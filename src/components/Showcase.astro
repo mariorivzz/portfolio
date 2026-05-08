@@ -1,53 +1,49 @@
 ---
-import fisio      from '../assets/images/fisio1.jpg';
-import portfolio  from '../assets/images/portfolio1.jpg';
-import psico      from '../assets/images/psico1.jpg';
-import veterinaria from '../assets/images/veterinaria1.jpg';
+import plannormal       from '../assets/images/plannormal.png';
+import asistenteIA      from '../assets/images/asistenteIA.png';
+import negociointegraciones from '../assets/images/negociointegraciones.png';
+import plancompleto     from '../assets/images/plancompleto.png';
 
 const projects = [
   {
-    title: 'Web Corporativa Profesional',
+    title: 'Página Corporativa Profesional',
     tag:   'Diseño Web · Visibilidad en tu Ciudad',
     tier:  'Plan Esencial',
-    desc:  'Presencia online elegante y rápida para clínica de fisioterapia. Aparece en Google Maps, ficha de servicios clara y formulario directo a WhatsApp.',
-    img:   fisio,
-    alt:   'Web profesional para clínica de fisioterapia',
+    desc:  'Web rápida y elegante para clínica de fisioterapia. Aparece en Google Maps, ficha de servicios clara y formulario directo a WhatsApp.',
+    img:   plannormal,
+    alt:   'Web corporativa profesional para clínica de fisioterapia',
     accent: 'var(--accent)',
     url:   '#contact',
-    featured: true,
   },
   {
     title: 'Web con Asistente Inteligente',
     tag:   'Asistente de IA · Avisos Automáticos',
-    tier:  'Plan Recomendado',
-    desc:  'Portfolio con chatbot de inteligencia artificial que atiende visitas al instante, responde preguntas y avisa por correo cuando alguien quiere contratar.',
-    img:   portfolio,
+    tier:  'Plan Pro',
+    desc:  'Chatbot de inteligencia artificial que atiende visitas al instante y avisa por correo cuando alguien quiere contratar.',
+    img:   asistenteIA,
     alt:   'Web con asistente de inteligencia artificial integrado',
     accent: 'var(--green)',
     url:   '#contact',
-    featured: false,
   },
   {
-    title: 'Web con Gestión de Reservas',
-    tag:   'Agenda Automática · Cita Previa',
-    tier:  'Plan Completo',
-    desc:  'Web para consulta de psicología con sistema de cita previa integrado. El cliente elige día y hora, recibe confirmación automática y tú no tienes que hacer nada.',
-    img:   psico,
-    alt:   'Web con sistema de reservas y cita previa',
-    accent: 'var(--warm)',
+    title: 'Integraciones Inteligentes',
+    tag:   'IA · Correo Automático · WhatsApp',
+    tier:  'Mejora tu Web',
+    desc:  'Web existente potenciada con asistente de IA, aviso automático por correo y botón de WhatsApp preconfigurado. Sin cambiar el diseño actual.',
+    img:   negociointegraciones,
+    alt:   'Integraciones inteligentes para web existente',
+    accent: 'var(--accent)',
     url:   '#contact',
-    featured: false,
   },
   {
     title: 'Sistema Digital Completo',
-    tag:   'Solución Total · Mantenimiento Incluido',
-    tier:  'Plan Completo',
-    desc:  'Solución integral para clínica veterinaria: web rápida, asistente de IA, agenda de citas, posicionamiento en la ciudad y mantenimiento mensual sin preocupaciones.',
-    img:   veterinaria,
+    tag:   'Reservas · IA · Soporte Mensual',
+    tier:  'Plan Premium',
+    desc:  'Solución integral: web rápida, asistente de IA, agenda de citas automática y mantenimiento mensual. Tu negocio funciona solo.',
+    img:   plancompleto,
     alt:   'Sistema digital completo para negocio local',
-    accent: 'var(--accent)',
+    accent: 'var(--warm)',
     url:   '#contact',
-    featured: false,
   },
 ];
 ---
@@ -69,7 +65,7 @@ const projects = [
     <div class="showcase__grid">
       {projects.map((p, i) => (
         <article
-          class={`project-card reveal-up ${p.featured ? 'project-card--featured' : ''}`}
+          class="project-card reveal-up"
           style={`--card-accent: ${p.accent}; animation-delay: ${i * 0.07}s`}
         >
           <!-- 16/9 image container — uniform regardless of source dimensions -->
@@ -142,17 +138,12 @@ const projects = [
     line-height: 1.6;
   }
 
-  /* ── Bento grid ────────────────────────────── */
+  /* ── Uniform 4-column grid ───────────────── */
   .showcase__grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 1.25rem;
     margin-bottom: 3rem;
-  }
-
-  /* First card spans 2 columns — bento "hero" slot */
-  .project-card--featured {
-    grid-column: span 2;
   }
 
   /* ── Card ─────────────────────────────────── */
@@ -176,14 +167,9 @@ const projects = [
   /* ── Image ─────────────────────────────────── */
   .project-card__img-wrap {
     position: relative;
-    /* 16:9 ratio — always uniform no matter the source image size */
+    /* strict 16:9 on every card — no exceptions */
     aspect-ratio: 16 / 9;
     overflow: hidden;
-  }
-
-  .project-card--featured .project-card__img-wrap {
-    /* taller crop for the featured card to use the extra width */
-    aspect-ratio: 16 / 7;
   }
 
   .project-card__img-wrap img {
@@ -250,15 +236,11 @@ const projects = [
   }
 
   .project-card__title {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: 700;
     letter-spacing: -0.02em;
     line-height: 1.2;
     color: var(--text);
-  }
-
-  .project-card--featured .project-card__title {
-    font-size: 1.3rem;
   }
 
   .project-card__desc {
@@ -312,17 +294,11 @@ const projects = [
     .showcase__grid {
       grid-template-columns: repeat(2, 1fr);
     }
-    .project-card--featured {
-      grid-column: span 2;
-    }
   }
 
   @media (max-width: 640px) {
     .showcase__grid {
       grid-template-columns: 1fr;
-    }
-    .project-card--featured {
-      grid-column: span 1;
     }
     .showcase__cta-wrap {
       flex-direction: column;
