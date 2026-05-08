@@ -4,11 +4,13 @@ import '../styles/global.css';
 interface Props {
   title?: string;
   description?: string;
+  robots?: string;
 }
 
 const {
   title = 'Mario Rivas — Diseño Web para Negocios Locales | PHP · JavaScript',
   description = 'Diseñador y desarrollador web freelance con 8 años de experiencia. Webs profesionales para negocios locales que generan clientes. PHP, JavaScript, MySQL.',
+  robots = 'index, follow',
 } = Astro.props;
 
 const siteUrl = 'https://portfolio-mariorivas.vercel.app';
@@ -26,7 +28,7 @@ const canonicalUrl = Astro.url ? new URL(Astro.url.pathname, siteUrl).href : sit
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content="Mario Rivas" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content={robots} />
     <link rel="canonical" href={canonicalUrl} />
 
     <!-- Google Verification -->

@@ -8,6 +8,8 @@ export default defineConfig({
   site: 'https://portfolio-mariorivas.vercel.app',
   // 'static' = static by default, API routes opt out via `export const prerender = false`
   output: 'static',
-  integrations: [sitemap()],
+  integrations: [sitemap({
+    filter: (page) => !page.includes('/stats'),
+  })],
   adapter: vercel(),
 });
