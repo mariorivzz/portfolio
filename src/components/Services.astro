@@ -1,8 +1,4 @@
 ---
-import fisio from '../assets/images/fisio1.jpg';
-import portfolio from '../assets/images/portfolio1.jpg';
-import yoga from '../assets/images/yoga1.jpg';
-
 const services = [
   {
     tier: '01',
@@ -24,8 +20,6 @@ const services = [
     cta: 'Quiero mi web',
     accent: 'var(--accent)',
     featured: false,
-    preview: fisio,
-    previewAlt: 'Web profesional para clínica de fisioterapia',
   },
   {
     tier: '02',
@@ -47,8 +41,6 @@ const services = [
     cta: 'Lo quiero todo hecho',
     accent: 'var(--green)',
     featured: true,
-    preview: portfolio,
-    previewAlt: 'Landing page de alta conversión con CTA visible',
   },
   {
     tier: '03',
@@ -70,8 +62,6 @@ const services = [
     cta: 'Quiero ese servicio',
     accent: 'var(--warm)',
     featured: false,
-    preview: yoga,
-    previewAlt: 'Panel SEO mostrando posición #1 en Google para negocio local',
   },
 ];
 ---
@@ -98,47 +88,33 @@ const services = [
         >
           {s.featured && <span class="service-card__badge">⭐ El más elegido</span>}
 
-          <!-- Preview image overlay (shown on hover / always on mobile) -->
-          <div class="service-card__preview" aria-hidden="true">
-            <img
-              src={s.preview.src}
-              alt={s.previewAlt}
-              loading="lazy"
-              decoding="async"
-            />
-            <div class="service-card__preview-glass" />
+          <div class="service-card__top">
+            <span class="service-card__tier">{s.tier}</span>
+            <span class="service-card__label">{s.label}</span>
           </div>
 
-          <!-- Content layer sits above the image -->
-          <div class="service-card__content">
-            <div class="service-card__top">
-              <span class="service-card__tier">{s.tier}</span>
-              <span class="service-card__label">{s.label}</span>
-            </div>
+          <div class="service-card__icon" set:html={s.icon} />
 
-            <div class="service-card__icon" set:html={s.icon} />
+          <h3 class="service-card__title">{s.title}</h3>
+          <p class="service-card__tagline">{s.tagline}</p>
+          <p class="service-card__desc">{s.description}</p>
 
-            <h3 class="service-card__title">{s.title}</h3>
-            <p class="service-card__tagline">{s.tagline}</p>
-            <p class="service-card__desc">{s.description}</p>
+          <ul class="service-card__features">
+            {s.features.map(f => (
+              <li>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                {f}
+              </li>
+            ))}
+          </ul>
 
-            <ul class="service-card__features">
-              {s.features.map(f => (
-                <li>
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                  {f}
-                </li>
-              ))}
-            </ul>
+          <p class="service-card__result">{s.result}</p>
 
-            <p class="service-card__result">{s.result}</p>
-
-            <div class="service-card__footer">
-              <span class="service-card__price">{s.price}</span>
-              <a href="#contact" class="btn service-card__cta">
-                {s.cta}
-              </a>
-            </div>
+          <div class="service-card__footer">
+            <span class="service-card__price">{s.price}</span>
+            <a href="#contact" class="btn service-card__cta">
+              {s.cta}
+            </a>
           </div>
         </div>
       ))}
@@ -204,24 +180,23 @@ const services = [
     align-items: start;
   }
 
-  /* ── Card shell ───────────────────────────── */
+  /* ── Card ─────────────────────────────────── */
   .service-card {
     position: relative;
+    padding: 2.25rem 1.75rem;
     border: 1px solid var(--border);
     border-radius: 16px;
     background: var(--bg-card);
-    overflow: hidden;            /* clips the preview image */
-    transition: border-color 0.4s, transform 0.4s ease, box-shadow 0.4s;
+    transition: border-color 0.35s, transform 0.35s ease, box-shadow 0.35s;
     display: flex;
     flex-direction: column;
-    /* min-height so cards don't collapse when image fades in */
-    min-height: 560px;
+    gap: 0.9rem;
   }
 
   .service-card:hover {
     border-color: var(--svc-accent);
-    transform: translateY(-8px);
-    box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+    transform: translateY(-6px);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.45);
   }
 
   .service-card--featured {
@@ -246,80 +221,8 @@ const services = [
     border-radius: 50px;
     white-space: nowrap;
     font-weight: 700;
-    z-index: 10;
   }
 
-  /* ── Preview image (hover reveal) ─────────── */
-  .service-card__preview {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    opacity: 0;
-    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    will-change: opacity;
-  }
-
-  .service-card__preview img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: top center;
-    /* parallax: image is slightly bigger so translateY has room */
-    transform: scale(1.08) translateY(0px);
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    display: block;
-  }
-
-  /* Dark glassmorphism overlay over the image */
-  .service-card__preview-glass {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 0.15) 0%,
-      rgba(0, 0, 0, 0.55) 50%,
-      rgba(0, 0, 0, 0.88) 100%
-    );
-    backdrop-filter: blur(1px);
-  }
-
-  /* Reveal on hover */
-  .service-card:hover .service-card__preview {
-    opacity: 1;
-  }
-
-  /* Parallax — image drifts up as card lifts */
-  .service-card:hover .service-card__preview img {
-    transform: scale(1.08) translateY(-12px);
-  }
-
-  /* Accent colour tint for glassmorphism */
-  .service-card__preview-glass::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: color-mix(in srgb, var(--svc-accent) 12%, transparent);
-    pointer-events: none;
-  }
-
-  /* ── Content layer (always above image) ──── */
-  .service-card__content {
-    position: relative;
-    z-index: 2;
-    padding: 2.25rem 1.75rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.9rem;
-    flex: 1;
-    /* text shadow strengthens when image is behind */
-    transition: text-shadow 0.4s;
-  }
-
-  .service-card:hover .service-card__content {
-    text-shadow: 0 1px 8px rgba(0,0,0,0.6);
-  }
-
-  /* Tier label row */
   .service-card__top {
     display: flex;
     align-items: center;
@@ -442,27 +345,6 @@ const services = [
   .service-card__cta:hover {
     opacity: 0.85;
     transform: translateY(-1px);
-  }
-
-  /* ── Mobile: always show image (no hover) ── */
-  @media (hover: none), (max-width: 768px) {
-    .service-card__preview {
-      opacity: 1;           /* always visible */
-    }
-
-    .service-card__preview-glass {
-      /* stronger overlay on mobile so text remains legible */
-      background: linear-gradient(
-        180deg,
-        rgba(0, 0, 0, 0.35) 0%,
-        rgba(0, 0, 0, 0.72) 45%,
-        rgba(0, 0, 0, 0.95) 100%
-      );
-    }
-
-    .service-card__preview img {
-      transform: scale(1) translateY(0);  /* no parallax on touch */
-    }
   }
 
   /* ── Trust bar ───────────────────────────────── */

@@ -1,0 +1,345 @@
+---
+import fisio      from '../assets/images/fisio1.jpg';
+import portfolio  from '../assets/images/portfolio1.jpg';
+import psico      from '../assets/images/psico1.jpg';
+import veterinaria from '../assets/images/veterinaria1.jpg';
+import yoga       from '../assets/images/yoga1.jpg';
+
+const projects = [
+  {
+    title: 'Clínica de Fisioterapia',
+    tag:   'Diseño Web + SEO Local',
+    desc:  'Web de captación con agenda online, ficha de servicios y posicionamiento local en Google Maps.',
+    img:   fisio,
+    alt:   'Web de clínica de fisioterapia',
+    accent: 'var(--accent)',
+    url:   '#contact',
+    featured: true,
+  },
+  {
+    title: 'Portfolio Profesional',
+    tag:   'Web Corporativa',
+    desc:  'Portfolio personal con animaciones GSAP, integración de chatbot IA y formulario de contacto automático.',
+    img:   portfolio,
+    alt:   'Portfolio profesional desarrollador web',
+    accent: 'var(--green)',
+    url:   '#contact',
+    featured: false,
+  },
+  {
+    title: 'Consulta de Psicología',
+    tag:   'Diseño Web + Reservas Online',
+    desc:  'Página de confianza y conversión para terapeuta, con formulario de primera consulta y cita previa.',
+    img:   psico,
+    alt:   'Web consulta de psicología',
+    accent: 'var(--warm)',
+    url:   '#contact',
+    featured: false,
+  },
+  {
+    title: 'Clínica Veterinaria',
+    tag:   'SEO Local + Web',
+    desc:  'Presencia digital completa con ficha de servicios, equipo veterinario y formulario de urgencias.',
+    img:   veterinaria,
+    alt:   'Web clínica veterinaria',
+    accent: 'var(--accent)',
+    url:   '#contact',
+    featured: false,
+  },
+  {
+    title: 'Centro de Yoga',
+    tag:   'Landing Page + Reservas',
+    desc:  'Landing de alta conversión con horarios, tarifas y botón de reserva directa a WhatsApp.',
+    img:   yoga,
+    alt:   'Web centro de yoga',
+    accent: 'var(--green)',
+    url:   '#contact',
+    featured: false,
+  },
+];
+---
+
+<section id="proyectos" class="showcase">
+  <div class="container">
+
+    <div class="showcase__header reveal-up">
+      <span class="section-tag">Trabajos reales — clientes reales</span>
+      <h2 class="showcase__heading">
+        PROYECTOS QUE<br />
+        <em>GENERAN RESULTADOS</em>
+      </h2>
+      <p class="showcase__subhead">
+        Cada web está diseñada con un objetivo claro: conseguir más clientes para el negocio.
+      </p>
+    </div>
+
+    <div class="showcase__grid">
+      {projects.map((p, i) => (
+        <article
+          class={`project-card reveal-up ${p.featured ? 'project-card--featured' : ''}`}
+          style={`--card-accent: ${p.accent}; animation-delay: ${i * 0.07}s`}
+        >
+          <!-- 16/9 image container — uniform regardless of source dimensions -->
+          <div class="project-card__img-wrap">
+            <img
+              src={p.img.src}
+              alt={p.alt}
+              loading="lazy"
+              decoding="async"
+              width={p.img.width}
+              height={p.img.height}
+            />
+            <div class="project-card__img-overlay" />
+          </div>
+
+          <div class="project-card__body">
+            <div class="project-card__meta">
+              <span class="project-card__tag">{p.tag}</span>
+            </div>
+            <h3 class="project-card__title">{p.title}</h3>
+            <p class="project-card__desc">{p.desc}</p>
+            <a href={p.url} class="project-card__cta">
+              Ver proyecto similar
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <!-- Bottom CTA -->
+    <div class="showcase__cta-wrap reveal-up">
+      <p class="showcase__cta-text">
+        ¿Quieres que tu negocio sea el próximo caso de éxito?
+      </p>
+      <a href="#contact" class="btn btn--primary">
+        Solicitar presupuesto gratuito
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .showcase {
+    padding: var(--section-py) 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .showcase__header { margin-bottom: 3.5rem; }
+
+  .showcase__heading {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin-bottom: 1rem;
+  }
+
+  .showcase__heading em {
+    font-style: normal;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 1px var(--accent);
+  }
+
+  .showcase__subhead {
+    font-size: 1.05rem;
+    color: var(--text-2);
+    max-width: 520px;
+    line-height: 1.6;
+  }
+
+  /* ── Bento grid ────────────────────────────── */
+  .showcase__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+
+  /* First card spans 2 columns — bento "hero" slot */
+  .project-card--featured {
+    grid-column: span 2;
+  }
+
+  /* ── Card ─────────────────────────────────── */
+  .project-card {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--bg-card);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.3s ease, transform 0.35s ease, box-shadow 0.35s ease;
+  }
+
+  .project-card:hover {
+    border-color: var(--card-accent);
+    transform: translateY(-6px);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5),
+                0 0 0 1px color-mix(in srgb, var(--card-accent) 30%, transparent);
+  }
+
+  /* ── Image ─────────────────────────────────── */
+  .project-card__img-wrap {
+    position: relative;
+    /* 16:9 ratio — always uniform no matter the source image size */
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+  }
+
+  .project-card--featured .project-card__img-wrap {
+    /* taller crop for the featured card to use the extra width */
+    aspect-ratio: 16 / 7;
+  }
+
+  .project-card__img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .project-card:hover .project-card__img-wrap img {
+    transform: scale(1.05);
+  }
+
+  /* Subtle gradient at image bottom for legibility */
+  .project-card__img-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 40%,
+      rgba(0, 0, 0, 0.35) 100%
+    );
+    pointer-events: none;
+  }
+
+  /* ── Body ─────────────────────────────────── */
+  .project-card__body {
+    padding: 1.25rem 1.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    flex: 1;
+  }
+
+  .project-card__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .project-card__tag {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--card-accent);
+    padding: 0.2rem 0.65rem;
+    border: 1px solid color-mix(in srgb, var(--card-accent) 40%, transparent);
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--card-accent) 8%, transparent);
+  }
+
+  .project-card__title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    color: var(--text);
+  }
+
+  .project-card--featured .project-card__title {
+    font-size: 1.3rem;
+  }
+
+  .project-card__desc {
+    font-size: 0.84rem;
+    color: var(--text-2);
+    line-height: 1.65;
+    flex: 1;
+  }
+
+  .project-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--card-accent);
+    margin-top: 0.25rem;
+    transition: gap 0.2s ease, opacity 0.2s;
+  }
+
+  .project-card__cta:hover {
+    gap: 0.75rem;
+    opacity: 0.8;
+  }
+
+  /* ── Bottom CTA strip ────────────────────── */
+  .showcase__cta-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 2rem 2.5rem;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--bg-card);
+  }
+
+  .showcase__cta-text {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text);
+    max-width: 420px;
+    line-height: 1.4;
+  }
+
+  /* ── Responsive ──────────────────────────── */
+  @media (max-width: 1024px) {
+    .showcase__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .project-card--featured {
+      grid-column: span 2;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .showcase__grid {
+      grid-template-columns: 1fr;
+    }
+    .project-card--featured {
+      grid-column: span 1;
+    }
+    .showcase__cta-wrap {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 1.5rem;
+    }
+    .showcase__cta-text {
+      font-size: 0.95rem;
+    }
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.utils.toArray<HTMLElement>('#proyectos .reveal-up').forEach((el, i) => {
+    gsap.to(el, {
+      y: 0, opacity: 1, duration: 0.85, ease: 'power3.out',
+      delay: i * 0.07,
+      scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+    });
+  });
+</script>
