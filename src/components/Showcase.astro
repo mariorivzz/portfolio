@@ -14,6 +14,7 @@ const projects = [
     alt:   'Web corporativa profesional para clínica de fisioterapia',
     accent: 'var(--accent)',
     url:   '#contact',
+    prefill: 'esencial',
   },
   {
     title: 'Web con Asistente Inteligente',
@@ -24,6 +25,7 @@ const projects = [
     alt:   'Web con asistente de inteligencia artificial integrado',
     accent: 'var(--green)',
     url:   '#contact',
+    prefill: 'pro',
   },
   {
     title: 'Integraciones Inteligentes',
@@ -34,6 +36,7 @@ const projects = [
     alt:   'Integraciones inteligentes para web existente',
     accent: 'var(--accent)',
     url:   '#contact',
+    prefill: 'mejora',
   },
   {
     title: 'Sistema Digital Completo',
@@ -44,6 +47,18 @@ const projects = [
     alt:   'Sistema digital completo para negocio local',
     accent: 'var(--warm)',
     url:   '#contact',
+    prefill: 'premium',
+  },
+  {
+    title: 'Migración y Renovación Premium',
+    tag:   'Sin perder datos · Sin perder posicionamiento',
+    tier:  'Migración Premium',
+    desc:  'Web completamente renovada para negocio establecido. Diseño moderno y rápido, sin perder ni un correo ni una posición en Google. El cliente nunca notó el cambio.',
+    img:   plancompleto, // Sustituir por imagen de migración cuando esté lista
+    alt:   'Migración y renovación web premium para negocio local',
+    accent: 'var(--accent)',
+    url:   '#contact',
+    prefill: 'migracion',
   },
 ];
 ---
@@ -88,8 +103,8 @@ const projects = [
             </div>
             <h3 class="project-card__title">{p.title}</h3>
             <p class="project-card__desc">{p.desc}</p>
-            <a href={p.url} class="project-card__cta">
-              Ver proyecto similar
+            <a href={p.url} class="project-card__cta" data-prefill={p.prefill}>
+              Quiero algo así para mi negocio
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
           </div>
@@ -138,13 +153,16 @@ const projects = [
     line-height: 1.6;
   }
 
-  /* ── Uniform 4-column grid ───────────────── */
+  /* ── Uniform grid — 3 on top, 2 centered below ── */
   .showcase__grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     gap: 1.25rem;
     margin-bottom: 3rem;
   }
+  .showcase__grid > .project-card              { grid-column: span 2; }
+  .showcase__grid > .project-card:nth-child(4) { grid-column: 2 / 4; }
+  .showcase__grid > .project-card:nth-child(5) { grid-column: 4 / 6; }
 
   /* ── Card ─────────────────────────────────── */
   .project-card {
@@ -291,15 +309,15 @@ const projects = [
 
   /* ── Responsive ──────────────────────────── */
   @media (max-width: 1024px) {
-    .showcase__grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
+    .showcase__grid { grid-template-columns: repeat(2, 1fr); }
+    .showcase__grid > .project-card              { grid-column: span 1; }
+    .showcase__grid > .project-card:nth-child(4),
+    .showcase__grid > .project-card:nth-child(5) { grid-column: span 1; }
   }
 
   @media (max-width: 640px) {
-    .showcase__grid {
-      grid-template-columns: 1fr;
-    }
+    .showcase__grid { grid-template-columns: 1fr; }
+    .showcase__grid > .project-card { grid-column: span 1; }
     .showcase__cta-wrap {
       flex-direction: column;
       align-items: flex-start;

@@ -122,9 +122,11 @@ const FORMSPREE_ENDPOINT = import.meta.env.FORMSPREE_ENDPOINT ?? '';
               <label for="cf-service">¿Qué necesitas?</label>
               <select id="cf-service" name="service">
                 <option value="">Elige una opción...</option>
-                <option value="presencia">Presencia Profesional (web básica)</option>
-                <option value="ventas">Página que Vende (llave en mano)</option>
-                <option value="socio">Socio Digital Total (mantenimiento mensual)</option>
+                <option value="esencial">Web Corporativa Esencial — desde 497 €</option>
+                <option value="pro">Nueva Web con Asistente IA — desde 997 €</option>
+                <option value="mejora">Mejora tu Web Actual con IA — desde 297 €</option>
+                <option value="premium">Sistema Digital Completo (Reservas) — desde 197 €/mes</option>
+                <option value="migracion">Migración y Renovación Premium — desde 397 €</option>
                 <option value="otro">No lo tengo claro, quiero consejo</option>
               </select>
             </div>
@@ -560,7 +562,27 @@ const FORMSPREE_ENDPOINT = import.meta.env.FORMSPREE_ENDPOINT ?? '';
       scrollTrigger: { trigger: el, start: 'top 88%', once: true },
     });
   });
+  // ── Service pre-fill (URL param OR click on [data-prefill] links) ────────
+  const serviceSelect = document.getElementById('cf-service') as HTMLSelectElement | null;
 
+  function prefillService(val: string) {
+    if (!serviceSelect || !val) return;
+    const opt = serviceSelect.querySelector<HTMLOptionElement>(`option[value="${val}"]`);
+    if (opt) serviceSelect.value = val;
+  }
+
+  // 1. URL param on load: /?servicio=esencial#contact
+  const sparam = new URLSearchParams(window.location.search).get('servicio');
+  if (sparam) prefillService(sparam);
+
+  // 2. Clicks on any [data-prefill] element across the page (showcase + services cards)
+  document.addEventListener('click', (e) => {
+    const link = (e.target as HTMLElement).closest<HTMLElement>('[data-prefill]');
+    if (!link) return;
+    const val = link.dataset.prefill ?? '';
+    // Small delay so the scroll animation finishes before the select updates
+    setTimeout(() => prefillService(val), 200);
+  });
   // ── Form submission ────────────────────────────────────────────
   const form      = document.getElementById('contact-form') as HTMLFormElement;
   const btnLabel  = document.getElementById('submit-label')!;

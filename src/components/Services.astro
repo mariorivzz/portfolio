@@ -3,8 +3,9 @@ const services = [
   {
     tier: '01',
     label: 'Esencial',
+    value: 'esencial',
     icon: `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
-    title: 'Web Corporativa Completa',
+    title: 'Web Corporativa Esencial',
     tagline: 'Tu negocio visible en tu ciudad desde el primer día',
     description:
       'Una web rápida, elegante y bien posicionada que genera confianza desde el primer segundo. Tus clientes te encuentran antes que a la competencia, ven que eres serio, y te llaman.',
@@ -24,8 +25,9 @@ const services = [
   {
     tier: '02',
     label: 'Pro — Recomendado',
+    value: 'pro',
     icon: `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
-    title: 'Nueva Web con Asistente Inteligente',
+    title: 'Nueva Web con Asistente IA',
     tagline: 'Todo lo del plan Esencial, más automatización con IA',
     description:
       'Tu web trabaja por ti incluso cuando duermes. Un asistente de inteligencia artificial atiende a tus visitas al instante y el sistema avisa automáticamente por correo y WhatsApp cuando alguien quiere contratarte.',
@@ -45,8 +47,9 @@ const services = [
   {
     tier: '03',
     label: 'Mejora tu web',
+    value: 'mejora',
     icon: `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>`,
-    title: 'Potencia tu Web Actual',
+    title: 'Mejora tu Web Actual con IA',
     tagline: '¿Ya tienes web? Añádele IA, avisos automáticos y WhatsApp',
     description:
       'No necesitas empezar de cero. Integro un asistente inteligente, avisos automáticos por correo y un botón de WhatsApp preconfigurado en tu web actual, sin cambiar nada de lo que ya tienes.',
@@ -66,9 +69,10 @@ const services = [
   {
     tier: '04',
     label: 'Premium',
+    value: 'premium',
     icon: `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
-    title: 'Sistema Digital Completo',
-    tagline: 'Web + IA + Reservas automáticas + soporte mensual',
+    title: 'Sistema Digital Completo (Reservas)',
+    tagline: 'Web + IA + Agenda automática + soporte mensual',
     description:
       'La solución más completa para negocios que quieren crecer sin preocuparse de nada técnico. Tus clientes reservan cita directamente desde la web, reciben confirmación automática, y tú solo tienes que aparecer.',
     features: [
@@ -84,6 +88,28 @@ const services = [
     accent: 'var(--warm)',
     featured: false,
   },
+  {
+    tier: '05',
+    label: 'Migración',
+    value: 'migracion',
+    icon: `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>`,
+    title: 'Migración y Renovación Premium',
+    tagline: 'Web nueva sin perder ni un dato, correo ni posición en Google',
+    description:
+      'Renovación total de tu web vieja sin perder ni un solo dato, correo o posicionamiento. Tus clientes verán una web moderna desde el primer día, y tú no notarás ni el cambio.',
+    features: [
+      'Migración completa — cero pérdida de datos ni correos',
+      'Tu posicionamiento en Google se mantiene intacto',
+      'Diseño moderno y rápido desde el primer día',
+      'Todos tus archivos, contraseñas y dominios a salvo',
+      'Sin interrupciones: tu web nunca se queda offline',
+    ],
+    result: '→ Web nueva. Sin miedos. Sin perder nada.',
+    price: 'Desde 397 €',
+    cta: 'Quiero renovar mi web',
+    accent: 'var(--accent)',
+    featured: false,
+  },
 ];
 ---
 
@@ -91,7 +117,7 @@ const services = [
   <div class="container">
 
     <div class="services__header reveal-up">
-      <span class="section-tag">Esencial · Pro · Mejora tu web · Premium</span>
+      <span class="section-tag">Esencial · Pro · Mejora · Premium · Migración</span>
       <h2 class="services__heading">
         SOLUCIONES WEB DISEÑADAS<br />
         <em>PARA TU NEGOCIO LOCAL</em>
@@ -133,7 +159,7 @@ const services = [
 
           <div class="service-card__footer">
             <span class="service-card__price">{s.price}</span>
-            <a href="#contact" class="btn service-card__cta">
+            <a href="#contact" class="btn service-card__cta" data-prefill={s.value}>
               {s.cta}
             </a>
           </div>
@@ -192,14 +218,17 @@ const services = [
     line-height: 1.6;
   }
 
-  /* ── Grid ─────────────────────────────────── */
+  /* ── Grid — 3 cards row 1, 2 cards row 2 (centered) ─── */
   .services__grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     gap: 1.5rem;
     margin-bottom: 2.5rem;
     align-items: start;
   }
+  .services__grid > .service-card              { grid-column: span 2; }
+  .services__grid > .service-card:nth-child(4) { grid-column: 2 / 4; }
+  .services__grid > .service-card:nth-child(5) { grid-column: 4 / 6; }
 
   /* ── Card ─────────────────────────────────── */
   .service-card {
@@ -393,8 +422,14 @@ const services = [
   .trust-item svg { color: var(--accent); flex-shrink: 0; }
 
   @media (max-width: 1024px) {
-    .services__grid { grid-template-columns: 1fr; max-width: 520px; }
+    .services__grid { grid-template-columns: repeat(2, 1fr); max-width: none; }
+    .services__grid > .service-card              { grid-column: span 1; }
+    .services__grid > .service-card:nth-child(4),
+    .services__grid > .service-card:nth-child(5) { grid-column: span 1; }
     .service-card--featured { transform: none; }
+  }
+  @media (max-width: 640px) {
+    .services__grid { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
   }
 
   @media (max-width: 640px) {
