@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@astrojs/node": "^10.1.0",
+    "@astrojs/sitemap": "^3.7.2",
     "@astrojs/vercel": "^10.0.6",
     "@opentelemetry/api": "^1.9.1",
     "@opentelemetry/exporter-metrics-otlp-http": "^0.217.0",
