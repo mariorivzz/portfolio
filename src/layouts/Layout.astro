@@ -7,9 +7,13 @@ interface Props {
 }
 
 const {
-  title = 'Mario Rivas — Full-Stack Developer',
-  description = 'Full-Stack Developer con 8 años de experiencia. PHP, JavaScript, MySQL, SASS/SCSS. Soluciones web que convierten visitantes en clientes.',
+  title = 'Mario Rivas — Diseño Web para Negocios Locales | PHP · JavaScript',
+  description = 'Diseñador y desarrollador web freelance con 8 años de experiencia. Webs profesionales para negocios locales que generan clientes. PHP, JavaScript, MySQL.',
 } = Astro.props;
+
+const siteUrl = 'https://portfolio-mariorivas.vercel.app';
+const ogImage = `${siteUrl}/og-image.png`;
+const canonicalUrl = Astro.url ? new URL(Astro.url.pathname, siteUrl).href : siteUrl;
 ---
 
 <!doctype html>
@@ -17,16 +21,96 @@ const {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
-    <meta name="google-site-verification" content="VGGV2PFjqPYor4HjA-QI69avVE3NvBfDgqi8wkLmgc8" />
-    <title>{title}</title>
 
-    <!-- Open Graph -->
+    <!-- Primary SEO -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Mario Rivas" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Google Verification -->
+    <meta name="google-site-verification" content="VGGV2PFjqPYor4HjA-QI69avVE3NvBfDgqi8wkLmgc8" />
+
+    <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:site_name" content="Mario Rivas — Diseño Web" />
+
+    <!-- Twitter / X Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Structured Data: Person + LocalBusiness -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Person",
+          "@id": `${siteUrl}/#person`,
+          "name": "Mario Rivas",
+          "url": siteUrl,
+          "jobTitle": "Desarrollador Web Freelance",
+          "description": description,
+          "knowsAbout": ["Diseño Web", "PHP", "JavaScript", "MySQL", "SEO", "WordPress"],
+          "sameAs": [
+            "https://github.com/mariorivzz"
+          ]
+        },
+        {
+          "@type": "ProfessionalService",
+          "@id": `${siteUrl}/#business`,
+          "name": "Mario Rivas — Diseño Web",
+          "url": siteUrl,
+          "description": "Servicio de diseño y desarrollo web para negocios locales. Páginas web profesionales que generan clientes reales.",
+          "founder": { "@id": `${siteUrl}/#person` },
+          "areaServed": {
+            "@type": "Country",
+            "name": "España"
+          },
+          "priceRange": "€€",
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Servicios de Diseño Web",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": { "@type": "Service", "name": "Web Corporativa Esencial" },
+                "price": "497",
+                "priceCurrency": "EUR"
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": { "@type": "Service", "name": "Nueva Web con Asistente IA" },
+                "price": "997",
+                "priceCurrency": "EUR"
+              }
+            ]
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": `${siteUrl}/#website`,
+          "url": siteUrl,
+          "name": "Mario Rivas — Diseño Web",
+          "publisher": { "@id": `${siteUrl}/#person` },
+          "inLanguage": "es-ES"
+        }
+      ]
+    })} />
 
     <!-- Preconnect for fonts speed -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
