@@ -6,6 +6,14 @@
 	"name": "digital-disk",
 	"main": "./dist/server/entry.mjs",
 	"no_bundle": true,
+	"rules": [
+		{
+			"type": "ESModule",
+			"globs": [
+				"dist/server/**/*.mjs"
+			]
+		}
+	],
 	"assets": {
 		"directory": "./dist/client",
 		"binding": "ASSETS"

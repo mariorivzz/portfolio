@@ -12,6 +12,8 @@ const config = {
 	name: 'digital-disk',
 	main: './dist/server/entry.mjs',
 	no_bundle: true,
+	// Required: tells Wrangler to upload chunk files imported by entry.mjs
+	rules: [{ type: 'ESModule', globs: ['dist/server/**/*.mjs'] }],
 	assets: {
 		directory: './dist/client',
 		binding: 'ASSETS',
