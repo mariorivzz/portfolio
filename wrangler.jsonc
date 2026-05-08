@@ -2,9 +2,9 @@
 	"compatibility_date": "2026-05-08",
 	"compatibility_flags": ["global_fetch_strictly_public"],
 	"name": "digital-disk",
-	"main": "@astrojs/cloudflare/entrypoints/server",
+	"main": "./dist/server/entry.mjs",
 	"assets": {
-		"directory": "./dist",
+		"directory": "./dist/client",
 		"binding": "ASSETS"
 	},
 	"observability": {
