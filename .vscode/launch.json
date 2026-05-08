@@ -2,8 +2,20 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "command": "./node_modules/.bin/astro dev",
-      "name": "Development server",
+      "command": "pnpm --filter @astro-webs/veterinario-sedano dev",
+      "name": "Dev: veterinario-sedano",
+      "request": "launch",
+      "type": "node-terminal"
+    },
+    {
+      "command": "pnpm --filter @astro-webs/psicologo-mariorivas dev",
+      "name": "Dev: psicologo-mariorivas",
+      "request": "launch",
+      "type": "node-terminal"
+    },
+    {
+      "command": "pnpm --filter @astro-webs/plantilla dev",
+      "name": "Dev: plantilla",
       "request": "launch",
       "type": "node-terminal"
     }

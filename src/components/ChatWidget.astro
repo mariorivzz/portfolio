@@ -1,0 +1,547 @@
+<!-- AI Chat Widget — Simulated AI that knows about the developer.
+     To upgrade to real OpenAI: replace the getAIResponse() function
+     with a fetch() call to your backend endpoint. -->
+
+<div id="chat-widget" class="chat-widget" role="complementary" aria-label="Chat con AI">
+  <!-- Chat toggle button -->
+  <button id="chat-toggle" class="chat-toggle" aria-label="Abrir chat" aria-expanded="false">
+    <svg class="chat-toggle__icon chat-toggle__icon--open" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+    <svg class="chat-toggle__icon chat-toggle__icon--close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    <span class="chat-toggle__badge" id="chat-badge">1</span>
+  </button>
+
+  <!-- Chat panel -->
+  <div id="chat-panel" class="chat-panel" aria-hidden="true">
+    <!-- Header -->
+    <div class="chat-header">
+      <div class="chat-header__avatar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </div>
+      <div class="chat-header__info">
+        <span class="chat-header__name">AI Assistant</span>
+        <span class="chat-header__status">
+          <span class="chat-header__dot"></span>
+          Online
+        </span>
+      </div>
+      <button id="chat-close" class="chat-header__close" aria-label="Cerrar chat">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Messages -->
+    <div id="chat-messages" class="chat-messages" role="log" aria-live="polite">
+      <!-- Initial bot message injected by JS -->
+    </div>
+
+    <!-- Quick actions -->
+    <div class="chat-quick" id="chat-quick" role="list">
+      <button class="chat-chip" data-q="¿Qué servicios ofreces?" role="listitem">Servicios 💼</button>
+      <button class="chat-chip" data-q="¿Cuánto cuesta una landing page?" role="listitem">Precios 💰</button>
+      <button class="chat-chip" data-q="¿Tienes disponibilidad ahora?" role="listitem">Disponibilidad 📅</button>
+    </div>
+
+    <!-- Input -->
+    <form id="chat-form" class="chat-input-wrap" autocomplete="off" novalidate>
+      <input
+        id="chat-input"
+        type="text"
+        placeholder="Escribe tu pregunta..."
+        class="chat-input"
+        maxlength="300"
+        aria-label="Mensaje"
+      />
+      <button type="submit" class="chat-send" aria-label="Enviar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </form>
+  </div>
+</div>
+
+<style>
+  /* ── Toggle button ────────────────────────────────── */
+  .chat-widget {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 5000;
+  }
+
+  .chat-toggle {
+    position: relative;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    box-shadow: 0 8px 30px rgba(0, 212, 255, 0.4);
+    transition: transform 0.3s var(--ease-out-expo), box-shadow 0.3s;
+  }
+
+  .chat-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 12px 40px rgba(0, 212, 255, 0.6);
+  }
+
+  .chat-toggle__icon { position: absolute; transition: opacity 0.2s, transform 0.2s; }
+  .chat-toggle__icon--close { opacity: 0; transform: rotate(-90deg); }
+
+  .chat-toggle.open .chat-toggle__icon--open  { opacity: 0; transform: rotate(90deg); }
+  .chat-toggle.open .chat-toggle__icon--close { opacity: 1; transform: rotate(0deg); }
+
+  .chat-toggle__badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 18px;
+    height: 18px;
+    background: var(--warm);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: badge-pulse 2s infinite;
+    transition: opacity 0.3s;
+  }
+
+  @keyframes badge-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+
+  /* ── Panel ────────────────────────────────── */
+  .chat-panel {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    width: min(380px, 92vw);
+    background: #0d0d14;
+    border: 1px solid var(--border-accent);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(0,212,255,0.1);
+    display: flex;
+    flex-direction: column;
+    transform: translateY(20px) scale(0.97);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.35s var(--ease-out-expo), opacity 0.3s;
+    transform-origin: bottom right;
+    max-height: 80vh;
+  }
+
+  .chat-panel.open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  /* Header */
+  .chat-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(0,212,255,0.04);
+    flex-shrink: 0;
+  }
+
+  .chat-header__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--accent-dim);
+    border: 1px solid var(--border-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .chat-header__name {
+    display: block;
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text);
+  }
+
+  .chat-header__status {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+
+  .chat-header__dot {
+    width: 6px;
+    height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  .chat-header__close {
+    margin-left: auto;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 4px;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .chat-header__close:hover { color: var(--text); }
+
+  /* Messages */
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+    min-height: 240px;
+    max-height: 340px;
+  }
+
+  .chat-msg {
+    display: flex;
+    gap: 0.6rem;
+    max-width: 88%;
+    animation: msg-in 0.3s var(--ease-out-expo);
+  }
+
+  @keyframes msg-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .chat-msg--user {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+  }
+
+  .chat-msg__bubble {
+    padding: 0.7rem 1rem;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    line-height: 1.55;
+    word-break: break-word;
+  }
+
+  .chat-msg--bot .chat-msg__bubble {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    color: var(--text-2);
+    border-radius: 4px 12px 12px 12px;
+  }
+
+  .chat-msg--user .chat-msg__bubble {
+    background: var(--accent);
+    color: #000;
+    font-weight: 500;
+    border-radius: 12px 4px 12px 12px;
+  }
+
+  /* Typing indicator */
+  .chat-typing {
+    display: flex;
+    gap: 4px;
+    padding: 0.7rem 1rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 4px 12px 12px 12px;
+    width: fit-content;
+  }
+
+  .chat-typing span {
+    width: 6px;
+    height: 6px;
+    background: var(--text-muted);
+    border-radius: 50%;
+    animation: typing-dot 1.4s ease-in-out infinite;
+  }
+
+  .chat-typing span:nth-child(2) { animation-delay: 0.2s; }
+  .chat-typing span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes typing-dot {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-6px); opacity: 1; }
+  }
+
+  /* Quick chips */
+  .chat-quick {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding: 0.75rem 1.25rem;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .chat-chip {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    padding: 0.35rem 0.85rem;
+    border: 1px solid var(--border-accent);
+    border-radius: 50px;
+    background: var(--accent-dim);
+    color: var(--accent);
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    white-space: nowrap;
+  }
+
+  .chat-chip:hover {
+    background: rgba(0,212,255,0.2);
+    border-color: var(--accent);
+  }
+
+  /* Input */
+  .chat-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.25rem;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .chat-input {
+    flex: 1;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    padding: 0.6rem 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .chat-input::placeholder { color: var(--text-muted); }
+  .chat-input:focus { border-color: var(--border-accent); }
+
+  .chat-send {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--accent);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    transition: background 0.2s, transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  .chat-send:hover { background: var(--green); transform: scale(1.05); }
+
+  @media (max-width: 480px) {
+    .chat-widget { bottom: 1rem; right: 1rem; }
+    .chat-panel { width: calc(100vw - 2rem); right: -1rem; }
+  }
+</style>
+
+<script>
+  // ── Conversation history (sent to /api/chat each turn) ───────
+  const history: { role: 'user' | 'assistant'; content: string }[] = [];
+
+  // ── Local fallback KB (used when API is unavailable) ─────────
+  const FALLBACK = `Disculpa, el asistente AI no está disponible en este momento. Por favor contáctame directamente en la sección de contacto. ¡Estaré encantado de ayudarte!`;
+
+  // ── Typewriter effect ─────────────────────────────────────────
+  function sleep(ms: number) { return new Promise(r => setTimeout(r, ms)); }
+
+  async function typeText(el: HTMLElement, text: string) {
+    const formatted = text
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n/g, '<br/>');
+    el.innerHTML = '';
+    let html = '';
+    const nodes = formatted.split(/(<[^>]+>)/g);
+    for (const node of nodes) {
+      if (node.startsWith('<')) {
+        html += node;
+        el.innerHTML = html + '▋';
+      } else {
+        for (const char of node) {
+          html += char;
+          el.innerHTML = html + '▋';
+          await sleep(12 + Math.random() * 18);
+        }
+      }
+    }
+    el.innerHTML = html;
+  }
+
+  // ── DOM refs ──────────────────────────────────────────────────
+  const toggle   = document.getElementById('chat-toggle')!;
+  const panel    = document.getElementById('chat-panel')!;
+  const closeBtn = document.getElementById('chat-close')!;
+  const messages = document.getElementById('chat-messages')!;
+  const form     = document.getElementById('chat-form')!;
+  const input    = document.getElementById('chat-input') as HTMLInputElement;
+  const badge    = document.getElementById('chat-badge')!;
+  const quick    = document.getElementById('chat-quick')!;
+
+  let isOpen   = false;
+  let isTyping = false;
+
+  function openChat() {
+    isOpen = true;
+    toggle.classList.add('open');
+    toggle.setAttribute('aria-expanded', 'true');
+    panel.classList.add('open');
+    panel.setAttribute('aria-hidden', 'false');
+    badge.style.opacity = '0';
+  }
+
+  function closeChat() {
+    isOpen = false;
+    toggle.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+    panel.classList.remove('open');
+    panel.setAttribute('aria-hidden', 'true');
+  }
+
+  toggle.addEventListener('click', () => isOpen ? closeChat() : openChat());
+  closeBtn.addEventListener('click', closeChat);
+
+  // ── Add message ───────────────────────────────────────────────
+  function addMessage(text: string, role: 'bot' | 'user') {
+    const msg    = document.createElement('div');
+    msg.className = `chat-msg chat-msg--${role}`;
+    const bubble  = document.createElement('div');
+    bubble.className = 'chat-msg__bubble';
+    bubble.textContent = text;
+    msg.appendChild(bubble);
+    messages.appendChild(msg);
+    messages.scrollTop = messages.scrollHeight;
+    return bubble;
+  }
+
+  function addTyping() {
+    const msg = document.createElement('div');
+    msg.className = 'chat-msg chat-msg--bot';
+    msg.id = 'chat-typing-msg';
+    msg.innerHTML = `<div class="chat-typing"><span></span><span></span><span></span></div>`;
+    messages.appendChild(msg);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function removeTyping() {
+    document.getElementById('chat-typing-msg')?.remove();
+  }
+
+  // ── Call /api/chat ─────────────────────────────────────────────
+  async function callAPI(userText: string): Promise<string> {
+    // 15-second timeout — prevents hanging fetch on slow/dead server
+    const controller = new AbortController();
+    const timeoutId  = setTimeout(() => controller.abort(), 15_000);
+
+    let res: Response;
+    try {
+      res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: history }),
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timeoutId);
+    }
+
+    // Handle specific error codes with friendly messages (no raw throw to console)
+    if (res.status === 401 || res.status === 403) {
+      return 'El asistente no está disponible en este momento. Por favor, escríbeme directamente por el formulario de contacto o WhatsApp.';
+    }
+    if (res.status === 503 || res.status === 504) {
+      return 'El servidor está tardando en responder. Por favor, inténtalo de nuevo en unos segundos o contáctame directamente.';
+    }
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
+    }
+
+    const data = await res.json();
+    return (data.reply as string) ?? FALLBACK;
+  }
+
+  // ── Send & respond ─────────────────────────────────────────────
+  async function handleSend(userText: string) {
+    if (!userText.trim() || isTyping) return;
+    isTyping = true;
+
+    quick.style.display = 'none';
+
+    // Push user turn to history before showing in UI
+    history.push({ role: 'user', content: userText.trim() });
+    addMessage(userText.trim(), 'user');
+
+    addTyping();
+
+    let reply = FALLBACK;
+    try {
+      reply = await callAPI(userText);
+    } catch (err: any) {
+      if (err?.name === 'AbortError') {
+        reply = 'La solicitud tardó demasiado. Por favor, inténtalo de nuevo.';
+      } else {
+        console.warn('[ChatWidget] API error, using fallback.', err?.message ?? err);
+      }
+    }
+
+    removeTyping();
+
+    // Push assistant reply to history
+    history.push({ role: 'assistant', content: reply });
+
+    const botBubble = addMessage('', 'bot');
+    await typeText(botBubble, reply);
+
+    isTyping = false;
+  }
+
+  // ── Form submit ────────────────────────────────────────────────
+  (form as HTMLFormElement).addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    await handleSend(text);
+  });
+
+  // ── Quick chips ────────────────────────────────────────────────
+  document.querySelectorAll<HTMLButtonElement>('.chat-chip').forEach(chip => {
+    chip.addEventListener('click', () => handleSend(chip.dataset.q!));
+  });
+
+  // ── Initial greeting (local, no API cost) ─────────────────────
+  const GREETING = `¡Hola! 👋 Soy el asistente AI de este portfolio, impulsado por GPT-4o mini. Puedo responderte preguntas sobre servicios, tecnologías, experiencia y precios. ¿En qué puedo ayudarte?`;
+  setTimeout(() => {
+    const greeting = addMessage('', 'bot');
+    typeText(greeting, GREETING);
+  }, 200);
+</script>

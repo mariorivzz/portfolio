@@ -1,0 +1,398 @@
+---
+const services = [
+  {
+    tier: '01',
+    label: 'El Primer Paso',
+    icon: `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+    title: 'Presencia Profesional',
+    tagline: 'Tu negocio abierto las 24h, los 365 días del año',
+    description:
+      'Una web rápida y elegante que genera confianza desde el primer segundo. Tus clientes te encuentran en Google, ven que eres serio, y te llaman.',
+    features: [
+      'Carga en menos de 2 segundos',
+      'Diseño perfecto en móvil y tablet',
+      'Apareces en Google Maps y búsquedas locales',
+      'Formulario de contacto directo a tu WhatsApp',
+      'Dominio y hosting gestionados por mí',
+    ],
+    result: '→ Más credibilidad. Más llamadas.',
+    price: 'Desde 497 €',
+    cta: 'Quiero mi web',
+    accent: 'var(--accent)',
+    featured: false,
+  },
+  {
+    tier: '02',
+    label: 'El Más Elegido',
+    icon: `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
+    title: 'Página que Vende',
+    tagline: 'Llave en mano — tú solo te preocupas de atender clientes',
+    description:
+      'No solo te hago una web bonita. Te entrego una máquina de captar clientes: diseño que convence, textos que venden y un proceso 100% sin complicaciones.',
+    features: [
+      'Diseño que vende (no solo que impresiona)',
+      'Copywriting incluido — yo escribo los textos',
+      'Botón de WhatsApp y reservas online',
+      'SEO local para salir antes que tu competencia',
+      'Entrega en 7 días — garantizado',
+    ],
+    result: '→ Más clientes. Sin esfuerzo por tu parte.',
+    price: 'Desde 997 €',
+    cta: 'Lo quiero todo hecho',
+    accent: 'var(--green)',
+    featured: true,
+  },
+  {
+    tier: '03',
+    label: 'Tranquilidad Total',
+    icon: `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+    title: 'Socio Digital Total',
+    tagline: 'Tu propio departamento de IT — sin el coste de contratarlo',
+    description:
+      'Olvídate para siempre de problemas técnicos, actualizaciones y posicionamiento. Yo me encargo de todo, cada mes, para que tú te centres en tu negocio.',
+    features: [
+      'Web + mantenimiento mensual incluido',
+      'SEO continuo — cada mes más arriba en Google',
+      'Actualizaciones y copias de seguridad diarias',
+      'Soporte directo en menos de 4 horas',
+      'Informes mensuales de visitas y resultados',
+    ],
+    result: '→ Cero preocupaciones. Crecimiento constante.',
+    price: 'Desde 197 € / mes',
+    cta: 'Quiero ese servicio',
+    accent: 'var(--warm)',
+    featured: false,
+  },
+];
+---
+
+<section id="services" class="services">
+  <div class="container">
+
+    <div class="services__header reveal-up">
+      <span class="section-tag">Para negocios locales y autónomos</span>
+      <h2 class="services__heading">
+        SOLUCIONES WEB DISEÑADAS<br />
+        <em>PARA TU NEGOCIO LOCAL</em>
+      </h2>
+      <p class="services__subhead reveal-up">
+        Sin tecnicismos. Sin complicaciones. Solo resultados reales para tu negocio.
+      </p>
+    </div>
+
+    <div class="services__grid">
+      {services.map(s => (
+        <div
+          class={`service-card reveal-up ${s.featured ? 'service-card--featured' : ''}`}
+          style={`--svc-accent: ${s.accent};`}
+        >
+          {s.featured && <span class="service-card__badge">⭐ El más elegido</span>}
+
+          <div class="service-card__top">
+            <span class="service-card__tier">{s.tier}</span>
+            <span class="service-card__label">{s.label}</span>
+          </div>
+
+          <div class="service-card__icon" set:html={s.icon} />
+
+          <h3 class="service-card__title">{s.title}</h3>
+          <p class="service-card__tagline">{s.tagline}</p>
+          <p class="service-card__desc">{s.description}</p>
+
+          <ul class="service-card__features">
+            {s.features.map(f => (
+              <li>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                {f}
+              </li>
+            ))}
+          </ul>
+
+          <p class="service-card__result">{s.result}</p>
+
+          <div class="service-card__footer">
+            <span class="service-card__price">{s.price}</span>
+            <a href="#contact" class="btn service-card__cta">
+              {s.cta}
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Social proof / trust bar -->
+    <div class="services__trust-bar reveal-up">
+      <div class="trust-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Sin contratos de permanencia
+      </div>
+      <div class="trust-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Comunicación directa — sin intermediarios
+      </div>
+      <div class="trust-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Respuesta en menos de 24 horas
+      </div>
+      <div class="trust-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Presupuesto gratis y sin compromiso
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .services {
+    padding: var(--section-py) 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .services__header { margin-bottom: 3.5rem; }
+
+  .services__heading {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin-bottom: 1rem;
+  }
+
+  .services__heading em {
+    font-style: normal;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 1px var(--accent);
+  }
+
+  .services__subhead {
+    font-size: 1.05rem;
+    color: var(--text-2);
+    max-width: 520px;
+    line-height: 1.6;
+  }
+
+  /* ── Grid ─────────────────────────────────── */
+  .services__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    align-items: start;
+  }
+
+  /* ── Card ─────────────────────────────────── */
+  .service-card {
+    position: relative;
+    padding: 2.25rem 1.75rem;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--bg-card);
+    transition: border-color 0.35s, transform 0.35s ease, box-shadow 0.35s;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .service-card:hover {
+    border-color: var(--svc-accent);
+    transform: translateY(-6px);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.45);
+  }
+
+  .service-card--featured {
+    border-color: var(--svc-accent);
+    background: linear-gradient(160deg, rgba(0,255,135,0.05) 0%, var(--bg-card) 60%);
+    box-shadow: 0 0 50px rgba(0,255,135,0.1);
+    transform: translateY(-4px);
+  }
+
+  .service-card__badge {
+    position: absolute;
+    top: -0.8rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #000;
+    background: var(--green);
+    padding: 0.25rem 1rem;
+    border-radius: 50px;
+    white-space: nowrap;
+    font-weight: 700;
+  }
+
+  /* Tier label row */
+  .service-card__top {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .service-card__tier {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--svc-accent);
+    opacity: 0.6;
+    letter-spacing: 0.12em;
+  }
+
+  .service-card__label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 0.15rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+
+  .service-card__icon {
+    color: var(--svc-accent);
+    width: 2.2rem;
+    height: 2.2rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .service-card__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .service-card__tagline {
+    font-size: 0.82rem;
+    color: var(--svc-accent);
+    font-weight: 500;
+    margin-top: -0.4rem;
+    line-height: 1.4;
+  }
+
+  .service-card__desc {
+    font-size: 0.88rem;
+    color: var(--text-2);
+    line-height: 1.7;
+  }
+
+  .service-card__features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    flex: 1;
+  }
+
+  .service-card__features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    font-size: 0.86rem;
+    color: var(--text-2);
+    line-height: 1.4;
+  }
+
+  .service-card__features li svg {
+    color: var(--svc-accent);
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  .service-card__result {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--svc-accent);
+    padding: 0.6rem 0.9rem;
+    background: color-mix(in srgb, var(--svc-accent) 8%, transparent);
+    border-left: 2px solid var(--svc-accent);
+    border-radius: 0 6px 6px 0;
+    line-height: 1.4;
+  }
+
+  .service-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    margin-top: auto;
+  }
+
+  .service-card__price {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--svc-accent);
+  }
+
+  .service-card__cta {
+    padding: 0.55rem 1.25rem;
+    font-size: 0.82rem;
+    background: var(--svc-accent);
+    color: #000;
+    border-radius: 6px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    transition: opacity 0.2s, transform 0.2s;
+    border: none;
+  }
+
+  .service-card__cta:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+  }
+
+  /* ── Trust bar ───────────────────────────────── */
+  .services__trust-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding: 1.75rem 2rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg-card);
+  }
+
+  .trust-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+    color: var(--text-2);
+    white-space: nowrap;
+  }
+
+  .trust-item svg { color: var(--accent); flex-shrink: 0; }
+
+  @media (max-width: 1024px) {
+    .services__grid { grid-template-columns: 1fr; max-width: 520px; }
+    .service-card--featured { transform: none; }
+  }
+
+  @media (max-width: 640px) {
+    .services__trust-bar { gap: 1.25rem; }
+    .trust-item { font-size: 0.8rem; white-space: normal; }
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.utils.toArray<HTMLElement>('#services .reveal-up').forEach((el, i) => {
+    gsap.to(el, {
+      y: 0, opacity: 1, duration: 0.85, ease: 'power3.out',
+      delay: i * 0.08,
+      scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+    });
+  });
+</script>

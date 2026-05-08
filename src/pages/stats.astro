@@ -1,0 +1,261 @@
+---
+// src/pages/stats.astro  –  Token usage dashboard
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Token Stats — Mario Rivas AI Chatbot">
+  <main class="stats-page">
+    <div class="container">
+      <header class="stats-header">
+        <span class="section-tag">Dashboard</span>
+        <h1>AI Token Usage</h1>
+        <p class="stats-subtitle">
+          Live stats for the chatbot on this portfolio · model <code>gpt-4o-mini</code>
+        </p>
+        <p class="stats-note">⚠️ Counts reset when the server restarts.</p>
+      </header>
+
+      <div id="stats-grid" class="stats-grid">
+        <!-- Cards injected by JS -->
+        <div class="stats-skeleton"></div>
+        <div class="stats-skeleton"></div>
+        <div class="stats-skeleton"></div>
+        <div class="stats-skeleton"></div>
+      </div>
+
+      <div class="stats-meta">
+        <span id="stats-uptime" class="stats-meta-item">—</span>
+        <span id="stats-refreshed" class="stats-meta-item">—</span>
+        <button id="stats-refresh" class="btn btn-outline">↻ Refresh</button>
+      </div>
+
+      <section class="stats-info">
+        <h2>How tokens work</h2>
+        <ul>
+          <li><strong>Input tokens</strong> — every character you type + the system prompt sent to OpenAI each turn.</li>
+          <li><strong>Output tokens</strong> — the characters in the AI's reply.</li>
+          <li><strong>Cost</strong> — calculated at gpt-4o-mini rates: $0.15 / 1M input · $0.60 / 1M output (billed by OpenAI).</li>
+          <li><strong>Copilot tokens</strong> — shown separately in your GitHub Copilot billing dashboard at <a href="https://github.com/settings/billing" target="_blank" rel="noopener">github.com/settings/billing</a>.</li>
+        </ul>
+      </section>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .stats-page {
+    min-height: 100vh;
+    padding: 8rem 0 6rem;
+    background: var(--bg);
+  }
+
+  .stats-header {
+    margin-bottom: 3rem;
+  }
+
+  .stats-header h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-family: var(--font-head);
+    letter-spacing: -0.04em;
+    margin: 0.5rem 0 1rem;
+  }
+
+  .stats-subtitle {
+    color: var(--text-2);
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .stats-subtitle code {
+    font-family: var(--font-mono);
+    background: var(--accent-dim);
+    color: var(--accent);
+    padding: 0.1em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+
+  .stats-note {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  /* ── Cards grid ─────────────────────────────── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .stats-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem 1.5rem;
+    transition: border-color 0.3s;
+  }
+
+  .stats-card:hover { border-color: var(--border-accent); }
+
+  .stats-card__label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .stats-card__value {
+    font-family: var(--font-head);
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stats-card__sub {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.4rem;
+  }
+
+  .stats-skeleton {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    height: 120px;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; }
+    50%       { opacity: 1;   }
+  }
+
+  /* ── Meta bar ────────────────────────────────── */
+  .stats-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .stats-meta-item {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  /* ── Info section ───────────────────────────── */
+  .stats-info {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    background: var(--bg-card);
+  }
+
+  .stats-info h2 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+
+  .stats-info ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .stats-info li {
+    font-size: 0.9rem;
+    color: var(--text-2);
+    line-height: 1.6;
+    padding-left: 1.2em;
+    position: relative;
+  }
+
+  .stats-info li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 0.8em;
+  }
+
+  .stats-info a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>
+
+<script>
+  interface StatsData {
+    inputTokens: number;
+    outputTokens: number;
+    totalTokens: number;
+    requests: number;
+    estimatedCostUSD: number;
+    model: string;
+    uptimeSince: string;
+  }
+
+  function fmt(n: number): string {
+    return n.toLocaleString('en-US');
+  }
+
+  function renderCards(data: StatsData) {
+    const grid = document.getElementById('stats-grid')!;
+    grid.innerHTML = `
+      <div class="stats-card">
+        <p class="stats-card__label">Input tokens</p>
+        <p class="stats-card__value">${fmt(data.inputTokens)}</p>
+        <p class="stats-card__sub">Prompt + system prompt</p>
+      </div>
+      <div class="stats-card">
+        <p class="stats-card__label">Output tokens</p>
+        <p class="stats-card__value">${fmt(data.outputTokens)}</p>
+        <p class="stats-card__sub">AI replies generated</p>
+      </div>
+      <div class="stats-card">
+        <p class="stats-card__label">Total tokens</p>
+        <p class="stats-card__value">${fmt(data.totalTokens)}</p>
+        <p class="stats-card__sub">${fmt(data.requests)} request${data.requests !== 1 ? 's' : ''}</p>
+      </div>
+      <div class="stats-card">
+        <p class="stats-card__label">Estimated cost</p>
+        <p class="stats-card__value">$${data.estimatedCostUSD.toFixed(4)}</p>
+        <p class="stats-card__sub">USD · gpt-4o-mini rates</p>
+      </div>
+    `;
+  }
+
+  async function load() {
+    try {
+      const res = await fetch('/api/stats');
+      const data: StatsData = await res.json();
+      renderCards(data);
+
+      const since = new Date(data.uptimeSince);
+      document.getElementById('stats-uptime')!.textContent =
+        `Server up since: ${since.toLocaleString()}`;
+    } catch {
+      document.getElementById('stats-grid')!.innerHTML =
+        '<p style="color:var(--warm)">Failed to load stats. Is the dev server running?</p>';
+    }
+
+    document.getElementById('stats-refreshed')!.textContent =
+      `Last updated: ${new Date().toLocaleTimeString()}`;
+  }
+
+  load();
+  document.getElementById('stats-refresh')!.addEventListener('click', load);
+  // Auto-refresh every 30 seconds
+  setInterval(load, 30_000);
+</script>

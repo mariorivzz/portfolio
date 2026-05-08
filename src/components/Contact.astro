@@ -1,0 +1,644 @@
+---
+const CONTACT_EMAIL    = 'mariorivashdz@gmail.com';
+const CONTACT_PHONE    = '636 495 506';
+const WA_NUMBER        = '34636495506';
+const WA_MESSAGE       = encodeURIComponent('Hola Mario, he visto tu portfolio y me gustaría digitalizar mi negocio. ¿Podemos hablar?');
+const WA_LINK          = `https://wa.me/${WA_NUMBER}?text=${WA_MESSAGE}`;
+// Formspree: sign up at formspree.io → New Form → copy the form ID below
+// Then set FORMSPREE_ENDPOINT=https://formspree.io/f/YOUR_FORM_ID in your .env
+const FORMSPREE_ENDPOINT = import.meta.env.FORMSPREE_ENDPOINT ?? '';
+---
+
+<section id="contact" class="contact">
+  <div class="container">
+
+    <div class="contact__grid">
+
+      <!-- ── Left: copy + fast channels ─────────────────── -->
+      <div class="contact__copy">
+        <span class="section-tag reveal-up">Hablemos</span>
+
+        <h2 class="contact__heading reveal-up">
+          EMPIEZA HOY A<br />
+          <em>MULTIPLICAR<br />TUS CLIENTES</em>
+        </h2>
+
+        <p class="contact__desc reveal-up">
+          Cuéntame tu proyecto. En menos de 24h tendrás una propuesta clara,
+          directa y sin compromiso para impulsar tu negocio local.
+        </p>
+
+        <!-- WhatsApp primary CTA -->
+        <a href={WA_LINK} target="_blank" rel="noopener noreferrer"
+           class="contact__wa-btn reveal-up">
+          <!-- WhatsApp logo -->
+          <svg width="22" height="22" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
+            <path d="M16.003 2.667C8.637 2.667 2.667 8.636 2.667 16c0 2.37.625 4.693 1.813 6.74L2.667 29.333l6.784-1.778A13.29 13.29 0 0016.003 29.333C23.37 29.333 29.333 23.364 29.333 16S23.37 2.667 16.003 2.667zm0 2.4c5.94 0 10.93 4.99 10.93 10.933 0 5.944-4.99 10.934-10.93 10.934a10.9 10.9 0 01-5.572-1.53l-.397-.24-4.027 1.056 1.073-3.916-.262-.413A10.87 10.87 0 015.07 16C5.07 10.057 10.062 5.067 16.003 5.067zm-3.13 5.866c-.213 0-.558.08-.851.4-.292.32-1.12 1.094-1.12 2.666s1.146 3.094 1.306 3.307c.16.213 2.24 3.573 5.493 4.853 2.72 1.08 3.254.867 3.84.813.587-.053 1.893-.773 2.16-1.52.267-.746.267-1.386.187-1.52-.08-.133-.294-.213-.614-.373-.32-.16-1.893-.933-2.186-1.04-.294-.106-.507-.16-.72.16-.214.32-.826 1.04-.999 1.253-.174.214-.347.24-.667.08-.32-.16-1.347-.496-2.566-1.587-.948-.845-1.587-1.893-1.774-2.213-.186-.32-.02-.493.14-.653.143-.143.32-.373.48-.56.16-.186.213-.32.32-.533.106-.214.053-.4-.027-.56-.08-.16-.706-1.746-.982-2.386-.266-.626-.546-.52-.72-.52l-.6-.014z"/>
+          </svg>
+          <div>
+            <span class="contact__wa-label">Respuesta rápida</span>
+            <span class="contact__wa-text">Escríbeme por WhatsApp</span>
+          </div>
+          <svg class="contact__wa-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+
+        <!-- Divider -->
+        <div class="contact__divider reveal-up">
+          <span>o usa el formulario</span>
+        </div>
+
+        <!-- Contact details -->
+        <div class="contact__details">
+          <a href={`mailto:${CONTACT_EMAIL}`} class="contact__detail-item reveal-up">
+            <span class="contact__detail-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </span>
+            <div>
+              <span class="contact__detail-label">Email</span>
+              <span class="contact__detail-value">{CONTACT_EMAIL}</span>
+            </div>
+          </a>
+
+          <a href={WA_LINK} target="_blank" rel="noopener noreferrer" class="contact__detail-item reveal-up">
+            <span class="contact__detail-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.0 1.18 2 2 0 012 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92z"/></svg>
+            </span>
+            <div>
+              <span class="contact__detail-label">WhatsApp</span>
+              <span class="contact__detail-value">{CONTACT_PHONE}</span>
+            </div>
+          </a>
+        </div>
+
+        <!-- Trust signals -->
+        <ul class="contact__trust reveal-up">
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Propuesta estratégica gratuita en 24h
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Contratación transparente y directa
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Trato humano y cercano, siempre.
+          </li>
+        </ul>
+      </div>
+
+      <!-- ── Right: form ──────────────────────────────────── -->
+      <div class="contact__form-wrap reveal-up">
+
+        <!-- Default state -->
+        <div id="form-default">
+          <p class="form-intro">
+            Cuéntame sobre tu negocio y te preparo una propuesta personalizada.
+          </p>
+
+          <form id="contact-form" class="contact-form" novalidate
+                data-endpoint={FORMSPREE_ENDPOINT}>
+
+            <div class="contact-form__row">
+              <div class="field">
+                <label for="cf-name">Tu nombre</label>
+                <input id="cf-name" name="name" type="text"
+                       placeholder="María García" required autocomplete="name" />
+              </div>
+              <div class="field">
+                <label for="cf-email">Tu email</label>
+                <input id="cf-email" name="email" type="email"
+                       placeholder="maria@negocio.com" required autocomplete="email" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="cf-business">¿A qué te dedicas?</label>
+              <input id="cf-business" name="business" type="text"
+                     placeholder="Ej: Peluquería, restaurante, clínica dental..." />
+            </div>
+
+            <div class="field">
+              <label for="cf-service">¿Qué necesitas?</label>
+              <select id="cf-service" name="service">
+                <option value="">Elige una opción...</option>
+                <option value="presencia">Presencia Profesional (web básica)</option>
+                <option value="ventas">Página que Vende (llave en mano)</option>
+                <option value="socio">Socio Digital Total (mantenimiento mensual)</option>
+                <option value="otro">No lo tengo claro, quiero consejo</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="cf-message">Cuéntame más (opcional)</label>
+              <textarea id="cf-message" name="message" rows="3"
+                        placeholder="¿Tienes web ahora? ¿Qué problema quieres resolver?"></textarea>
+            </div>
+
+            <button type="submit" class="contact-form__submit" id="submit-btn">
+              <span id="submit-label">Solicitar mi propuesta estratégica gratuita</span>
+              <svg id="submit-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+
+            <p class="form-disclaimer">
+              Al enviar aceptas que te contacte para preparar tu presupuesto. Sin spam, nunca.
+            </p>
+
+            <div id="form-error" class="form-error-msg" aria-live="polite" hidden>
+              ⚠️ Algo salió mal. Escríbeme directamente a
+              <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+            </div>
+          </form>
+        </div>
+
+        <!-- Success state (replaces form) -->
+        <div id="form-success" class="form-success" hidden aria-live="polite">
+          <div class="form-success__icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <h3>¡Mensaje recibido!</h3>
+          <p>
+            Gracias por confiar en mí. Te contactaré en <strong>menos de 24 horas</strong>
+            con una propuesta personalizada para tu negocio.
+          </p>
+          <p class="form-success__sub">
+            Mientras tanto, si tienes urgencia puedes escribirme por
+            <a href={WA_LINK} target="_blank" rel="noopener">WhatsApp</a>.
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .contact {
+    padding: var(--section-py) 0;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── Grid ─────────────────────────────────── */
+  .contact__grid {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: clamp(3rem, 6vw, 7rem);
+    align-items: start;
+  }
+
+  /* ── Heading ─────────────────────────────── */
+  .contact__heading {
+    font-size: clamp(2.4rem, 5vw, 4.2rem);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 1.25rem;
+  }
+
+  .contact__heading em {
+    font-style: normal;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 1px var(--accent);
+  }
+
+  .contact__desc {
+    font-size: 1rem;
+    color: var(--text-2);
+    line-height: 1.7;
+    margin-bottom: 1.75rem;
+    max-width: 380px;
+  }
+
+  /* ── WhatsApp primary button ─────────────── */
+  .contact__wa-btn {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: #25D366;
+    color: #000;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contact__wa-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.12);
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .contact__wa-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 40px rgba(37,211,102,0.35);
+    filter: brightness(1.05);
+  }
+
+  .contact__wa-btn:hover::before { opacity: 1; }
+
+  .contact__wa-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .contact__wa-text {
+    display: block;
+    font-weight: 700;
+    font-size: 0.95rem;
+    line-height: 1.3;
+  }
+
+  .contact__wa-arrow { margin-left: auto; flex-shrink: 0; }
+
+  /* ── Divider ─────────────────────────────── */
+  .contact__divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .contact__divider::before,
+  .contact__divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .contact__divider span {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  /* ── Detail items ────────────────────────── */
+  .contact__details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .contact__detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.25s;
+  }
+
+  .contact__detail-item:hover { color: var(--accent); }
+
+  .contact__detail-icon {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--accent);
+    flex-shrink: 0;
+    transition: border-color 0.25s, background 0.25s;
+  }
+
+  .contact__detail-item:hover .contact__detail-icon {
+    border-color: var(--border-accent);
+    background: var(--accent-dim);
+  }
+
+  .contact__detail-label {
+    display: block;
+    font-size: 0.68rem;
+    font-family: var(--font-mono);
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .contact__detail-value {
+    display: block;
+    font-size: 0.88rem;
+    color: var(--text-2);
+    margin-top: 0.05rem;
+  }
+
+  /* ── Trust list ──────────────────────────── */
+  .contact__trust {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .contact__trust li {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .contact__trust li svg { color: var(--green); flex-shrink: 0; }
+
+  /* ── Form card ───────────────────────────── */
+  .contact__form-wrap {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.5rem;
+  }
+
+  .form-intro {
+    font-size: 0.92rem;
+    color: var(--text-2);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .contact-form { display: flex; flex-direction: column; gap: 1.15rem; }
+
+  .contact-form__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.15rem;
+  }
+
+  .field { display: flex; flex-direction: column; gap: 0.4rem; }
+
+  .field label {
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    padding: 0.75rem 1rem;
+    outline: none;
+    transition: border-color 0.25s, background 0.25s;
+    width: 100%;
+    resize: vertical;
+  }
+
+  .field input::placeholder,
+  .field textarea::placeholder { color: var(--text-muted); }
+
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    border-color: var(--border-accent);
+    background: rgba(0,212,255,0.03);
+  }
+
+  .field input.invalid,
+  .field textarea.invalid { border-color: var(--warm); }
+
+  .field select { cursor: pointer; appearance: none; }
+
+  /* Dropdown options — force dark bg so text is always visible regardless of OS theme */
+  .field select option {
+    background-color: #0d0d14;
+    color: #e8e8e8;
+  }
+
+  .field select option:checked {
+    background-color: rgba(0, 212, 255, 0.15);
+    color: #00d4ff;
+  }
+
+  /* Submit button */
+  .contact-form__submit {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 1rem 1.5rem;
+    background: var(--accent);
+    color: #000;
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contact-form__submit::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+  }
+
+  .contact-form__submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(0,212,255,0.35);
+    filter: brightness(1.08);
+  }
+
+  .contact-form__submit:hover::before { transform: translateX(100%); }
+  .contact-form__submit:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+
+  .form-disclaimer {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .form-error-msg {
+    padding: 0.85rem 1rem;
+    background: rgba(255,107,53,0.08);
+    border: 1px solid rgba(255,107,53,0.3);
+    border-radius: 8px;
+    font-size: 0.88rem;
+    color: var(--warm);
+  }
+
+  .form-error-msg a { color: var(--warm); text-decoration: underline; }
+
+  /* ── Success state ───────────────────────── */
+  .form-success {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+    padding: 1rem 0;
+  }
+
+  .form-success__icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(0,255,135,0.1);
+    border: 1px solid rgba(0,255,135,0.3);
+    color: var(--green);
+  }
+
+  .form-success h3 {
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+    color: var(--green);
+  }
+
+  .form-success p {
+    font-size: 0.95rem;
+    color: var(--text-2);
+    line-height: 1.7;
+    max-width: 340px;
+  }
+
+  .form-success__sub {
+    font-size: 0.85rem !important;
+    color: var(--text-muted) !important;
+  }
+
+  .form-success__sub a {
+    color: #25D366;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  @media (max-width: 900px) {
+    .contact__grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 560px) {
+    .contact-form__row { grid-template-columns: 1fr; }
+    .contact__form-wrap { padding: 1.75rem 1.25rem; }
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  // ── Scroll reveals ─────────────────────────────────────────────
+  gsap.utils.toArray<HTMLElement>('#contact .reveal-up').forEach(el => {
+    gsap.to(el, {
+      y: 0, opacity: 1, duration: 0.85, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+    });
+  });
+
+  // ── Form submission ────────────────────────────────────────────
+  const form      = document.getElementById('contact-form') as HTMLFormElement;
+  const btnLabel  = document.getElementById('submit-label')!;
+  const btnIcon   = document.getElementById('submit-icon')!;
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+  const errMsg    = document.getElementById('form-error')!;
+  const formWrap  = document.getElementById('form-default')!;
+  const successEl = document.getElementById('form-success')!;
+
+  // Inline validation helpers
+  function markValid(el: HTMLInputElement | HTMLTextAreaElement) {
+    el.classList.remove('invalid');
+  }
+  function markInvalid(el: HTMLInputElement | HTMLTextAreaElement) {
+    el.classList.add('invalid');
+  }
+
+  form.querySelectorAll<HTMLInputElement>('input[required], textarea[required]').forEach(el => {
+    el.addEventListener('input', () => { if (el.value.trim()) markValid(el); });
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errMsg.hidden = true;
+
+    // Client-side validation
+    let valid = true;
+    form.querySelectorAll<HTMLInputElement>('input[required]').forEach(el => {
+      if (!el.value.trim() || (el.type === 'email' && !el.value.includes('@'))) {
+        markInvalid(el); valid = false;
+      }
+    });
+    if (!valid) return;
+
+    // UI loading state
+    btnLabel.textContent = 'Enviando...';
+    btnIcon.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>`;
+    submitBtn.disabled = true;
+
+    const endpoint = (form.dataset.endpoint ?? '').trim();
+    const data     = Object.fromEntries(new FormData(form).entries());
+
+    try {
+      if (endpoint) {
+        // ── Formspree (preferred — real email delivery) ──────────
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (!res.ok) throw new Error(`Formspree ${res.status}`);
+      } else {
+        // ── Mailto fallback (opens email client) ─────────────────
+        const svc  = data.service as string || 'Consulta';
+        const name = data.name    as string || '';
+        const subject = encodeURIComponent(`[Portfolio] ${svc} — ${name}`);
+        const body    = encodeURIComponent(
+          Object.entries(data).map(([k, v]) => `${k}: ${v}`).join('\n')
+        );
+        window.open(`mailto:mariorivashdz@gmail.com?subject=${subject}&body=${body}`, '_blank');
+      }
+
+      // Show success panel with animation
+      formWrap.style.transition = 'opacity 0.3s';
+      formWrap.style.opacity    = '0';
+      setTimeout(() => {
+        formWrap.hidden   = true;
+        successEl.hidden  = false;
+        successEl.style.opacity = '0';
+        successEl.style.transition = 'opacity 0.4s';
+        requestAnimationFrame(() => { successEl.style.opacity = '1'; });
+      }, 300);
+
+    } catch {
+      errMsg.hidden = false;
+      btnLabel.textContent = 'Solicitar mi propuesta estratégica gratuita';
+      btnIcon.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>`;
+      submitBtn.disabled = false;
+    }
+  });
+</script>

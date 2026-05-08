@@ -1,0 +1,205 @@
+---
+const links = [
+  { href: '#about',    label: 'Sobre mí'  },
+  { href: '#services', label: 'Servicios' },
+  { href: '#contact',  label: 'Contacto'  },
+];
+---
+
+<nav id="nav" class="nav">
+  <div class="container nav__inner">
+    <!-- Logo -->
+    <a href="/" class="nav__logo" aria-label="Inicio">
+      <span class="nav__logo-symbol">&lt;</span>dev<span class="nav__logo-symbol">/&gt;</span>
+    </a>
+
+    <!-- Desktop links -->
+    <ul class="nav__links" role="list">
+      {links.map(l => (
+        <li>
+          <a href={l.href} class="nav__link">{l.label}</a>
+        </li>
+      ))}
+    </ul>
+
+    <!-- Mobile hamburger -->
+    <button class="nav__burger" id="nav-burger" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <div class="nav__mobile" id="nav-mobile" aria-hidden="true">
+    <ul role="list">
+      {links.map(l => (
+        <li><a href={l.href} class="nav__mobile-link">{l.label}</a></li>
+      ))}
+    </ul>
+  </div>
+</nav>
+
+<style>
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 1.5rem 0;
+    transition: padding 0.4s ease, background 0.4s ease, border-color 0.4s ease;
+    border-bottom: 1px solid transparent;
+  }
+
+  .nav.scrolled {
+    padding: 0.9rem 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom-color: var(--border);
+  }
+
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  /* Logo */
+  .nav__logo {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text);
+    transition: color 0.3s;
+    flex-shrink: 0;
+  }
+  .nav__logo-symbol { color: var(--accent); }
+  .nav__logo:hover { color: var(--accent); }
+
+  /* Links */
+  .nav__links {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+    list-style: none;
+    margin-left: auto;
+  }
+
+  .nav__link {
+    font-family: var(--font-head);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    position: relative;
+    transition: color 0.3s;
+  }
+
+  .nav__link::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--accent);
+    transition: width 0.3s var(--ease-out-expo);
+  }
+
+  .nav__link:hover { color: var(--text); }
+  .nav__link:hover::after { width: 100%; }
+
+  /* CTA */
+  .nav__cta { margin-left: 1rem; }
+
+  /* Burger */
+  .nav__burger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: auto;
+    padding: 4px;
+  }
+
+  .nav__burger span {
+    display: block;
+    width: 24px;
+    height: 1.5px;
+    background: var(--text);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform-origin: center;
+  }
+
+  .nav__burger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .nav__burger.open span:nth-child(2) { opacity: 0; }
+  .nav__burger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  /* Mobile menu */
+  .nav__mobile {
+    display: none;
+    padding: 1.5rem var(--pad-x);
+    border-top: 1px solid var(--border);
+    background: rgba(0,0,0,0.95);
+  }
+
+  .nav__mobile ul { list-style: none; display: flex; flex-direction: column; gap: 0.25rem; }
+
+  .nav__mobile-link {
+    display: block;
+    font-family: var(--font-head);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+    transition: color 0.3s;
+  }
+
+  .nav__mobile-link:hover { color: var(--accent); }
+
+  @media (max-width: 768px) {
+    .nav__links, .nav__cta { display: none; }
+    .nav__burger { display: flex; }
+    .nav__mobile { display: block; }
+    .nav__mobile[aria-hidden="true"] { display: none; }
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+
+  const nav    = document.getElementById('nav')!;
+  const burger = document.getElementById('nav-burger')!;
+  const mobile = document.getElementById('nav-mobile')!;
+
+  // ── Scroll handler ──────────────────────────────────────────
+  const onScroll = () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // ── Mobile menu toggle ──────────────────────────────────────
+  burger.addEventListener('click', () => {
+    const isOpen = burger.classList.toggle('open');
+    burger.setAttribute('aria-expanded', isOpen.toString());
+    mobile.setAttribute('aria-hidden', (!isOpen).toString());
+  });
+
+  // ── Close on link click ─────────────────────────────────────
+  mobile.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      burger.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+      mobile.setAttribute('aria-hidden', 'true');
+    });
+  });
+
+  // ── Entrance animation ──────────────────────────────────────
+  gsap.from('.nav__inner', {
+    y: -30, opacity: 0, duration: 0.9,
+    ease: 'power4.out', delay: 1.6,
+  });
+</script>

@@ -1,0 +1,239 @@
+---
+const stats = [
+  { number: 8,   suffix: '+', label: 'Años de experiencia' },
+  { number: 50,  suffix: '+', label: 'Proyectos entregados' },
+  { number: 30,  suffix: '+', label: 'Clientes satisfechos' },
+  { number: 100, suffix: '%', label: 'Compromiso total'     },
+];
+---
+
+<section id="about" class="about">
+  <div class="container">
+
+    <div class="about__grid">
+      <!-- Stats column -->
+      <div class="about__stats">
+        {stats.map(s => (
+          <div class="about__stat reveal-up">
+            <span class="about__stat-num" data-target={s.number}>0</span>
+            <span class="about__stat-suf">{s.suffix}</span>
+            <span class="about__stat-label">{s.label}</span>
+          </div>
+        ))}
+      </div>
+
+      <!-- Text column -->
+      <div class="about__copy">
+        <span class="section-tag reveal-up">Sobre mí</span>
+
+        <h2 class="about__heading reveal-up">
+          HOLA, SOY MARIO.<br />
+          <em>TU SOCIO TECNOLÓGICO LOCAL.</em>
+        </h2>
+
+        <div class="about__body">
+          <p class="reveal-up">
+            En 8 años y más de 50 proyectos exitosos, he aprendido lo que realmente importa:
+            <strong>tu negocio</strong>. No buscas solo una web ‘bonita’, buscas una web que
+            funcione. Como desarrollador solo, te ofrezco la comunicación directa, la honestidad
+            y la transparencia que tu negocio local necesita, sin intermediarios ni costes ocultos.
+          </p>
+        </div>
+
+        <!-- Differentiators -->
+        <p class="about__pillars-title">Resultados que avalan mi compromiso</p>
+        <ul class="about__pillars">
+          {[
+            { icon: '⚡', text: 'Webs que cargan al instante (crítico para SEO)' },
+            { icon: '📊', text: 'Estrategia diseñada para conseguir clientes' },
+            { icon: '🤝', text: 'Trato humano y cercano, siempre disponible' },
+          ].map(p => (
+            <li class="reveal-up">
+              <span class="about__pillar-icon">{p.icon}</span>
+              {p.text}
+            </li>
+          ))}
+        </ul>
+
+        <a href="#contact" class="btn btn-primary reveal-up">
+          <span>Hablemos de tu proyecto</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .about {
+    padding: var(--section-py) 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .about__grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: clamp(3rem, 6vw, 7rem);
+    align-items: start;
+  }
+
+  /* ── Stats ─────────────────────────────────── */
+  .about__stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    position: sticky;
+    top: 8rem;
+  }
+
+  .about__stat {
+    padding: 1.75rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-card);
+    transition: border-color 0.3s, background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .about__stat::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent-dim);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .about__stat:hover { border-color: var(--border-accent); }
+  .about__stat:hover::before { opacity: 1; }
+
+  .about__stat-num {
+    display: block;
+    font-family: var(--font-head);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .about__stat-suf {
+    font-family: var(--font-head);
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-weight: 700;
+    color: var(--accent);
+    margin-left: -0.1em;
+  }
+
+  .about__stat-label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+    line-height: 1.3;
+  }
+
+  /* ── Copy ─────────────────────────────────── */
+  .about__heading {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    margin-bottom: 2rem;
+    line-height: 1.15;
+  }
+
+  .about__heading em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .about__body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    color: var(--text-2);
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+
+  .about__body strong { color: var(--text); }
+
+  .about__pillars-title {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.85rem;
+  }
+
+  .about__pillars {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .about__pillars li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--text-2);
+  }
+
+  .about__pillar-icon {
+    font-size: 1.1rem;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-dim);
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 900px) {
+    .about__grid { grid-template-columns: 1fr; }
+    .about__stats { position: static; grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 480px) {
+    .about__stats { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  // ── Scroll reveals ───────────────────────────────────────────
+  gsap.utils.toArray<HTMLElement>('#about .reveal-up').forEach(el => {
+    gsap.to(el, {
+      y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+    });
+  });
+
+  // ── Counter animation ───────────────────────────────────────
+  document.querySelectorAll<HTMLElement>('.about__stat-num').forEach(el => {
+    const target = parseInt(el.dataset.target || '0', 10);
+    ScrollTrigger.create({
+      trigger: el,
+      start: 'top 85%',
+      once: true,
+      onEnter: () => {
+        gsap.to({ val: 0 }, {
+          val: target,
+          duration: 1.8,
+          ease: 'power2.out',
+          onUpdate() { el.textContent = Math.round((this as any).targets()[0].val).toString(); },
+          onComplete() { el.textContent = target.toString(); },
+        });
+      },
+    });
+  });
+</script>
