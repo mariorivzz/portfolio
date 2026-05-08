@@ -3,7 +3,7 @@
 	"compatibility_flags": [
 		"global_fetch_strictly_public"
 	],
-	"name": "digital-disk",
+	"name": "portfolio-mariorivas",
 	"main": "./dist/server/entry.mjs",
 	"assets": {
 		"directory": "./dist/client",
