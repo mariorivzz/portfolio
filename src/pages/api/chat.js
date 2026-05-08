@@ -34,7 +34,7 @@ Si alguien quiere un presupuesto o más info, invítales a usar el formulario de
 Si te preguntan algo completamente ajeno a Mario y sus servicios web, redirige amablemente la conversación.`;
 
 // ── Request handler ──────────────────────────────────────────────────────────
-export async function POST({ request }) {
+export async function POST({ request, locals }) {
   // Validate Content-Type
   const contentType = request.headers.get('content-type') ?? '';
   if (!contentType.includes('application/json')) {
@@ -56,7 +56,8 @@ export async function POST({ request }) {
   }
 
   // Guard: API key must be configured
-  const apiKey = import.meta.env.GROQ_API_KEY;
+  // En Cloudflare Workers las secrets se leen desde locals.runtime.env
+  const apiKey = locals?.runtime?.env?.GROQ_API_KEY ?? import.meta.env.GROQ_API_KEY;
   if (!apiKey) {
     console.warn('[/api/chat] GROQ_API_KEY is not set — returning 503');
     return new Response(

@@ -12,6 +12,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^13.5.0",
     "@astrojs/node": "^10.1.0",
     "@astrojs/vercel": "^10.0.6",
     "@opentelemetry/api": "^1.9.1",
