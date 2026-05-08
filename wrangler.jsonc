@@ -1,8 +1,11 @@
 {
 	"compatibility_date": "2026-05-08",
-	"compatibility_flags": ["global_fetch_strictly_public"],
+	"compatibility_flags": [
+		"global_fetch_strictly_public"
+	],
 	"name": "digital-disk",
 	"main": "./dist/server/entry.mjs",
+	"no_bundle": true,
 	"assets": {
 		"directory": "./dist/client",
 		"binding": "ASSETS"
