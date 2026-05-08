@@ -2,18 +2,18 @@
 const services = [
   {
     tier: '01',
-    label: 'El Primer Paso',
+    label: 'Esencial',
     icon: `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
-    title: 'Presencia Profesional',
-    tagline: 'Tu negocio abierto las 24h, los 365 días del año',
+    title: 'Web Profesional',
+    tagline: 'Tu negocio visible en tu ciudad desde el primer día',
     description:
-      'Una web rápida y elegante que genera confianza desde el primer segundo. Tus clientes te encuentran en Google, ven que eres serio, y te llaman.',
+      'Una web rápida, elegante y bien posicionada que genera confianza desde el primer segundo. Tus clientes te encuentran antes que a la competencia, ven que eres serio, y te llaman.',
     features: [
-      'Carga en menos de 2 segundos',
-      'Diseño perfecto en móvil y tablet',
-      'Apareces en Google Maps y búsquedas locales',
+      'Carga en menos de 2 segundos — crítico para Google',
+      'Diseño adaptado a móvil, tablet y ordenador',
+      'Apareces en Google Maps y en las búsquedas de tu zona',
       'Formulario de contacto directo a tu WhatsApp',
-      'Dominio y hosting gestionados por mí',
+      'Dominio y alojamiento gestionados por mí',
     ],
     result: '→ Más credibilidad. Más llamadas.',
     price: 'Desde 497 €',
@@ -23,43 +23,43 @@ const services = [
   },
   {
     tier: '02',
-    label: 'El Más Elegido',
+    label: 'Recomendado',
     icon: `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
-    title: 'Página que Vende',
-    tagline: 'Llave en mano — tú solo te preocupas de atender clientes',
+    title: 'Web que Capta Clientes',
+    tagline: 'Todo lo del plan Esencial, más automatización inteligente',
     description:
-      'No solo te hago una web bonita. Te entrego una máquina de captar clientes: diseño que convence, textos que venden y un proceso 100% sin complicaciones.',
+      'Tu web trabaja por ti incluso cuando duermes. Un asistente de inteligencia artificial atiende a tus visitas al instante y el sistema avisa automáticamente por correo y WhatsApp cuando alguien quiere contratarte.',
     features: [
-      'Diseño que vende (no solo que impresiona)',
-      'Copywriting incluido — yo escribo los textos',
-      'Botón de WhatsApp y reservas online',
-      'SEO local para salir antes que tu competencia',
-      'Entrega en 7 días — garantizado',
+      'Todo lo incluido en el plan Esencial',
+      'Asistente de IA — responde dudas de tus clientes 24h',
+      'Aviso automático por correo cuando llega un cliente',
+      'Botón de WhatsApp con mensaje pregrabado',
+      'Textos redactados por mí, pensados para vender',
     ],
-    result: '→ Más clientes. Sin esfuerzo por tu parte.',
+    result: '→ Más contactos. Sin estar pendiente del teléfono.',
     price: 'Desde 997 €',
-    cta: 'Lo quiero todo hecho',
+    cta: 'Lo quiero todo incluido',
     accent: 'var(--green)',
     featured: true,
   },
   {
     tier: '03',
-    label: 'Tranquilidad Total',
+    label: 'Completo',
     icon: `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
-    title: 'Socio Digital Total',
-    tagline: 'Tu propio departamento de IT — sin el coste de contratarlo',
+    title: 'Solución Digital Total',
+    tagline: 'Todo lo anterior más agenda automática y sin complicaciones',
     description:
-      'Olvídate para siempre de problemas técnicos, actualizaciones y posicionamiento. Yo me encargo de todo, cada mes, para que tú te centres en tu negocio.',
+      'La solución más completa para negocios que quieren crecer sin preocuparse de nada técnico. Tus clientes reservan cita directamente desde la web, tú recibes la confirmación y yo me encargo del resto cada mes.',
     features: [
-      'Web + mantenimiento mensual incluido',
-      'SEO continuo — cada mes más arriba en Google',
-      'Actualizaciones y copias de seguridad diarias',
-      'Soporte directo en menos de 4 horas',
-      'Informes mensuales de visitas y resultados',
+      'Todo lo incluido en el plan Web que Capta Clientes',
+      'Agenda automática — tus clientes reservan solos',
+      'Confirmación de cita por correo y por WhatsApp',
+      'Mantenimiento mensual y posicionamiento continuo',
+      'Informe mensual de visitas y resultados en claro',
     ],
-    result: '→ Cero preocupaciones. Crecimiento constante.',
+    result: '→ Tu negocio en piloto automático.',
     price: 'Desde 197 € / mes',
-    cta: 'Quiero ese servicio',
+    cta: 'Quiero la solución completa',
     accent: 'var(--warm)',
     featured: false,
   },
@@ -70,7 +70,7 @@ const services = [
   <div class="container">
 
     <div class="services__header reveal-up">
-      <span class="section-tag">Para negocios locales y autónomos</span>
+      <span class="section-tag">Esencial · Recomendado · Completo</span>
       <h2 class="services__heading">
         SOLUCIONES WEB DISEÑADAS<br />
         <em>PARA TU NEGOCIO LOCAL</em>
@@ -86,7 +86,7 @@ const services = [
           class={`service-card reveal-up ${s.featured ? 'service-card--featured' : ''}`}
           style={`--svc-accent: ${s.accent};`}
         >
-          {s.featured && <span class="service-card__badge">⭐ El más elegido</span>}
+          {s.featured && <span class="service-card__badge">⭐ Más recomendado</span>}
 
           <div class="service-card__top">
             <span class="service-card__tier">{s.tier}</span>

@@ -3,56 +3,49 @@ import fisio      from '../assets/images/fisio1.jpg';
 import portfolio  from '../assets/images/portfolio1.jpg';
 import psico      from '../assets/images/psico1.jpg';
 import veterinaria from '../assets/images/veterinaria1.jpg';
-import yoga       from '../assets/images/yoga1.jpg';
 
 const projects = [
   {
-    title: 'Clínica de Fisioterapia',
-    tag:   'Diseño Web + SEO Local',
-    desc:  'Web de captación con agenda online, ficha de servicios y posicionamiento local en Google Maps.',
+    title: 'Web Corporativa Profesional',
+    tag:   'Diseño Web · Visibilidad en tu Ciudad',
+    tier:  'Plan Esencial',
+    desc:  'Presencia online elegante y rápida para clínica de fisioterapia. Aparece en Google Maps, ficha de servicios clara y formulario directo a WhatsApp.',
     img:   fisio,
-    alt:   'Web de clínica de fisioterapia',
+    alt:   'Web profesional para clínica de fisioterapia',
     accent: 'var(--accent)',
     url:   '#contact',
     featured: true,
   },
   {
-    title: 'Portfolio Profesional',
-    tag:   'Web Corporativa',
-    desc:  'Portfolio personal con animaciones GSAP, integración de chatbot IA y formulario de contacto automático.',
+    title: 'Web con Asistente Inteligente',
+    tag:   'Asistente de IA · Avisos Automáticos',
+    tier:  'Plan Recomendado',
+    desc:  'Portfolio con chatbot de inteligencia artificial que atiende visitas al instante, responde preguntas y avisa por correo cuando alguien quiere contratar.',
     img:   portfolio,
-    alt:   'Portfolio profesional desarrollador web',
+    alt:   'Web con asistente de inteligencia artificial integrado',
     accent: 'var(--green)',
     url:   '#contact',
     featured: false,
   },
   {
-    title: 'Consulta de Psicología',
-    tag:   'Diseño Web + Reservas Online',
-    desc:  'Página de confianza y conversión para terapeuta, con formulario de primera consulta y cita previa.',
+    title: 'Web con Gestión de Reservas',
+    tag:   'Agenda Automática · Cita Previa',
+    tier:  'Plan Completo',
+    desc:  'Web para consulta de psicología con sistema de cita previa integrado. El cliente elige día y hora, recibe confirmación automática y tú no tienes que hacer nada.',
     img:   psico,
-    alt:   'Web consulta de psicología',
+    alt:   'Web con sistema de reservas y cita previa',
     accent: 'var(--warm)',
     url:   '#contact',
     featured: false,
   },
   {
-    title: 'Clínica Veterinaria',
-    tag:   'SEO Local + Web',
-    desc:  'Presencia digital completa con ficha de servicios, equipo veterinario y formulario de urgencias.',
+    title: 'Sistema Digital Completo',
+    tag:   'Solución Total · Mantenimiento Incluido',
+    tier:  'Plan Completo',
+    desc:  'Solución integral para clínica veterinaria: web rápida, asistente de IA, agenda de citas, posicionamiento en la ciudad y mantenimiento mensual sin preocupaciones.',
     img:   veterinaria,
-    alt:   'Web clínica veterinaria',
+    alt:   'Sistema digital completo para negocio local',
     accent: 'var(--accent)',
-    url:   '#contact',
-    featured: false,
-  },
-  {
-    title: 'Centro de Yoga',
-    tag:   'Landing Page + Reservas',
-    desc:  'Landing de alta conversión con horarios, tarifas y botón de reserva directa a WhatsApp.',
-    img:   yoga,
-    alt:   'Web centro de yoga',
-    accent: 'var(--green)',
     url:   '#contact',
     featured: false,
   },
@@ -95,6 +88,7 @@ const projects = [
           <div class="project-card__body">
             <div class="project-card__meta">
               <span class="project-card__tag">{p.tag}</span>
+              <span class="project-card__tier-badge">{p.tier}</span>
             </div>
             <h3 class="project-card__title">{p.title}</h3>
             <p class="project-card__desc">{p.desc}</p>
@@ -242,6 +236,17 @@ const projects = [
     border: 1px solid color-mix(in srgb, var(--card-accent) 40%, transparent);
     border-radius: 4px;
     background: color-mix(in srgb, var(--card-accent) 8%, transparent);
+  }
+
+  .project-card__tier-badge {
+    font-family: var(--font-mono);
+    font-size: 0.63rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
   }
 
   .project-card__title {
