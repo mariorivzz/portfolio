@@ -2,9 +2,11 @@
 import { defineConfig } from 'astro/config';
 import vercel from '@astrojs/vercel';
 
+import cloudflare from '@astrojs/cloudflare';
+
 // https://astro.build/config
 export default defineConfig({
   // 'static' = static by default, API routes opt out via `export const prerender = false`
   output: 'static',
-  adapter: vercel(),
+  adapter: cloudflare(),
 });
