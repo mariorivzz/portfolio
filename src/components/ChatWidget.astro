@@ -1,8 +1,8 @@
-<!-- AI Chat Widget — Simulated AI that knows about the developer.
-     To upgrade to real OpenAI: replace the getAIResponse() function
-     with a fetch() call to your backend endpoint. -->
+<!-- Asistente virtual — habla con el endpoint /api/chat.
+     El texto de cara al público evita tecnicismos a propósito: el visitante
+     no necesita saber qué modelo hay detrás, solo que le van a contestar. -->
 
-<div id="chat-widget" class="chat-widget" role="complementary" aria-label="Chat con AI">
+<div id="chat-widget" class="chat-widget" role="complementary" aria-label="Chat con el asistente virtual">
   <!-- Chat toggle button -->
   <button id="chat-toggle" class="chat-toggle" aria-label="Abrir chat" aria-expanded="false">
     <svg class="chat-toggle__icon chat-toggle__icon--open" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
@@ -18,10 +18,10 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
       </div>
       <div class="chat-header__info">
-        <span class="chat-header__name">AI Assistant</span>
+        <span class="chat-header__name">Asistente virtual</span>
         <span class="chat-header__status">
           <span class="chat-header__dot"></span>
-          Online
+          En línea
         </span>
       </div>
       <button id="chat-close" class="chat-header__close" aria-label="Cerrar chat">
@@ -36,9 +36,9 @@
 
     <!-- Quick actions -->
     <div class="chat-quick" id="chat-quick" role="list">
-      <button class="chat-chip" data-q="¿Qué servicios ofreces?" role="listitem">Servicios 💼</button>
-      <button class="chat-chip" data-q="¿Cuánto cuesta una landing page?" role="listitem">Precios 💰</button>
-      <button class="chat-chip" data-q="¿Tienes disponibilidad ahora?" role="listitem">Disponibilidad 📅</button>
+      <button class="chat-chip" data-q="¿Qué servicios ofreces?" role="listitem">Servicios</button>
+      <button class="chat-chip" data-q="¿Cuánto cuesta una web?" role="listitem">Precios</button>
+      <button class="chat-chip" data-q="¿Tienes disponibilidad ahora?" role="listitem">Disponibilidad</button>
     </div>
 
     <!-- Input -->
@@ -370,7 +370,7 @@
   const history: { role: 'user' | 'assistant'; content: string }[] = [];
 
   // ── Local fallback KB (used when API is unavailable) ─────────
-  const FALLBACK = `Disculpa, el asistente AI no está disponible en este momento. Por favor contáctame directamente en la sección de contacto. ¡Estaré encantado de ayudarte!`;
+  const FALLBACK = `Disculpa, el asistente no está disponible en este momento. Escríbeme directamente desde la sección de contacto o por WhatsApp. ¡Estaré encantado de ayudarte!`;
 
   // ── Typewriter effect ─────────────────────────────────────────
   function sleep(ms: number) { return new Promise(r => setTimeout(r, ms)); }
@@ -539,7 +539,7 @@
   });
 
   // ── Initial greeting (local, no API cost) ─────────────────────
-  const GREETING = `¡Hola! 👋 Soy el asistente AI de este portfolio, impulsado por GPT-4o mini. Puedo responderte preguntas sobre servicios, tecnologías, experiencia y precios. ¿En qué puedo ayudarte?`;
+  const GREETING = `¡Hola! 👋 Soy el asistente virtual de Mario. Puedo resolverte dudas sobre los servicios, los precios y cómo trabajamos. Pregúntame con toda confianza, ¿en qué puedo ayudarte?`;
   setTimeout(() => {
     const greeting = addMessage('', 'bot');
     typeText(greeting, GREETING);

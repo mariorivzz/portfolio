@@ -180,6 +180,31 @@ img { display: block; max-width: 100%; }
   transform: translateY(50px);
 }
 
+/* ---- Display headlines ----
+   Los titulares se escriben en el HTML en frase normal (legible y fácil de
+   editar); el efecto de mayúsculas es puramente visual. */
+.display-caps {
+  text-transform: uppercase;
+}
+
+/* ---- Accesibilidad: movimiento reducido ----
+   Si el usuario pide menos movimiento, el contenido se muestra ya visible
+   y sin animaciones de entrada. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  .reveal-up {
+    opacity: 1;
+    transform: none;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* ---- Cursor ---- */
 #cursor-dot,
 #cursor-ring {

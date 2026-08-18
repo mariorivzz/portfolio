@@ -15,7 +15,7 @@ const stats = [
       <div class="about__stats">
         {stats.map(s => (
           <div class="about__stat reveal-up">
-            <span class="about__stat-num" data-target={s.number}>0</span>
+            <span class="about__stat-num" data-target={s.number}>{s.number}</span>
             <span class="about__stat-suf">{s.suffix}</span>
             <span class="about__stat-label">{s.label}</span>
           </div>
@@ -26,9 +26,9 @@ const stats = [
       <div class="about__copy">
         <span class="section-tag reveal-up">Sobre mí</span>
 
-        <h2 class="about__heading reveal-up">
-          HOLA, SOY MARIO.<br />
-          <em>TU SOCIO TECNOLÓGICO LOCAL.</em>
+        <h2 class="about__heading display-caps reveal-up">
+          Hola, soy Mario.<br />
+          <em>Tu socio de confianza para todo lo digital.</em>
         </h2>
 
         <div class="about__body">
@@ -44,7 +44,7 @@ const stats = [
         <p class="about__pillars-title">Resultados que avalan mi compromiso</p>
         <ul class="about__pillars">
           {[
-            { icon: '⚡', text: 'Webs que cargan al instante (crítico para SEO)' },
+            { icon: '⚡', text: 'Webs que cargan al instante, y eso ayuda a salir antes en Google' },
             { icon: '📊', text: 'Estrategia diseñada para conseguir clientes' },
             { icon: '🤝', text: 'Trato humano y cercano, siempre disponible' },
           ].map(p => (
@@ -219,21 +219,42 @@ const stats = [
   });
 
   // ── Counter animation ───────────────────────────────────────
-  document.querySelectorAll<HTMLElement>('.about__stat-num').forEach(el => {
-    const target = parseInt(el.dataset.target || '0', 10);
-    ScrollTrigger.create({
-      trigger: el,
-      start: 'top 85%',
-      once: true,
-      onEnter: () => {
-        gsap.to({ val: 0 }, {
-          val: target,
-          duration: 1.8,
-          ease: 'power2.out',
-          onUpdate() { el.textContent = Math.round((this as any).targets()[0].val).toString(); },
-          onComplete() { el.textContent = target.toString(); },
-        });
-      },
-    });
-  });
+  // El número final ya viene escrito en el HTML, así que se ve correcto
+  // aunque no haya JS, la conexión sea lenta o falle la carga de GSAP.
+  // El JS solo AÑADE el efecto de cuenta atrás cuando procede animar.
+  const counters = document.querySelectorAll<HTMLElement>('.about__stat-num');
+  const noMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Con movimiento reducido (o sin IntersectionObserver) no se toca nada:
+  // el valor real ya está en pantalla.
+  if (!noMotion && 'IntersectionObserver' in window) {
+    const countUp = (el: HTMLElement) => {
+      const target = parseInt(el.dataset.target || '0', 10);
+      if (!target) return;
+
+      // Se pone a 0 justo al empezar a animar, nunca antes: así el número
+      // nunca se queda visible en 0 si la animación no llega a arrancar.
+      el.textContent = '0';
+
+      gsap.to({ val: 0 }, {
+        val: target,
+        duration: 1.8,
+        ease: 'power2.out',
+        onUpdate() { el.textContent = Math.round((this as any).targets()[0].val).toString(); },
+        // Red de seguridad: pase lo que pase, acaba en el valor real.
+        onComplete()  { el.textContent = target.toString(); },
+        onInterrupt() { el.textContent = target.toString(); },
+      });
+    };
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        io.unobserve(entry.target);
+        countUp(entry.target as HTMLElement);
+      });
+    }, { threshold: 0.4 });
+
+    counters.forEach(el => io.observe(el));
+  }
 </script>

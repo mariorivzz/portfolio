@@ -1,4 +1,12 @@
 ---
+// ⚠️ NOTA INTERNA (no visible para el público) — revisar márgenes:
+// Los planes "Nueva Web con Asistente IA" (997 €) y "Sistema Digital Completo"
+// (197 €/mes) incluyen asistente virtual. Antes de cerrar cada venta, comprobar
+// que el coste mensual real (consumo de API del modelo + alojamiento + dominio)
+// no se coma el margen, sobre todo en el plan mensual, donde el gasto es
+// recurrente pero el ingreso está fijado. Revisar consumo en /stats.
+// Si un cliente genera mucho tráfico de chat, replantear el precio mensual.
+
 const services = [
   {
     tier: '01',
@@ -17,23 +25,23 @@ const services = [
       'Dominio y alojamiento gestionados por mí',
     ],
     result: '→ Más credibilidad. Más llamadas.',
-    price: 'Desde 497 €',
+    price: 'Desde 690 €',
     cta: 'Quiero mi web',
     accent: 'var(--accent)',
     featured: false,
   },
   {
     tier: '02',
-    label: 'Pro — Recomendado',
+    label: 'Pro',
     value: 'pro',
     icon: `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
-    title: 'Nueva Web con Asistente IA',
-    tagline: 'Todo lo del plan Esencial, más automatización con IA',
+    title: 'Nueva Web con Asistente Virtual',
+    tagline: 'Todo lo del plan Esencial, más un ayudante que atiende a tus clientes solo',
     description:
-      'Tu web trabaja por ti incluso cuando duermes. Un asistente de inteligencia artificial atiende a tus visitas al instante y el sistema avisa automáticamente por correo y WhatsApp cuando alguien quiere contratarte.',
+      'Tu web trabaja por ti incluso cuando duermes. Un ayudante virtual atiende a tus visitas al instante, como si tuvieras a alguien en recepción a cualquier hora, y el sistema te avisa automáticamente por correo y WhatsApp cuando alguien quiere contratarte.',
     features: [
       'Todo lo incluido en el plan Esencial',
-      'Asistente de IA — responde dudas de tus clientes 24h',
+      'Un ayudante virtual que responde a tus clientes las 24 horas, como una recepcionista siempre disponible',
       'Aviso automático por correo cuando llega un cliente',
       'Botón de WhatsApp con mensaje pregrabado',
       'Textos redactados por mí, pensados para vender',
@@ -49,19 +57,19 @@ const services = [
     label: 'Mejora tu web',
     value: 'mejora',
     icon: `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>`,
-    title: 'Mejora tu Web Actual con IA',
-    tagline: '¿Ya tienes web? Añádele IA, avisos automáticos y WhatsApp',
+    title: 'Mejora tu Web Actual con un Asistente Virtual',
+    tagline: '¿Ya tienes web? Le añado un ayudante que atiende, avisa y conecta con tu WhatsApp',
     description:
-      'No necesitas empezar de cero. Integro un asistente inteligente, avisos automáticos por correo y un botón de WhatsApp preconfigurado en tu web actual, sin cambiar nada de lo que ya tienes.',
+      'No necesitas empezar de cero. Instalo en tu web actual un ayudante virtual que resuelve las dudas de tus clientes a cualquier hora, avisos automáticos por correo y un botón de WhatsApp preconfigurado, sin cambiar nada de lo que ya tienes.',
     features: [
       'Compatible con cualquier web existente',
-      'Asistente de IA personalizado para tu negocio',
+      'Un ayudante virtual que aprende cómo es tu negocio y contesta por ti',
       'Avisos automáticos por correo al recibir consultas',
       'Botón de WhatsApp con mensaje personalizado',
       'Sin tocar el diseño ni la estructura actuales',
     ],
     result: '→ Tu web de siempre, pero trabajando sola.',
-    price: 'Desde 297 €',
+    price: 'Desde 390 €',
     cta: 'Mejorar mi web actual',
     accent: 'var(--accent)',
     featured: false,
@@ -72,7 +80,7 @@ const services = [
     value: 'premium',
     icon: `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
     title: 'Sistema Digital Completo (Reservas)',
-    tagline: 'Web + IA + Agenda automática + soporte mensual',
+    tagline: 'Web, ayudante virtual, agenda automática y soporte mensual',
     description:
       'La solución más completa para negocios que quieren crecer sin preocuparse de nada técnico. Tus clientes reservan cita directamente desde la web, reciben confirmación automática, y tú solo tienes que aparecer.',
     features: [
@@ -80,7 +88,7 @@ const services = [
       'Agenda de citas — tus clientes reservan solos',
       'Confirmación de cita por correo y por WhatsApp',
       'Mantenimiento mensual y posicionamiento continuo',
-      'Informe mensual de visitas y resultados en claro',
+      'Informe mensual claro de visitas y resultados',
     ],
     result: '→ Tu negocio en piloto automático.',
     price: 'Desde 197 € / mes',
@@ -105,7 +113,7 @@ const services = [
       'Sin interrupciones: tu web nunca se queda offline',
     ],
     result: '→ Web nueva. Sin miedos. Sin perder nada.',
-    price: 'Desde 397 €',
+    price: 'Desde 790 €',
     cta: 'Quiero renovar mi web',
     accent: 'var(--accent)',
     featured: false,
@@ -118,9 +126,9 @@ const services = [
 
     <div class="services__header reveal-up">
       <span class="section-tag">Esencial · Pro · Mejora · Premium · Migración</span>
-      <h2 class="services__heading">
-        SOLUCIONES WEB DISEÑADAS<br />
-        <em>PARA TU NEGOCIO LOCAL</em>
+      <h2 class="services__heading display-caps">
+        Soluciones web diseñadas<br />
+        <em>para tu negocio local</em>
       </h2>
       <p class="services__subhead reveal-up">
         Sin tecnicismos. Sin complicaciones. Solo resultados reales para tu negocio.
