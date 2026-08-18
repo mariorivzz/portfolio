@@ -84,15 +84,17 @@
       bar.style.width = '100%';
       counter.textContent = '100';
 
-      // Slide loader off screen then remove
+      // Slide loader off screen then remove — content reveal starts as soon
+      // as the slide begins, so it's visible underneath while the loader
+      // is still moving away (one continuous reveal, not a second "load").
       setTimeout(() => {
+        document.body.dispatchEvent(new CustomEvent('loader:done'));
         gsap.to(loader, {
           yPercent: -100,
           duration: 0.9,
           ease: 'power4.inOut',
           onComplete: () => {
             loader.style.display = 'none';
-            document.body.dispatchEvent(new CustomEvent('loader:done'));
           },
         });
       }, 300);

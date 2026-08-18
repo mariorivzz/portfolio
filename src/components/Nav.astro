@@ -199,8 +199,13 @@ const links = [
   });
 
   // ── Entrance animation ──────────────────────────────────────
-  gsap.from('.nav__inner', {
-    y: -30, opacity: 0, duration: 0.9,
-    ease: 'power4.out', delay: 1.6,
-  });
+  function initNav() {
+    gsap.from('.nav__inner', {
+      y: -30, opacity: 0, duration: 0.9,
+      ease: 'power4.out', delay: 0.1,
+    });
+  }
+  document.body.addEventListener('loader:done', initNav, { once: true });
+  // Fallback if loader is already done (e.g. HMR)
+  if (document.getElementById('loader')?.style.display === 'none') initNav();
 </script>
