@@ -8,8 +8,8 @@ interface Props {
 }
 
 const {
-  title = 'Mario Rivas — Diseño Web para Negocios Locales | PHP · JavaScript',
-  description = 'Diseñador y desarrollador web freelance con 8 años de experiencia. Webs profesionales para negocios locales que generan clientes. PHP, JavaScript, MySQL.',
+  title = 'Mario Rivas — Diseño Web para Negocios Locales',
+  description = 'Diseñador y desarrollador web con 8 años de experiencia. Webs profesionales para negocios locales que generan clientes de verdad, sin complicaciones ni tecnicismos.',
   robots = 'index, follow',
 } = Astro.props;
 
@@ -90,20 +90,32 @@ const canonicalUrl = Astro.url ? new URL(Astro.url.pathname, siteUrl).href : sit
             "itemListElement": [
               {
                 "@type": "Offer",
-                "itemOffered": { "@type": "Service", "name": "Web Corporativa Esencial" },
-                "price": "690",
+                "itemOffered": { "@type": "Service", "name": "Landing Page" },
+                "price": "450",
                 "priceCurrency": "EUR"
               },
               {
                 "@type": "Offer",
-                "itemOffered": { "@type": "Service", "name": "Nueva Web con Asistente Virtual" },
+                "itemOffered": { "@type": "Service", "name": "Web Corporativa" },
+                "price": "750",
+                "priceCurrency": "EUR"
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": { "@type": "Service", "name": "Web con Asistente de IA" },
                 "price": "997",
                 "priceCurrency": "EUR"
               },
               {
                 "@type": "Offer",
-                "itemOffered": { "@type": "Service", "name": "Migración y Renovación Premium" },
-                "price": "790",
+                "itemOffered": { "@type": "Service", "name": "Añade IA a tu Web Actual" },
+                "price": "400",
+                "priceCurrency": "EUR"
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": { "@type": "Service", "name": "Mantenimiento Mensual" },
+                "price": "197",
                 "priceCurrency": "EUR"
               }
             ]
