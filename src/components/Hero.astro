@@ -3,7 +3,7 @@
 ---
 
 <section id="hero" class="hero">
-  <canvas id="hero-canvas" class="hero__canvas" aria-hidden="true"></canvas>
+  <div class="hero__grid" aria-hidden="true"></div>
 
   <!-- Gradient radial glow -->
   <div class="hero__glow" aria-hidden="true"></div>
@@ -71,26 +71,35 @@
     padding-top: var(--space-8);
   }
 
-  /* ── Canvas ─────────────────────────────────────── */
-  .hero__canvas {
+  /* ── Retícula de fondo ──────────────────────────────
+     Sustituye al lienzo de partículas animadas. Es CSS puro: cero
+     JavaScript, cero coste de CPU y ningún movimiento que distraiga.
+     La cuadrícula es de 64px (múltiplo de la escala de 8) y se desvanece
+     hacia los bordes con una máscara, para que no se corte en seco. */
+  .hero__grid {
     position: absolute;
     inset: 0;
-    width: 100%;
-    height: 100%;
     z-index: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(to right,  rgba(29, 53, 87, 0.055) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(29, 53, 87, 0.055) 1px, transparent 1px);
+    background-size: 64px 64px;
+    -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 42%, #000 30%, transparent 78%);
+    mask-image: radial-gradient(ellipse 75% 65% at 50% 42%, #000 30%, transparent 78%);
   }
 
-  /* ── Glow ─────────────────────────────────────── */
+  /* ── Halo suave ─────────────────────────────────── */
   .hero__glow {
     position: absolute;
-    top: -20%;
+    top: -25%;
     left: 50%;
     transform: translateX(-50%);
-    width: 80vw;
-    height: 80vw;
-    max-width: 900px;
-    max-height: 900px;
-    background: radial-gradient(circle, rgba(29,53,87,0.05) 0%, transparent 65%);
+    width: 85vw;
+    height: 85vw;
+    max-width: 1000px;
+    max-height: 1000px;
+    background: radial-gradient(circle, rgba(29, 53, 87, 0.05) 0%, transparent 62%);
     pointer-events: none;
     z-index: 0;
   }
@@ -259,93 +268,4 @@
   // Fallback if loader is already done (e.g. HMR)
   if (document.getElementById('loader')?.style.display === 'none') initHero();
 
-  // ── Particle canvas ──────────────────────────────────────────
-  class NeuralCanvas {
-    canvas: HTMLCanvasElement;
-    ctx: CanvasRenderingContext2D;
-    particles: Array<{x:number;y:number;vx:number;vy:number;r:number}>;
-    mx: number = -9999;
-    my: number = -9999;
-    D = 130;
-    raf = 0;
-
-    constructor(id: string) {
-      this.canvas = document.getElementById(id) as HTMLCanvasElement;
-      if (!this.canvas) return;
-      this.ctx = this.canvas.getContext('2d')!;
-      this.particles = [];
-      this.resize();
-      this.spawn();
-      window.addEventListener('resize', () => { this.resize(); this.spawn(); }, { passive: true });
-      this.canvas.addEventListener('mousemove', (e) => {
-        const r = this.canvas.getBoundingClientRect();
-        this.mx = e.clientX - r.left;
-        this.my = e.clientY - r.top;
-      });
-      this.canvas.addEventListener('mouseleave', () => { this.mx = -9999; this.my = -9999; });
-      this.loop();
-    }
-
-    resize() {
-      this.canvas.width  = this.canvas.offsetWidth;
-      this.canvas.height = this.canvas.offsetHeight;
-    }
-
-    spawn() {
-      const n = Math.max(60, Math.floor((this.canvas.width * this.canvas.height) / 16000));
-      this.particles = Array.from({ length: n }, () => ({
-        x: Math.random() * this.canvas.width,
-        y: Math.random() * this.canvas.height,
-        vx: (Math.random() - 0.5) * 0.35,
-        vy: (Math.random() - 0.5) * 0.35,
-        r: Math.random() * 1.6 + 0.6,
-      }));
-    }
-
-    loop() {
-      const { ctx, canvas, particles, D } = this;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      for (const p of particles) {
-        const dx = p.x - this.mx, dy = p.y - this.my;
-        const dist = Math.sqrt(dx*dx + dy*dy);
-        if (dist < 90) {
-          p.x += (dx / dist) * 1.8;
-          p.y += (dy / dist) * 1.8;
-        }
-        p.x += p.vx; p.y += p.vy;
-        if (p.x < 0 || p.x > canvas.width)  p.vx *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(29,53,87,0.28)';
-        ctx.fill();
-      }
-
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const d = Math.sqrt(dx*dx + dy*dy);
-          if (d < D) {
-            const alpha = (1 - d / D) * 0.13;
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(29,53,87,${alpha})`;
-            ctx.lineWidth = 0.6;
-            ctx.stroke();
-          }
-        }
-      }
-
-      this.raf = requestAnimationFrame(() => this.loop());
-    }
-  }
-
-  // Sin animación de fondo si el usuario ha pedido movimiento reducido.
-  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    new NeuralCanvas('hero-canvas');
-  }
 </script>
