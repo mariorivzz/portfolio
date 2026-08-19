@@ -1,4 +1,8 @@
 ---
+// Las opciones del desplegable se generan desde la fuente única de planes,
+// así que los precios no pueden quedarse desfasados respecto a /servicios.
+import { contactOptions } from '../data/services.js';
+
 const CONTACT_EMAIL    = 'mariorivashdz@gmail.com';
 const CONTACT_PHONE    = '636 495 506';
 const WA_NUMBER        = '34636495506';
@@ -122,15 +126,9 @@ const FORMSPREE_ENDPOINT = import.meta.env.FORMSPREE_ENDPOINT ?? '';
               <label for="cf-service">¿Qué necesitas?</label>
               <select id="cf-service" name="service">
                 <option value="">Elige una opción...</option>
-                <option value="landing">Landing Page — desde 450 €</option>
-                <option value="corporativa">Web Corporativa — desde 750 €</option>
-                <option value="ia">Web con Asistente de IA — desde 997 €</option>
-                <option value="ia-existente">Añade IA a tu Web Actual — desde 400 €</option>
-                <option value="automatizaciones">Automatizaciones Sencillas — desde 200 €</option>
-                <option value="redes">Redes Sociales Conectadas — desde 200 €</option>
-                <option value="mantenimiento">Mantenimiento Mensual — desde 197 €/mes</option>
-                <option value="renovar">Renovar mi web antigua — lo vemos juntos</option>
-                <option value="otro">No lo tengo claro, quiero consejo</option>
+                {contactOptions.map(o => (
+                  <option value={o.value}>{o.label}</option>
+                ))}
               </select>
             </div>
 

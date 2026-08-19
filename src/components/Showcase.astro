@@ -5,6 +5,18 @@ import negociointegraciones from '../assets/images/negociointegraciones.png';
 import plancompleto     from '../assets/images/plancompleto.png';
 import migracion        from '../assets/images/migracion.png';
 
+interface Props {
+  /** true = resumen para la portada (3 proyectos + enlace a /proyectos). */
+  teaser?: boolean;
+}
+
+const { teaser = false } = Astro.props;
+
+// El formulario vive en la portada; desde /proyectos hay que volver a ella
+// pasando el plan por la URL (?servicio=…), que Contact.astro ya sabe leer.
+const isHome = Astro.url.pathname === '/';
+const contactHref = (value) => (isHome ? '#contact' : `/?servicio=${value}#contact`);
+
 const projects = [
   {
     title: 'Una Sola Página, Todo lo Importante',
@@ -62,6 +74,10 @@ const projects = [
     prefill: 'renovar',
   },
 ];
+
+// En la portada solo se enseñan los 3 primeros: menos scroll y, sobre todo,
+// dos imágenes pesadas menos que cargar de entrada.
+const list = teaser ? projects.slice(0, 3) : projects;
 ---
 
 <section id="proyectos" class="showcase">
@@ -79,7 +95,7 @@ const projects = [
     </div>
 
     <div class="showcase__grid">
-      {projects.map((p, i) => (
+      {list.map((p, i) => (
         <article
           class="project-card reveal-up"
           style={`--card-accent: ${p.accent}; animation-delay: ${i * 0.07}s`}
@@ -104,7 +120,7 @@ const projects = [
             </div>
             <h3 class="project-card__title">{p.title}</h3>
             <p class="project-card__desc">{p.desc}</p>
-            <a href={p.url} class="project-card__cta" data-prefill={p.prefill}>
+            <a href={contactHref(p.prefill)} class="project-card__cta" data-prefill={p.prefill}>
               Quiero algo así para mi negocio
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
@@ -116,11 +132,19 @@ const projects = [
     <!-- Bottom CTA -->
     <div class="showcase__cta-wrap reveal-up">
       <p class="showcase__cta-text">
-        ¿Quieres que tu negocio sea el próximo caso de éxito?
+        {teaser
+          ? `Estos son solo 3 de los ${projects.length} trabajos que puedes ver.`
+          : '¿Quieres que tu negocio sea el próximo caso de éxito?'}
       </p>
-      <a href="#contact" class="btn btn--primary">
-        Solicitar presupuesto gratuito
-      </a>
+      {teaser ? (
+        <a href="/proyectos" class="btn btn-primary">
+          <span>Ver todos los proyectos</span>
+        </a>
+      ) : (
+        <a href={isHome ? '#contact' : '/#contact'} class="btn btn-primary">
+          <span>Solicitar presupuesto gratuito</span>
+        </a>
+      )}
     </div>
 
   </div>

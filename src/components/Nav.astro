@@ -1,9 +1,11 @@
 ---
+// "Sobre mí" y "Contacto" son secciones de la portada; Servicios y Proyectos
+// tienen página propia. El prefijo "/" hace que funcionen también desde ellas.
 const links = [
-  { href: '#about',     label: 'Sobre mí'  },
-  { href: '#services',  label: 'Servicios' },
-  { href: '#proyectos', label: 'Proyectos' },
-  { href: '#contact',   label: 'Contacto'  },
+  { href: '/#about',    label: 'Sobre mí'  },
+  { href: '/servicios', label: 'Servicios' },
+  { href: '/proyectos', label: 'Proyectos' },
+  { href: '/#contact',  label: 'Contacto'  },
 ];
 ---
 
@@ -206,6 +208,7 @@ const links = [
     });
   }
   document.body.addEventListener('loader:done', initNav, { once: true });
-  // Fallback if loader is already done (e.g. HMR)
-  if (document.getElementById('loader')?.style.display === 'none') initNav();
+  // Sin pantalla de carga (páginas internas) o ya terminada (HMR): anima ya.
+  const loaderEl = document.getElementById('loader');
+  if (!loaderEl || loaderEl.style.display === 'none') initNav();
 </script>

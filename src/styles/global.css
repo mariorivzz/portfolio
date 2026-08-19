@@ -97,6 +97,11 @@ h1, h2, h3, h4, h5 {
 a { color: inherit; text-decoration: none; }
 img { display: block; max-width: 100%; }
 
+/* El atributo [hidden] debe ganar siempre. Sin esto, cualquier regla propia
+   que fije `display` (por ejemplo `.form-success { display: flex }`) anula el
+   ocultado del navegador y el elemento se ve aunque tenga hidden. */
+[hidden] { display: none !important; }
+
 /* ---- Section tag ---- */
 .section-tag {
   display: inline-flex;

@@ -1,0 +1,23 @@
+---
+import Layout         from '../layouts/Layout.astro';
+import Nav            from '../components/Nav.astro';
+import Services       from '../components/Services.astro';
+import Footer         from '../components/Footer.astro';
+import ChatWidget     from '../components/ChatWidget.astro';
+import WhatsAppFloat  from '../components/WhatsAppFloat.astro';
+---
+
+<Layout
+  title="Servicios y precios — Mario Rivas | Diseño web para negocios locales"
+  description="Desde una página sencilla hasta el mantenimiento mes a mes: 7 servicios con el precio a la vista, pensados para negocios locales. Presupuesto gratis y sin compromiso."
+>
+  <Nav />
+  <main>
+    <!-- La página interna no lleva pantalla de carga: se entra desde el menú
+         y volver a ver la animación de bienvenida sería molesto. -->
+    <Services />
+  </main>
+  <Footer />
+  <ChatWidget />
+  <WhatsAppFloat />
+</Layout>
