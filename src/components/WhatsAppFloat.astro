@@ -27,29 +27,28 @@ const WA_LINK    = `https://wa.me/${WA_NUMBER}?text=${WA_MESSAGE}`;
 <style>
   .wa-float {
     position: fixed;
-    bottom: 2rem;
-    left: 2rem;
+    bottom: var(--space-4);
+    left: var(--space-4);
     z-index: 900;
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    padding: 0.8rem 1.1rem;
-    background: #25D366;
-    color: #fff;
-    border-radius: 50px;
-    text-decoration: none;
-    box-shadow: 0 6px 25px rgba(37,211,102,0.45);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, padding 0.25s ease;
-    overflow: visible;
+    gap: var(--space-1);
+    padding: 0.75rem var(--space-2);
+    background: var(--support);
+    color: #FFFFFF;
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-lg);
+    transition: background-color 0.2s var(--ease), transform 0.2s var(--ease),
+                box-shadow 0.2s var(--ease), padding 0.25s var(--ease);
   }
 
-  /* Collapsed — show only icon on scroll */
   .wa-float__label {
-    font-weight: 700;
-    font-size: 0.88rem;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: var(--fs-xs);
     white-space: nowrap;
-    transition: max-width 0.35s ease, opacity 0.25s ease;
-    max-width: 120px;
+    transition: max-width 0.3s var(--ease), opacity 0.2s var(--ease);
+    max-width: 7.5rem;
     opacity: 1;
   }
 
@@ -59,31 +58,18 @@ const WA_LINK    = `https://wa.me/${WA_NUMBER}?text=${WA_MESSAGE}`;
     overflow: hidden;
   }
 
-  .wa-float.is-collapsed { padding: 0.85rem; border-radius: 50%; gap: 0; }
+  /* Sin el gap, el botón queda un circulo exacto al colapsarse */
+  .wa-float.is-collapsed { padding: 0.875rem; border-radius: var(--radius-pill); gap: 0; }
 
   .wa-float:hover {
-    transform: translateY(-3px) scale(1.04);
-    box-shadow: 0 12px 35px rgba(37,211,102,0.55);
+    background: #245840;
+    transform: translateY(-2px);
   }
 
-  /* Pulse animation ring */
-  .wa-float__pulse {
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: #25D366;
-    z-index: -1;
-    animation: wa-pulse 2.2s ease-out infinite;
-  }
-
-  @keyframes wa-pulse {
-    0%   { transform: scale(1);   opacity: 0.6; }
-    70%  { transform: scale(1.5); opacity: 0; }
-    100% { transform: scale(1.5); opacity: 0; }
-  }
+  .wa-float__pulse { display: none; }
 
   @media (max-width: 560px) {
-    .wa-float { bottom: 1.25rem; left: 1.25rem; }
+    .wa-float { bottom: var(--space-2); left: var(--space-2); }
   }
 </style>
 

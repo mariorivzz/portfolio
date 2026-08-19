@@ -25,7 +25,7 @@ const contactHref = (value) => (isHome ? '#contact' : `/?servicio=${value}#conta
 
     <div class="services__header reveal-up">
       <span class="section-tag">De la página más sencilla al mantenimiento mensual</span>
-      <h2 class="services__heading display-caps">
+      <h2 class="services__heading">
         Soluciones web diseñadas<br />
         <em>para tu negocio local</em>
       </h2>
@@ -37,18 +37,13 @@ const contactHref = (value) => (isHome ? '#contact' : `/?servicio=${value}#conta
 
     <div class="services__grid">
       {list.map(s => (
-        <div
-          class={`service-card reveal-up ${s.featured ? 'service-card--featured' : ''}`}
-          style={`--svc-accent: ${s.accent};`}
-        >
-          {s.featured && <span class="service-card__badge">⭐ Más recomendado</span>}
+        <div class={`service-card reveal-up ${s.featured ? 'service-card--featured' : ''}`}>
+          {s.featured && <span class="service-card__badge">Más recomendado</span>}
 
-          <div class="service-card__top">
-            <span class="service-card__tier">{s.tier}</span>
+          <div class="service-card__head">
+            <span class="service-card__icon" set:html={s.icon} />
             <span class="service-card__label">{s.label}</span>
           </div>
-
-          <div class="service-card__icon" set:html={s.icon} />
 
           <h3 class="service-card__title">{s.title}</h3>
           <p class="service-card__tagline">{s.tagline}</p>
@@ -57,8 +52,8 @@ const contactHref = (value) => (isHome ? '#contact' : `/?servicio=${value}#conta
           <ul class="service-card__features">
             {s.features.map(f => (
               <li>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                {f}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>{f}</span>
               </li>
             ))}
           </ul>
@@ -67,7 +62,7 @@ const contactHref = (value) => (isHome ? '#contact' : `/?servicio=${value}#conta
 
           <div class="service-card__footer">
             <span class="service-card__price">{s.price}</span>
-            <a href={contactHref(s.value)} class="btn service-card__cta" data-prefill={s.value}>
+            <a href={contactHref(s.value)} class="btn btn-primary service-card__cta" data-prefill={s.value}>
               {s.cta}
             </a>
           </div>
@@ -140,133 +135,133 @@ const contactHref = (value) => (isHome ? '#contact' : `/?servicio=${value}#conta
     border-top: 1px solid var(--border);
   }
 
-  .services__header { margin-bottom: 3.5rem; }
-
-  .services__heading {
-    font-size: clamp(2.5rem, 6vw, 5rem);
-    letter-spacing: -0.04em;
-    line-height: 1.05;
-    margin-bottom: 1rem;
+  .services__header {
+    margin-bottom: var(--space-6);
+    max-width: 46rem;
   }
 
+  .services__heading {
+    font-size: var(--fs-h2);
+    margin-bottom: var(--space-2);
+  }
+
+  /* El énfasis va en color de marca, no con texto hueco de contorno:
+     el contorno se lee mal y no cumple contraste. */
   .services__heading em {
     font-style: normal;
-    -webkit-text-fill-color: transparent;
-    -webkit-text-stroke: 1px var(--accent);
+    color: var(--brand);
   }
 
   .services__subhead {
-    font-size: 1.05rem;
+    font-size: var(--fs-lead);
     color: var(--text-2);
-    max-width: 520px;
-    line-height: 1.6;
+    max-width: 38rem;
+    line-height: 1.7;
   }
 
-  /* ── Grid — 3 + 3 cards, la 7ª centrada debajo ─── */
+  /* ── Cuadrícula — 3 + 3 tarjetas, la 7ª centrada debajo ───────
+     Sin `align-items`, para que todas las tarjetas de una fila
+     tengan exactamente el mismo alto. */
   .services__grid {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: 1.5rem;
-    margin-bottom: 2.5rem;
-    align-items: start;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
   }
   .services__grid > .service-card              { grid-column: span 2; }
   .services__grid > .service-card:nth-child(7) { grid-column: 3 / 5; }
 
-  /* ── Card ─────────────────────────────────── */
+  /* ── Tarjeta ─────────────────────────────────── */
   .service-card {
     position: relative;
-    padding: 2.25rem 1.75rem;
+    padding: var(--space-4) var(--space-3);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    background: var(--bg-card);
-    transition: border-color 0.35s, transform 0.35s ease, box-shadow 0.35s;
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
     display: flex;
     flex-direction: column;
-    gap: 0.9rem;
+    gap: var(--space-2);
   }
 
   .service-card:hover {
-    border-color: var(--svc-accent);
-    transform: translateY(-6px);
-    box-shadow: 0 24px 60px rgba(0,0,0,0.45);
+    border-color: var(--brand-line);
+    box-shadow: var(--shadow-md);
   }
 
+  /* El plan recomendado se distingue por el borde y la etiqueta, no por
+     otro color ni por desalinearse del resto de la cuadrícula. */
   .service-card--featured {
-    border-color: var(--svc-accent);
-    background: linear-gradient(160deg, rgba(0,255,135,0.05) 0%, var(--bg-card) 60%);
-    box-shadow: 0 0 50px rgba(0,255,135,0.1);
-    transform: translateY(-4px);
+    border-color: var(--brand);
+    box-shadow: var(--shadow-md);
   }
 
   .service-card__badge {
     position: absolute;
-    top: -0.8rem;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 0;
+    right: var(--space-3);
+    transform: translateY(-50%);
     font-family: var(--font-mono);
-    font-size: 0.68rem;
+    font-size: var(--fs-label);
+    font-weight: 500;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #000;
-    background: var(--green);
-    padding: 0.25rem 1rem;
-    border-radius: 50px;
+    color: var(--brand-contrast);
+    background: var(--brand);
+    padding: 0.3125rem var(--space-2);
+    border-radius: var(--radius-pill);
     white-space: nowrap;
-    font-weight: 700;
   }
 
-  .service-card__top {
+  /* ── Cabecera: icono + etiqueta ───────────────── */
+  .service-card__head {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 0.25rem;
-  }
-
-  .service-card__tier {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    color: var(--svc-accent);
-    opacity: 0.6;
-    letter-spacing: 0.12em;
-  }
-
-  .service-card__label {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    padding: 0.15rem 0.6rem;
-    border: 1px solid var(--border);
-    border-radius: 4px;
+    gap: var(--space-1);
   }
 
   .service-card__icon {
-    color: var(--svc-accent);
-    width: 2.2rem;
-    height: 2.2rem;
     display: flex;
     align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-sm);
+    background: var(--brand-soft);
+    color: var(--brand);
+    flex-shrink: 0;
   }
 
+  .service-card__icon :global(svg) { width: 20px; height: 20px; }
+
+  .service-card__label {
+    font-family: var(--font-mono);
+    font-size: var(--fs-label);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* ── Cuerpo ───────────────────────────────────── */
   .service-card__title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    line-height: 1.2;
-    letter-spacing: -0.02em;
+    font-size: var(--fs-h3);
+    font-weight: 600;
+    line-height: 1.25;
+    margin-top: var(--space-1);
   }
 
   .service-card__tagline {
-    font-size: 0.82rem;
-    color: var(--svc-accent);
-    font-weight: 500;
-    margin-top: -0.4rem;
-    line-height: 1.4;
+    font-size: var(--fs-sm);
+    color: var(--brand);
+    font-weight: 600;
+    line-height: 1.5;
+    margin-top: calc(var(--space-1) * -1);
   }
 
   .service-card__desc {
-    font-size: 0.88rem;
+    font-size: var(--fs-sm);
     color: var(--text-2);
     line-height: 1.7;
   }
@@ -275,189 +270,153 @@ const contactHref = (value) => (isHome ? '#contact' : `/?servicio=${value}#conta
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 0.55rem;
+    gap: var(--space-1);
+    padding-top: var(--space-1);
+    border-top: 1px solid var(--border);
     flex: 1;
   }
 
   .service-card__features li {
     display: flex;
     align-items: flex-start;
-    gap: 0.55rem;
-    font-size: 0.86rem;
+    gap: var(--space-1);
+    font-size: var(--fs-xs);
     color: var(--text-2);
-    line-height: 1.4;
+    line-height: 1.55;
   }
 
   .service-card__features li svg {
-    color: var(--svc-accent);
+    color: var(--support);
     flex-shrink: 0;
     margin-top: 3px;
   }
 
+  /* Frase de cierre: se mantiene, pero en discreto para que no compita
+     con el precio ni con el botón. */
   .service-card__result {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    color: var(--svc-accent);
-    padding: 0.6rem 0.9rem;
-    background: color-mix(in srgb, var(--svc-accent) 8%, transparent);
-    border-left: 2px solid var(--svc-accent);
-    border-radius: 0 6px 6px 0;
-    line-height: 1.4;
+    font-size: var(--fs-xs);
+    color: var(--text-muted);
+    line-height: 1.5;
   }
 
+  /* ── Pie: precio + un único botón, siempre a la misma altura ─── */
   .service-card__footer {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    padding-top: 1rem;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-2);
+    padding-top: var(--space-2);
     border-top: 1px solid var(--border);
     margin-top: auto;
   }
 
   .service-card__price {
-    font-family: var(--font-head);
-    font-weight: 700;
-    font-size: 1rem;
-    color: var(--svc-accent);
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 1.375rem;
+    letter-spacing: -0.02em;
+    color: var(--text);
   }
 
-  .service-card__cta {
-    padding: 0.55rem 1.25rem;
-    font-size: 0.82rem;
-    background: var(--svc-accent);
-    color: #000;
-    border-radius: 6px;
-    font-weight: 700;
-    letter-spacing: 0.01em;
-    transition: opacity 0.2s, transform 0.2s;
-    border: none;
-  }
-
-  .service-card__cta:hover {
-    opacity: 0.85;
-    transform: translateY(-1px);
-  }
+  .service-card__cta { width: 100%; }
 
   /* ── Portada: enlace al listado completo ─────── */
-  .services__more {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    padding: 1.75rem 2.5rem;
-    margin-bottom: 2.5rem;
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    background: var(--bg-card);
-  }
-
-  .services__more-text {
-    font-size: 0.95rem;
-    color: var(--text-2);
-    line-height: 1.6;
-    max-width: 520px;
-  }
-
-  .services__more-cta { flex-shrink: 0; }
-
-  @media (max-width: 768px) {
-    .services__more {
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 1.5rem;
-    }
-    .services__more-cta { width: 100%; justify-content: center; }
-  }
-
-  /* ── Bloque "renovar web antigua" ────────────── */
+  .services__more,
   .services__renew {
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 1.5rem;
-    padding: 2rem 2.5rem;
-    margin-bottom: 2.5rem;
-    border: 1px dashed var(--border-accent);
-    border-radius: 16px;
-    background: var(--bg-card);
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-5);
+    margin-bottom: var(--space-3);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
   }
 
-  .services__renew-copy { max-width: 620px; }
+  .services__more-text {
+    font-size: var(--fs-sm);
+    color: var(--text-2);
+    line-height: 1.7;
+    max-width: 34rem;
+  }
+
+  .services__more-cta,
+  .services__renew-cta { flex-shrink: 0; }
+
+  /* ── Bloque "renovar web antigua" ────────────── */
+  .services__renew { border-style: dashed; border-color: var(--brand-line); }
+
+  .services__renew-copy { max-width: 38rem; }
 
   .services__renew-tag {
     display: block;
     font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-size: var(--fs-label);
+    font-weight: 500;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 0.6rem;
+    color: var(--brand);
+    margin-bottom: var(--space-1);
   }
 
   .services__renew-title {
-    font-size: clamp(1.15rem, 2.2vw, 1.5rem);
-    line-height: 1.25;
-    margin-bottom: 0.6rem;
+    font-size: var(--fs-h3);
+    margin-bottom: var(--space-1);
   }
 
   .services__renew-text {
-    font-size: 0.9rem;
+    font-size: var(--fs-sm);
     color: var(--text-2);
     line-height: 1.7;
   }
 
-  .services__renew-cta { flex-shrink: 0; }
-
-  @media (max-width: 768px) {
-    .services__renew {
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 1.75rem 1.5rem;
-    }
-    .services__renew-cta { width: 100%; justify-content: center; }
-  }
-
-  /* ── Trust bar ───────────────────────────────── */
+  /* ── Barra de confianza ───────────────────────── */
   .services__trust-bar {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 2rem;
-    padding: 1.75rem 2rem;
+    gap: var(--space-2) var(--space-5);
+    padding: var(--space-3) var(--space-4);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    background: var(--bg-subtle);
   }
 
   .trust-item {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    font-size: 0.85rem;
+    gap: var(--space-1);
+    font-size: var(--fs-xs);
     color: var(--text-2);
     white-space: nowrap;
   }
 
-  .trust-item svg { color: var(--accent); flex-shrink: 0; }
+  .trust-item svg { color: var(--support); flex-shrink: 0; }
 
   @media (max-width: 1024px) {
-    .services__grid { grid-template-columns: repeat(2, 1fr); max-width: none; }
+    .services__grid { grid-template-columns: repeat(2, 1fr); }
     .services__grid > .service-card              { grid-column: span 1; }
     .services__grid > .service-card:nth-child(7) { grid-column: span 1; }
-    .service-card--featured { transform: none; }
   }
-  @media (max-width: 640px) {
-    .services__grid { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
+
+  @media (max-width: 768px) {
+    .services__more,
+    .services__renew {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: var(--space-3);
+    }
+    .services__more-cta,
+    .services__renew-cta { width: 100%; }
   }
 
   @media (max-width: 640px) {
-    .services__trust-bar { gap: 1.25rem; }
-    .trust-item { font-size: 0.8rem; white-space: normal; }
+    .services__grid { grid-template-columns: 1fr; max-width: 32rem; margin-inline: auto; }
+    .trust-item { white-space: normal; }
   }
 </style>
 

@@ -25,7 +25,6 @@ const projects = [
     desc:  'Página única para clínica de fisioterapia: quiénes son, qué hacen y un botón directo a WhatsApp. Pensada para el móvil, que es por donde la mira casi todo el mundo.',
     img:   plannormal,
     alt:   'Landing page de una clínica de fisioterapia vista en el móvil',
-    accent: 'var(--accent)',
     url:   '#contact',
     prefill: 'landing',
   },
@@ -36,7 +35,6 @@ const projects = [
     desc:  'Un ayudante virtual que responde a los clientes al instante, a cualquier hora, como tener a alguien siempre en recepción. Resuelve las dudas de siempre y avisa por correo cuando alguien quiere contratar.',
     img:   asistenteIA,
     alt:   'Web de una cafetería con un asistente virtual atendiendo en el chat',
-    accent: 'var(--green)',
     url:   '#contact',
     prefill: 'ia',
   },
@@ -47,7 +45,6 @@ const projects = [
     desc:  'La web de siempre de un restaurante, con un ayudante virtual que contesta por su cuenta, aviso automático por correo y botón de WhatsApp. Sin tocar el diseño que ya tenían.',
     img:   negociointegraciones,
     alt:   'Web de restaurante con asistente virtual, correo y WhatsApp conectados',
-    accent: 'var(--accent)',
     url:   '#contact',
     prefill: 'ia-existente',
   },
@@ -58,7 +55,6 @@ const projects = [
     desc:  'Sus clientes reservan cita solos desde la web, conectando una herramienta de agenda ya existente. Yo me ocupo cada mes de las actualizaciones y de los cambios que van pidiendo.',
     img:   plancompleto,
     alt:   'Agenda de citas online conectada a la web de una clínica',
-    accent: 'var(--warm)',
     url:   '#contact',
     prefill: 'mantenimiento',
   },
@@ -69,7 +65,6 @@ const projects = [
     desc:  'Una web anticuada convertida en algo moderno y rápido. Cada caso es distinto según cómo esté montada la web de partida, así que esto se habla antes: cuéntame la tuya y vemos qué necesita.',
     img:   migracion,
     alt:   'Comparación de una web antigua junto a su versión renovada',
-    accent: 'var(--accent)',
     url:   '#contact',
     prefill: 'renovar',
   },
@@ -85,7 +80,7 @@ const list = teaser ? projects.slice(0, 3) : projects;
 
     <div class="showcase__header reveal-up">
       <span class="section-tag">Trabajos reales — clientes reales</span>
-      <h2 class="showcase__heading display-caps">
+      <h2 class="showcase__heading">
         Proyectos que<br />
         <em>generan resultados</em>
       </h2>
@@ -96,10 +91,7 @@ const list = teaser ? projects.slice(0, 3) : projects;
 
     <div class="showcase__grid">
       {list.map((p, i) => (
-        <article
-          class="project-card reveal-up"
-          style={`--card-accent: ${p.accent}; animation-delay: ${i * 0.07}s`}
-        >
+        <article class="project-card reveal-up">
           <!-- 16/9 image container — uniform regardless of source dimensions -->
           <div class="project-card__img-wrap">
             <img
@@ -156,63 +148,63 @@ const list = teaser ? projects.slice(0, 3) : projects;
     border-top: 1px solid var(--border);
   }
 
-  .showcase__header { margin-bottom: 3.5rem; }
+  .showcase__header {
+    margin-bottom: var(--space-6);
+    max-width: 46rem;
+  }
 
   .showcase__heading {
-    font-size: clamp(2.5rem, 6vw, 5rem);
-    letter-spacing: -0.04em;
-    line-height: 1.05;
-    margin-bottom: 1rem;
+    font-size: var(--fs-h2);
+    margin-bottom: var(--space-2);
   }
 
   .showcase__heading em {
     font-style: normal;
-    -webkit-text-fill-color: transparent;
-    -webkit-text-stroke: 1px var(--accent);
+    color: var(--brand);
   }
 
   .showcase__subhead {
-    font-size: 1.05rem;
+    font-size: var(--fs-lead);
     color: var(--text-2);
-    max-width: 520px;
-    line-height: 1.6;
+    max-width: 38rem;
+    line-height: 1.7;
   }
 
-  /* ── Uniform grid — 3 on top, 2 centered below ── */
+  /* ── Cuadrícula: 3 arriba, 2 centradas debajo ── */
   .showcase__grid {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: 1.25rem;
-    margin-bottom: 3rem;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
   }
   .showcase__grid > .project-card              { grid-column: span 2; }
   .showcase__grid > .project-card:nth-child(4) { grid-column: 2 / 4; }
   .showcase__grid > .project-card:nth-child(5) { grid-column: 4 / 6; }
 
-  /* ── Card ─────────────────────────────────── */
+  /* ── Tarjeta ─────────────────────────────────── */
   .project-card {
     border: 1px solid var(--border);
-    border-radius: 16px;
-    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    transition: border-color 0.3s ease, transform 0.35s ease, box-shadow 0.35s ease;
+    transition: border-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
   }
 
   .project-card:hover {
-    border-color: var(--card-accent);
-    transform: translateY(-6px);
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5),
-                0 0 0 1px color-mix(in srgb, var(--card-accent) 30%, transparent);
+    border-color: var(--brand-line);
+    box-shadow: var(--shadow-md);
   }
 
-  /* ── Image ─────────────────────────────────── */
+  /* ── Imagen ─────────────────────────────────── */
   .project-card__img-wrap {
     position: relative;
-    /* strict 16:9 on every card — no exceptions */
     aspect-ratio: 16 / 9;
     overflow: hidden;
+    background: var(--bg-subtle);
+    border-bottom: 1px solid var(--border);
   }
 
   .project-card__img-wrap img {
@@ -221,118 +213,108 @@ const list = teaser ? projects.slice(0, 3) : projects;
     object-fit: cover;
     object-position: top center;
     display: block;
-    transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.5s var(--ease);
   }
 
-  .project-card:hover .project-card__img-wrap img {
-    transform: scale(1.05);
-  }
+  .project-card:hover .project-card__img-wrap img { transform: scale(1.03); }
 
-  /* Subtle gradient at image bottom for legibility */
+  /* Velo muy leve para asentar la imagen sobre el fondo claro */
   .project-card__img-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      to bottom,
-      transparent 40%,
-      rgba(0, 0, 0, 0.35) 100%
-    );
+    background: linear-gradient(to bottom, transparent 60%, rgba(31, 35, 40, 0.10) 100%);
     pointer-events: none;
   }
 
-  /* ── Body ─────────────────────────────────── */
+  /* ── Cuerpo ─────────────────────────────────── */
   .project-card__body {
-    padding: 1.25rem 1.5rem 1.5rem;
+    padding: var(--space-3);
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
+    gap: var(--space-1);
     flex: 1;
   }
 
   .project-card__meta {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    margin-bottom: var(--space-1);
   }
 
   .project-card__tag {
     font-family: var(--font-mono);
-    font-size: 0.68rem;
-    letter-spacing: 0.1em;
+    font-size: var(--fs-label);
+    font-weight: 500;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--card-accent);
-    padding: 0.2rem 0.65rem;
-    border: 1px solid color-mix(in srgb, var(--card-accent) 40%, transparent);
-    border-radius: 4px;
-    background: color-mix(in srgb, var(--card-accent) 8%, transparent);
+    color: var(--brand);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    background: var(--brand-soft);
   }
 
   .project-card__tier-badge {
     font-family: var(--font-mono);
-    font-size: 0.63rem;
-    letter-spacing: 0.08em;
+    font-size: var(--fs-label);
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--text-muted);
-    padding: 0.2rem 0.6rem;
+    padding: 0.25rem 0.5rem;
     border: 1px solid var(--border);
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
   }
 
   .project-card__title {
-    font-size: 1.05rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-    color: var(--text);
+    font-size: var(--fs-h3);
+    font-weight: 600;
+    line-height: 1.25;
   }
 
   .project-card__desc {
-    font-size: 0.84rem;
+    font-size: var(--fs-xs);
     color: var(--text-2);
-    line-height: 1.65;
+    line-height: 1.7;
     flex: 1;
   }
 
   .project-card__cta {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
+    gap: var(--space-1);
+    font-family: var(--font-body);
+    font-size: var(--fs-sm);
     font-weight: 600;
-    letter-spacing: 0.04em;
-    color: var(--card-accent);
-    margin-top: 0.25rem;
-    transition: gap 0.2s ease, opacity 0.2s;
+    color: var(--brand);
+    margin-top: var(--space-1);
+    transition: gap 0.2s var(--ease);
   }
 
-  .project-card__cta:hover {
-    gap: 0.75rem;
-    opacity: 0.8;
-  }
+  .project-card__cta:hover { gap: 0.75rem; }
 
-  /* ── Bottom CTA strip ────────────────────── */
+  /* ── Franja final ────────────────────────────── */
   .showcase__cta-wrap {
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 1.5rem;
-    padding: 2rem 2.5rem;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-5);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
   }
 
   .showcase__cta-text {
-    font-size: 1.05rem;
+    font-size: var(--fs-lead);
     font-weight: 600;
     color: var(--text);
-    max-width: 420px;
-    line-height: 1.4;
+    max-width: 30rem;
+    line-height: 1.5;
   }
 
-  /* ── Responsive ──────────────────────────── */
   @media (max-width: 1024px) {
     .showcase__grid { grid-template-columns: repeat(2, 1fr); }
     .showcase__grid > .project-card              { grid-column: span 1; }
@@ -341,16 +323,13 @@ const list = teaser ? projects.slice(0, 3) : projects;
   }
 
   @media (max-width: 640px) {
-    .showcase__grid { grid-template-columns: 1fr; }
-    .showcase__grid > .project-card { grid-column: span 1; }
+    .showcase__grid { grid-template-columns: 1fr; max-width: 32rem; margin-inline: auto; }
     .showcase__cta-wrap {
       flex-direction: column;
       align-items: flex-start;
-      padding: 1.5rem;
+      padding: var(--space-3);
     }
-    .showcase__cta-text {
-      font-size: 0.95rem;
-    }
+    .showcase__cta-wrap .btn { width: 100%; }
   }
 </style>
 

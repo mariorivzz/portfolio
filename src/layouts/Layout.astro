@@ -1,4 +1,12 @@
 ---
+// Fuentes autoalojadas con @fontsource (patrón recomendado por Astro).
+// Se sirven desde el propio dominio: sin petición a Google, sin parpadeo y
+// sin salto de maquetación al cargar.
+import '@fontsource-variable/space-grotesk';  // titulares (600–700)
+import '@fontsource-variable/inter';          // cuerpo (400–600)
+import '@fontsource/ibm-plex-mono/400.css';   // etiquetas y precios
+import '@fontsource/ibm-plex-mono/500.css';
+
 import '../styles/global.css';
 
 interface Props {
@@ -132,44 +140,14 @@ const canonicalUrl = Astro.url ? new URL(Astro.url.pathname, siteUrl).href : sit
       ]
     })} />
 
-    <!-- Preconnect for fonts speed -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Color de la barra del navegador en móvil -->
+    <meta name="theme-color" content="#FAF9F6" />
   </head>
   <body>
-    <!-- Custom cursor -->
-    <div id="cursor-dot" aria-hidden="true"></div>
-    <div id="cursor-ring" aria-hidden="true"></div>
-
+    <!-- Se retiró el cursor personalizado (punto y anillo de color): sustituía
+         el puntero del sistema, lo que despista a quien tiene menos soltura con
+         el ordenador, y su brillo no encaja con el tono formal de la marca. -->
     <slot />
-
-    <script>
-      // ── Custom cursor ──────────────────────────────────────────
-      const dot  = document.getElementById('cursor-dot')!;
-      const ring = document.getElementById('cursor-ring')!;
-      let ringX = 0, ringY = 0;
-      let mouseX = 0, mouseY = 0;
-
-      document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        dot.style.left = mouseX + 'px';
-        dot.style.top  = mouseY + 'px';
-      });
-
-      (function lerpRing() {
-        ringX += (mouseX - ringX) * 0.12;
-        ringY += (mouseY - ringY) * 0.12;
-        ring.style.left = ringX + 'px';
-        ring.style.top  = ringY + 'px';
-        requestAnimationFrame(lerpRing);
-      })();
-
-      document.querySelectorAll('a, button, [data-cursor-hover]').forEach((el) => {
-        el.addEventListener('mouseenter', () => ring.classList.add('hovered'));
-        el.addEventListener('mouseleave', () => ring.classList.remove('hovered'));
-      });
-    </script>
   </body>
 </html>
 

@@ -1,84 +1,167 @@
-/* =====================================================
-   GLOBAL STYLES — Digital Portfolio
-   TODO: Replace [NOMBRE], [EMAIL], [PHONE], [CIUDAD]
-   ===================================================== */
+/* =============================================================================
+   SISTEMA DE DISEÑO
+   Todos los valores visuales (color, tipografía, espaciado, radios y sombras)
+   salen de los tokens de :root. Ningún componente debería inventarse un color
+   ni un espaciado suelto: si hace falta algo nuevo, se añade aquí primero.
 
-/* ---- Import Fonts ---- */
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+   Reutilizable en otros proyectos: copia este bloque :root y las utilidades.
+   ============================================================================= */
 
-/* ---- Design Tokens ---- */
 :root {
-  /* Colors */
-  --bg:           #000000;
-  --bg-2:         #080810;
-  --bg-card:      #0a0a0f;
-  --bg-card-h:    #111118;
-  --accent:       #00d4ff;
-  --accent-dim:   rgba(0, 212, 255, 0.12);
-  --accent-glow:  rgba(0, 212, 255, 0.4);
-  --warm:         #ff6b35;
-  --warm-dim:     rgba(255, 107, 53, 0.12);
-  --green:        #00ff87;
-  --text:         #ffffff;
-  --text-2:       #cccccc;
-  --text-muted:   #666680;
-  --border:       rgba(255, 255, 255, 0.06);
-  --border-accent:rgba(0, 212, 255, 0.2);
+  /* ---------------------------------------------------------------------
+     COLOR — 3 colores principales (fondo, texto, marca) + neutros de apoyo.
+     Contrastes comprobados sobre --bg para cumplir WCAG AA (mínimo 4.5:1).
+     --------------------------------------------------------------------- */
+  --bg:             #FAF9F6;  /* blanco cálido, nunca blanco puro          */
+  --bg-subtle:      #F2F0EA;  /* franjas y zonas alternas                  */
+  --surface:        #FFFFFF;  /* tarjetas sobre el fondo cálido            */
 
-  /* Typography */
-  --font-head:  'Space Grotesk', sans-serif;
-  --font-body:  'Inter', sans-serif;
-  --font-mono:  'JetBrains Mono', monospace;
+  --text:           #1F2328;  /* carbón — 15.9:1 sobre --bg                */
+  --text-2:         #454B54;  /* secundario — 8.6:1                        */
+  --text-muted:     #5A6270;  /* apoyo — 5.8:1, sigue cumpliendo AA        */
 
-  /* Spacing */
-  --section-py: clamp(5rem, 10vw, 9rem);
+  --brand:          #1D3557;  /* azul marino — 11.7:1 sobre --bg           */
+  --brand-hover:    #16283F;
+  --brand-contrast: #FFFFFF;  /* texto sobre marca — 12.4:1                */
+  --brand-soft:     rgba(29, 53, 87, 0.06);
+  --brand-line:     rgba(29, 53, 87, 0.20);
+
+  --support:        #2D6A4F;  /* verde apagado: disponible, checks — 6.1:1 */
+  --support-soft:   rgba(45, 106, 79, 0.10);
+
+  /* Color funcional, solo para errores de formulario. No es color de marca. */
+  --danger:         #9B2C2C;
+  --danger-soft:    rgba(155, 44, 44, 0.07);
+
+  --border:         rgba(31, 35, 40, 0.10);
+  --border-strong:  rgba(31, 35, 40, 0.18);
+
+  /* ---------------------------------------------------------------------
+     TIPOGRAFÍA — 3 familias con un papel claro cada una.
+     Autoalojadas con @fontsource (ver importaciones en Layout.astro), así no
+     hay petición a servidores externos ni parpadeo al cargar.
+     --------------------------------------------------------------------- */
+  --font-head: 'Space Grotesk Variable', 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Inter Variable', 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
+
+  /* Escala tipográfica — fluida entre móvil y escritorio */
+  --fs-display: clamp(2.75rem, 7vw, 5.25rem);  /* h1 del hero              */
+  --fs-h2:      clamp(2rem, 4vw, 3rem);
+  --fs-h3:      clamp(1.125rem, 1.6vw, 1.3125rem);
+  --fs-lead:    clamp(1rem, 1.4vw, 1.125rem);  /* entradillas              */
+  --fs-body:    1rem;
+  --fs-sm:      0.9375rem;
+  --fs-xs:      0.8125rem;
+  --fs-label:   0.75rem;                       /* etiquetas monoespaciadas */
+
+  /* ---------------------------------------------------------------------
+     ESPACIADO — escala de 8px. Se usa siempre un peldaño de la escala,
+     nunca un valor suelto.
+     --------------------------------------------------------------------- */
+  --space-1:  0.5rem;   /*  8px */
+  --space-2:  1rem;     /* 16px */
+  --space-3:  1.5rem;   /* 24px */
+  --space-4:  2rem;     /* 32px */
+  --space-5:  2.5rem;   /* 40px */
+  --space-6:  3rem;     /* 48px */
+  --space-8:  4rem;     /* 64px */
+  --space-12: 6rem;     /* 96px */
+
+  --section-py: clamp(var(--space-8), 9vw, var(--space-12));
   --container:  1200px;
-  --pad-x:      clamp(1.25rem, 5vw, 2.5rem);
+  --pad-x:      clamp(var(--space-3), 5vw, var(--space-5));
 
-  /* Eases */
-  --ease-out-expo:   cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in-out:     cubic-bezier(0.4, 0, 0.2, 1);
+  /* ---------------------------------------------------------------------
+     RADIOS — solo dos valores en toda la web.
+     --------------------------------------------------------------------- */
+  --radius-sm: 8px;    /* botones, campos de formulario, etiquetas */
+  --radius-lg: 16px;   /* tarjetas y bloques grandes               */
+  --radius-pill: 999px;/* píldoras y puntos                        */
+
+  /* ---------------------------------------------------------------------
+     SOMBRAS — suaves y de bajo contraste. Nada de sombras duras.
+     --------------------------------------------------------------------- */
+  --shadow-sm: 0 1px 2px rgba(31, 35, 40, 0.04),
+               0 1px 3px rgba(31, 35, 40, 0.05);
+  --shadow-md: 0 2px 4px rgba(31, 35, 40, 0.03),
+               0 8px 24px rgba(31, 35, 40, 0.06);
+  --shadow-lg: 0 4px 8px rgba(31, 35, 40, 0.03),
+               0 16px 40px rgba(31, 35, 40, 0.08);
+
+  /* ---- Transiciones ---- */
+  --ease:      cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out:  cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ---- Reset ---- */
+/* ============================ RESET ============================ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html {
   scroll-behavior: smooth;
-  scrollbar-width: thin;
-  scrollbar-color: var(--accent) transparent;
+  /* La cabecera es fija: sin esto los anclajes quedan tapados por el menú. */
+  scroll-padding-top: var(--space-8);
 }
-
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
-
-::selection { background: var(--accent-dim); color: var(--accent); }
 
 body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
-  font-size: 1rem;
-  line-height: 1.6;
+  font-size: var(--fs-body);
+  font-weight: 400;
+  line-height: 1.65;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* ---- Noise overlay ---- */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 150px;
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0.35;
+::selection { background: var(--brand); color: var(--brand-contrast); }
+
+/* Barra de desplazamiento discreta */
+html { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: var(--radius-pill);
+  border: 3px solid var(--bg);
 }
 
-/* ---- Container ---- */
+/* ========================= TIPOGRAFÍA ========================== */
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-head);
+  color: var(--text);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+h1, h2 { font-weight: 700; }
+h3, h4, h5 { font-weight: 600; }
+
+h1 { font-size: var(--fs-display); letter-spacing: -0.035em; line-height: 1.04; }
+h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); }
+
+p { text-wrap: pretty; }
+strong, b { font-weight: 600; color: var(--text); }
+
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+
+/* Foco visible y coherente en todo el sitio (accesibilidad por teclado) */
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* El atributo [hidden] debe ganar siempre. Sin esto, cualquier regla propia
+   que fije `display` (por ejemplo `.form-success { display: flex }`) anula el
+   ocultado del navegador y el elemento se ve aunque tenga hidden. */
+[hidden] { display: none !important; }
+
+/* ========================== LAYOUT ============================= */
 .container {
   width: 100%;
   max-width: var(--container);
@@ -86,114 +169,86 @@ body::after {
   padding: 0 var(--pad-x);
 }
 
-/* ---- Typography ---- */
-h1, h2, h3, h4, h5 {
-  font-family: var(--font-head);
-  font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-}
-
-a { color: inherit; text-decoration: none; }
-img { display: block; max-width: 100%; }
-
-/* El atributo [hidden] debe ganar siempre. Sin esto, cualquier regla propia
-   que fije `display` (por ejemplo `.form-success { display: flex }`) anula el
-   ocultado del navegador y el elemento se ve aunque tenga hidden. */
-[hidden] { display: none !important; }
-
-/* ---- Section tag ---- */
+/* ==================== ETIQUETA DE SECCIÓN ====================== */
+/* Las mayúsculas van por CSS, nunca escritas en el texto fuente. */
 .section-tag {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-1);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.15em;
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 1.25rem;
+  color: var(--brand);
+  margin-bottom: var(--space-2);
 }
 
 .section-tag::before {
   content: '';
   display: block;
-  width: 1.5rem;
-  height: 1px;
-  background: var(--accent);
+  width: var(--space-3);
+  height: 2px;
+  background: var(--brand);
+  border-radius: var(--radius-pill);
 }
 
-/* ---- Buttons ---- */
+/* ========================== BOTONES ============================ */
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.85rem 2rem;
-  border-radius: 4px;
-  font-family: var(--font-head);
+  justify-content: center;
+  gap: var(--space-1);
+  padding: 0.8125rem var(--space-3);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
   font-weight: 600;
-  font-size: 0.9rem;
-  letter-spacing: 0.03em;
+  font-size: var(--fs-sm);
+  line-height: 1.2;
+  letter-spacing: 0;
+  border: 1px solid transparent;
   cursor: pointer;
-  transition: all 0.3s var(--ease-out-expo);
-  position: relative;
-  overflow: hidden;
-  border: none;
+  text-align: center;
+  transition: background-color 0.2s var(--ease),
+              border-color 0.2s var(--ease),
+              color 0.2s var(--ease),
+              box-shadow 0.2s var(--ease),
+              transform 0.2s var(--ease);
 }
+
+.btn svg { flex-shrink: 0; }
 
 .btn-primary {
-  background: var(--accent);
-  color: #000;
+  background: var(--brand);
+  color: var(--brand-contrast);
+  box-shadow: var(--shadow-sm);
 }
 
-.btn-primary::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--green);
-  transform: translateX(-101%);
-  transition: transform 0.4s var(--ease-out-expo);
+.btn-primary:hover {
+  background: var(--brand-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
-
-.btn-primary:hover::before { transform: translateX(0); }
-.btn-primary span { position: relative; z-index: 1; }
-.btn-primary:hover { box-shadow: 0 0 30px var(--accent-glow); }
 
 .btn-outline {
   background: transparent;
-  color: var(--text);
-  border: 1px solid var(--border-accent);
+  color: var(--brand);
+  border-color: var(--brand-line);
 }
 
 .btn-outline:hover {
-  background: var(--accent-dim);
-  color: var(--accent);
-  border-color: var(--accent);
+  background: var(--brand-soft);
+  border-color: var(--brand);
 }
 
-/* ---- Gradient text ---- */
-.gradient-text {
-  background: linear-gradient(135deg, var(--accent) 0%, var(--green) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* ---- Section reveal (GSAP target) ---- */
+/* ================== REVELADO AL HACER SCROLL =================== */
 .reveal-up {
   opacity: 0;
-  transform: translateY(50px);
+  transform: translateY(24px);
 }
 
-/* ---- Display headlines ----
-   Los titulares se escriben en el HTML en frase normal (legible y fácil de
-   editar); el efecto de mayúsculas es puramente visual. */
-.display-caps {
-  text-transform: uppercase;
-}
-
-/* ---- Accesibilidad: movimiento reducido ----
-   Si el usuario pide menos movimiento, el contenido se muestra ya visible
+/* ============ ACCESIBILIDAD: MOVIMIENTO REDUCIDO =============== */
+/* Si el usuario pide menos movimiento, el contenido se muestra ya visible
    y sin animaciones de entrada. */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -210,45 +265,9 @@ img { display: block; max-width: 100%; }
   }
 }
 
-/* ---- Cursor ---- */
-#cursor-dot,
-#cursor-ring {
-  position: fixed;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 10000;
-  mix-blend-mode: difference;
-  transition: transform 0.1s ease;
-}
-
-#cursor-dot {
-  width: 8px;
-  height: 8px;
-  background: var(--accent);
-  transform: translate(-50%, -50%);
-}
-
-#cursor-ring {
-  width: 36px;
-  height: 36px;
-  border: 1px solid rgba(0, 212, 255, 0.5);
-  transform: translate(-50%, -50%);
-  transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease, border-color 0.3s ease;
-}
-
-#cursor-ring.hovered {
-  width: 60px;
-  height: 60px;
-  border-color: var(--accent);
-}
-
-@media (max-width: 768px) {
-  #cursor-dot, #cursor-ring { display: none; }
-}
-
-/* ---- Utility ---- */
+/* ========================= UTILIDADES ========================== */
 .sr-only {
   position: absolute; width: 1px; height: 1px;
   padding: 0; margin: -1px; overflow: hidden;
-  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
 }

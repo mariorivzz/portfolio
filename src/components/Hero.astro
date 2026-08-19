@@ -16,7 +16,7 @@
     </p>
 
     <!-- Main headline — each word wrapped for GSAP split -->
-    <h1 class="hero__title display-caps" aria-label="Diseño web que vende para tu negocio local">
+    <h1 class="hero__title" aria-label="Diseño web que vende para tu negocio local">
       <span class="hero__line">
         <span class="hero__word-wrap"><span class="hero__word">Diseño web</span></span>
       </span>
@@ -68,7 +68,7 @@
     display: flex;
     align-items: center;
     overflow: hidden;
-    padding-top: 6rem;
+    padding-top: var(--space-8);
   }
 
   /* ── Canvas ─────────────────────────────────────── */
@@ -90,7 +90,7 @@
     height: 80vw;
     max-width: 900px;
     max-height: 900px;
-    background: radial-gradient(circle, rgba(0,212,255,0.06) 0%, transparent 65%);
+    background: radial-gradient(circle, rgba(29,53,87,0.05) 0%, transparent 65%);
     pointer-events: none;
     z-index: 0;
   }
@@ -99,109 +99,101 @@
   .hero__content {
     position: relative;
     z-index: 1;
-    padding-top: 2rem;
-    padding-bottom: 6rem;
+    padding-top: var(--space-4);
+    padding-bottom: var(--space-8);
   }
 
   /* Badge */
   .hero__badge {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: var(--space-1);
     font-family: var(--font-mono);
-    font-size: 0.78rem;
-    letter-spacing: 0.08em;
-    color: var(--accent);
-    border: 1px solid var(--border-accent);
-    padding: 0.4rem 1rem;
-    border-radius: 50px;
-    margin-bottom: 2rem;
-    background: var(--accent-dim);
+    font-size: var(--fs-label);
+    letter-spacing: 0.06em;
+    color: var(--text-2);
+    border: 1px solid var(--border-strong);
+    padding: 0.4375rem var(--space-2);
+    border-radius: var(--radius-pill);
+    margin-bottom: var(--space-4);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
   }
 
   .hero__badge-dot {
     width: 7px;
     height: 7px;
-    background: var(--green);
-    border-radius: 50%;
+    background: var(--support);
+    border-radius: var(--radius-pill);
     animation: pulse 2s infinite;
   }
 
   @keyframes pulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(0,255,135,0.4); }
-    50% { box-shadow: 0 0 0 8px rgba(0,255,135,0); }
+    0%, 100% { box-shadow: 0 0 0 0 rgba(45,106,79,0.35); }
+    50% { box-shadow: 0 0 0 7px rgba(45,106,79,0); }
   }
 
   /* Title */
   .hero__title {
     display: flex;
     flex-direction: column;
-    font-size: clamp(3.2rem, 9vw, 9rem);
-    letter-spacing: -0.04em;
-    line-height: 0.95;
-    margin-bottom: 2rem;
+    font-size: var(--fs-display);
+    letter-spacing: -0.035em;
+    line-height: 1.04;
+    margin-bottom: var(--space-3);
   }
 
   .hero__line { overflow: hidden; }
   .hero__word { display: inline-block; }
-  .hero__line--accent .hero__word { color: var(--accent); }
+  .hero__line--accent .hero__word { color: var(--brand); }
 
   /* Subtitle */
   .hero__sub {
-    font-size: clamp(0.85rem, 1.5vw, 1rem);
-    color: var(--text-muted);
-    margin-bottom: 1.25rem;
-    line-height: 1.65;
-    max-width: 520px;
+    font-size: var(--fs-lead);
+    color: var(--text-2);
+    margin-bottom: var(--space-2);
+    line-height: 1.7;
+    max-width: 34rem;
   }
 
   .hero__seo-tag {
     display: flex;
     align-items: center;
-    gap: 0.45rem;
+    gap: var(--space-1);
     font-family: var(--font-mono);
-    font-size: 0.78rem;
-    color: var(--green);
-    letter-spacing: 0.04em;
-    margin-bottom: 2.5rem;
+    font-size: var(--fs-xs);
+    color: var(--support);
+    letter-spacing: 0.02em;
+    margin-bottom: var(--space-5);
   }
 
   .hero__seo-tag svg { flex-shrink: 0; }
-
-  .hero__stack {
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    padding: 0.2rem 0.6rem;
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    color: var(--text-2);
-    background: rgba(255,255,255,0.03);
-  }
 
   /* Actions */
   .hero__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 4rem;
+    gap: var(--space-2);
+    margin-bottom: var(--space-8);
   }
 
   /* Scroll indicator */
   .hero__scroll {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: var(--space-2);
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: var(--fs-label);
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--text-muted);
   }
 
   .hero__scroll-line {
-    width: 60px;
-    height: 1px;
-    background: var(--border-accent);
+    width: 56px;
+    height: 2px;
+    border-radius: var(--radius-pill);
+    background: var(--border-strong);
     position: relative;
     overflow: hidden;
   }
@@ -213,7 +205,7 @@
     left: -100%;
     width: 100%;
     height: 100%;
-    background: var(--accent);
+    background: var(--brand);
     animation: scanline 2s ease-in-out infinite;
   }
 
@@ -223,7 +215,7 @@
   }
 
   @media (max-width: 768px) {
-    .hero__title { font-size: clamp(2.8rem, 13vw, 5rem); }
+    .hero__actions .btn { width: 100%; }
     .hero__scroll { display: none; }
     .hero__actions { flex-direction: column; }
     .hero__actions .btn { justify-content: center; }
@@ -327,7 +319,7 @@
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(0,212,255,0.55)';
+        ctx.fillStyle = 'rgba(29,53,87,0.28)';
         ctx.fill();
       }
 
@@ -337,11 +329,11 @@
           const dy = particles[i].y - particles[j].y;
           const d = Math.sqrt(dx*dx + dy*dy);
           if (d < D) {
-            const alpha = (1 - d / D) * 0.22;
+            const alpha = (1 - d / D) * 0.13;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(0,212,255,${alpha})`;
+            ctx.strokeStyle = `rgba(29,53,87,${alpha})`;
             ctx.lineWidth = 0.6;
             ctx.stroke();
           }
@@ -352,5 +344,8 @@
     }
   }
 
-  new NeuralCanvas('hero-canvas');
+  // Sin animación de fondo si el usuario ha pedido movimiento reducido.
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    new NeuralCanvas('hero-canvas');
+  }
 </script>

@@ -68,8 +68,8 @@ import Layout from '../layouts/Layout.astro';
 
   .stats-subtitle code {
     font-family: var(--font-mono);
-    background: var(--accent-dim);
-    color: var(--accent);
+    background: var(--brand-soft);
+    color: var(--brand);
     padding: 0.1em 0.4em;
     border-radius: 4px;
     font-size: 0.9em;
@@ -89,14 +89,14 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .stats-card {
-    background: var(--bg-card);
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 1.75rem 1.5rem;
     transition: border-color 0.3s;
   }
 
-  .stats-card:hover { border-color: var(--border-accent); }
+  .stats-card:hover { border-color: var(--brand-line); }
 
   .stats-card__label {
     font-family: var(--font-mono);
@@ -111,7 +111,7 @@ import Layout from '../layouts/Layout.astro';
     font-family: var(--font-head);
     font-size: clamp(1.8rem, 3.5vw, 2.8rem);
     font-weight: 700;
-    color: var(--accent);
+    color: var(--brand);
     line-height: 1;
   }
 
@@ -122,7 +122,7 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .stats-skeleton {
-    background: var(--bg-card);
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
     height: 120px;
@@ -156,7 +156,7 @@ import Layout from '../layouts/Layout.astro';
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 2rem;
-    background: var(--bg-card);
+    background: var(--surface);
   }
 
   .stats-info h2 {
@@ -184,12 +184,12 @@ import Layout from '../layouts/Layout.astro';
     content: '→';
     position: absolute;
     left: 0;
-    color: var(--accent);
+    color: var(--brand);
     font-size: 0.8em;
   }
 
   .stats-info a {
-    color: var(--accent);
+    color: var(--brand);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
@@ -247,7 +247,7 @@ import Layout from '../layouts/Layout.astro';
         `Server up since: ${since.toLocaleString()}`;
     } catch {
       document.getElementById('stats-grid')!.innerHTML =
-        '<p style="color:var(--warm)">Failed to load stats. Is the dev server running?</p>';
+        '<p style="color:var(--danger)">Failed to load stats. Is the dev server running?</p>';
     }
 
     document.getElementById('stats-refreshed')!.textContent =
