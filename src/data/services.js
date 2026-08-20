@@ -44,10 +44,10 @@ const MONTADO_CON_HERRAMIENTAS =
 // ── 1. Creación de la web — pago único ──────────────────────────────────────
 export const plans = [
   {
-    value: 'landing-basica',
+    value: 'pagina-basica',
     label: 'Pago único',
     icon: ICON.pagina,
-    title: 'Landing Básica',
+    title: 'Página Web Básica',
     tagline: 'Una sola página con todo lo importante, lista en pocos días',
     description:
       'La forma más rápida y económica de estar en internet. Una única página que cuenta quién eres, qué ofreces y cómo contactarte, con un botón directo a tu WhatsApp. Ideal si quieres empezar ya sin complicarte.',
@@ -56,23 +56,23 @@ export const plans = [
       'Botón de WhatsApp para que te escriban en un toque',
       'Se ve perfecta en el móvil, que es por donde te van a mirar',
       'Entrega rápida, en pocos días',
-      'Dominio y alojamiento configurados por mí',
+      'Dominio (tu dirección en internet) y alojamiento configurados por mí',
     ],
     result: '→ Tu negocio en internet, esta misma semana.',
     price: 'Desde 450 €',
-    cta: 'Quiero mi landing',
+    cta: 'Quiero mi página',
     featured: false,
   },
   {
-    value: 'landing-ia',
+    value: 'pagina-ia',
     label: 'Pago único',
     icon: ICON.chat,
-    title: 'Landing con Asistente de IA',
+    title: 'Página Web con Asistente de IA',
     tagline: 'Tu página, más un ayudante que atiende a tus clientes solo',
     description:
       'Todo lo de la Landing Básica y, además, un ayudante virtual que responde al instante las dudas de siempre —horarios, precios, qué servicios ofreces—, como si tuvieras a alguien en recepción a cualquier hora del día.',
     features: [
-      'Todo lo incluido en la Landing Básica',
+      'Todo lo incluido en la Página Web Básica',
       EXPLICA_ASISTENTE,
       'Contesta las dudas más comunes: horarios, precios, servicios, cómo llegar',
       'Se prepara con la información real de tu negocio',
@@ -80,14 +80,14 @@ export const plans = [
     ],
     result: '→ Nadie se queda sin respuesta, ni de madrugada.',
     price: 'Desde 690 €',
-    cta: 'Quiero la landing con asistente',
+    cta: 'Quiero la página con asistente',
     featured: false,
   },
   {
-    value: 'corporativa',
+    value: 'pagina-completa',
     label: 'Pago único',
     icon: ICON.edificio,
-    title: 'Web Corporativa',
+    title: 'Página Web Completa',
     tagline: 'Varias páginas para contar bien todo lo que ofreces',
     description:
       'Una web rápida, elegante y bien posicionada que genera confianza desde el primer segundo. Tus clientes te encuentran antes que a la competencia, ven que eres serio, y te llaman.',
@@ -96,23 +96,23 @@ export const plans = [
       'Dominio y alojamiento gestionados por mí, tú no tocas nada',
       'Tu ficha en Google Maps, para que te encuentren en tu zona',
       'Formulario de contacto que te llega directo al correo',
-      'Carga en menos de 2 segundos, y eso ayuda a salir en Google',
+      'Se carga en menos de 2 segundos (eso importa mucho a Google)',
     ],
     result: '→ Más credibilidad. Más llamadas.',
     price: 'Desde 750 €',
-    cta: 'Quiero mi web',
+    cta: 'Quiero mi página',
     featured: false,
   },
   {
-    value: 'corporativa-ia',
+    value: 'pagina-completa-ia',
     label: 'Pago único',
     icon: ICON.edificioIa,
-    title: 'Web Corporativa con Asistente de IA',
+    title: 'Página Web Completa con Asistente de IA',
     tagline: 'Todo lo anterior más un ayudante que atiende y te avisa',
     description:
       'Tu web trabaja por ti incluso cuando duermes. El ayudante virtual resuelve las dudas de quien te visita y el sistema te avisa por correo y WhatsApp en cuanto alguien está de verdad interesado en contratarte.',
     features: [
-      'Todo lo incluido en la Web Corporativa',
+      'Todo lo incluido en la Página Web Completa',
       EXPLICA_ASISTENTE,
       'Aviso automático por correo y WhatsApp cuando llega un cliente interesado',
       'Textos redactados por mí, pensados para vender',
@@ -120,7 +120,7 @@ export const plans = [
     ],
     result: '→ Más contactos. Sin estar pendiente del teléfono.',
     price: 'Desde 990 €',
-    cta: 'Lo quiero todo incluido',
+    cta: 'Lo quiero todo',
     featured: true,
   },
   {
@@ -140,7 +140,7 @@ export const plans = [
     ],
     result: '→ Tu web de siempre, pero trabajando sola.',
     price: 'Desde 400 €',
-    cta: 'Mejorar mi web actual',
+    cta: 'Añadir asistente a mi web',
     featured: false,
   },
 ];
@@ -254,7 +254,7 @@ export const allServices = [...plans, ...addons, ...maintenance];
 
 // Los 3 que se resumen en la portada: el más sencillo, el recomendado y el
 // mantenimiento intermedio. El listado completo vive en /servicios.
-export const teaserValues = ['landing-basica', 'corporativa-ia', 'mant-estandar'];
+export const teaserValues = ['pagina-basica', 'pagina-completa-ia', 'mant-estandar'];
 
 // Opciones del desplegable del formulario, generadas a partir de los servicios
 // para que los precios no puedan desincronizarse nunca.
