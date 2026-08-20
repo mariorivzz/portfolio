@@ -5,7 +5,9 @@ import Nav        from '../components/Nav.astro';
 import Hero       from '../components/Hero.astro';
 import About      from '../components/About.astro';
 import Services   from '../components/Services.astro';
-import Showcase   from '../components/Showcase.astro';
+// Sección Proyectos: pendiente de añadir casos reales, reactivar cuando tenga
+// proyectos aprobados por el cliente para mostrar.
+// import Showcase   from '../components/Showcase.astro';
 import Contact    from '../components/Contact.astro';
 import Footer     from '../components/Footer.astro';
 import ChatWidget    from '../components/ChatWidget.astro';
@@ -21,10 +23,15 @@ import WhatsAppFloat from '../components/WhatsAppFloat.astro';
   <main>
     <Hero />
     <About />
-    <!-- Resumen: 3 planes y 3 proyectos. El listado completo vive en
-         /servicios y /proyectos, para no cargar aquí todo de golpe. -->
+    <!-- Resumen de 3 servicios; el listado completo vive en /servicios,
+         para no cargar aquí todo de golpe. -->
     <Services teaser />
-    <Showcase teaser />
+    <!-- Sección Proyectos: pendiente de añadir casos reales, reactivar cuando
+         tenga proyectos aprobados por el cliente para mostrar.
+         Para reactivarla: descomentar el import de arriba, esta línea, el
+         enlace en Nav.astro y en Footer.astro, y renombrar la página
+         src/pages/_proyectos.astro quitándole el guion bajo del principio. -->
+    <!-- <Showcase teaser /> -->
     <Contact />
   </main>
   <Footer />

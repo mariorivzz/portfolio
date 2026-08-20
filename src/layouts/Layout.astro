@@ -9,6 +9,11 @@ import '@fontsource/ibm-plex-mono/500.css';
 
 import '../styles/global.css';
 
+// Las ofertas de los datos estructurados se generan desde la misma fuente que
+// las tarjetas y el formulario, para que un cambio de precio no deje a Google
+// mostrando cifras antiguas.
+import { allServices } from '../data/services.js';
+
 interface Props {
   title?: string;
   description?: string;
@@ -24,6 +29,14 @@ const {
 const siteUrl = 'https://portfolio-mariorivas.vercel.app';
 const ogImage = `${siteUrl}/og-image.png`;
 const canonicalUrl = Astro.url ? new URL(Astro.url.pathname, siteUrl).href : siteUrl;
+
+// "Desde 450 €" -> "450";  "45 € / mes" -> "45"
+const ofertas = allServices.map(s => ({
+  "@type": "Offer",
+  "itemOffered": { "@type": "Service", "name": s.title },
+  "price": s.price.replace(/[^\d]/g, ''),
+  "priceCurrency": "EUR",
+}));
 ---
 
 <!doctype html>
@@ -95,38 +108,7 @@ const canonicalUrl = Astro.url ? new URL(Astro.url.pathname, siteUrl).href : sit
           "hasOfferCatalog": {
             "@type": "OfferCatalog",
             "name": "Servicios de Diseño Web",
-            "itemListElement": [
-              {
-                "@type": "Offer",
-                "itemOffered": { "@type": "Service", "name": "Landing Page" },
-                "price": "450",
-                "priceCurrency": "EUR"
-              },
-              {
-                "@type": "Offer",
-                "itemOffered": { "@type": "Service", "name": "Web Corporativa" },
-                "price": "750",
-                "priceCurrency": "EUR"
-              },
-              {
-                "@type": "Offer",
-                "itemOffered": { "@type": "Service", "name": "Web con Asistente de IA" },
-                "price": "997",
-                "priceCurrency": "EUR"
-              },
-              {
-                "@type": "Offer",
-                "itemOffered": { "@type": "Service", "name": "Añade IA a tu Web Actual" },
-                "price": "400",
-                "priceCurrency": "EUR"
-              },
-              {
-                "@type": "Offer",
-                "itemOffered": { "@type": "Service", "name": "Mantenimiento Mensual" },
-                "price": "197",
-                "priceCurrency": "EUR"
-              }
-            ]
+            "itemListElement": ofertas
           }
         },
         {
