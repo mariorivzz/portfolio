@@ -15,20 +15,12 @@
       Disponible para nuevos proyectos · 2026
     </p>
 
-    <!-- Main headline — each word wrapped for GSAP split -->
-    <h1 class="hero__title" aria-label="Diseño web que vende para tu negocio local">
-      <span class="hero__line">
-        <span class="hero__word-wrap"><span class="hero__word">Diseño web</span></span>
-      </span>
-      <span class="hero__line hero__line--accent">
-        <span class="hero__word-wrap"><span class="hero__word">que vende</span></span>
-      </span>
-      <span class="hero__line">
-        <span class="hero__word-wrap"><span class="hero__word">para tu</span></span>
-      </span>
-      <span class="hero__line">
-        <span class="hero__word-wrap"><span class="hero__word">negocio local</span></span>
-      </span>
+    <!-- Titular en texto corrido: es el navegador quien decide dónde cortar
+         y `text-wrap: balance` reparte las líneas de forma pareja.
+         Antes venía partido a mano en cuatro <span> apilados, y por eso
+         "que vende" se quedaba solo en una línea muy corta. -->
+    <h1 class="hero__title">
+      Diseño web <span class="hero__accent">que vende</span> para tu negocio local
     </h1>
 
     <!-- Subtitle -->
@@ -142,19 +134,17 @@
     50% { box-shadow: 0 0 0 7px rgba(45,106,79,0); }
   }
 
-  /* Title */
+  /* Titular — sin flex ni saltos forzados, para que el texto fluya y el
+     navegador pueda equilibrar las líneas (text-wrap: balance en global.css). */
   .hero__title {
-    display: flex;
-    flex-direction: column;
     font-size: var(--fs-display);
     letter-spacing: -0.035em;
     line-height: 1.04;
     margin-bottom: var(--space-3);
+    max-width: 22ch;
   }
 
-  .hero__line { overflow: hidden; }
-  .hero__word { display: inline-block; }
-  .hero__line--accent .hero__word { color: var(--brand); }
+  .hero__accent { color: var(--brand); }
 
   /* Subtitle */
   .hero__sub {
@@ -238,12 +228,14 @@
 
   // ── Wait for loader ──────────────────────────────────────────
   function initHero() {
-    // Text word reveal
-    gsap.from('.hero__word', {
-      y: '105%',
-      duration: 1,
-      stagger: 0.08,
-      ease: 'power4.out',
+    // El titular entra de una pieza. Ya no hay líneas fijas que enmascarar,
+    // y con `from` el estado final es el natural: si el JS fallara, el
+    // titular se vería igualmente.
+    gsap.from('.hero__title', {
+      y: 24,
+      opacity: 0,
+      duration: 0.9,
+      ease: 'power3.out',
       delay: 0.1,
     });
 

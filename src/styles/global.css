@@ -128,7 +128,15 @@ html { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent;
 }
 
 /* ========================= TIPOGRAFÍA ========================== */
-h1, h2, h3, h4, h5 {
+/* REPARTO DE LÍNEAS
+   `balance` en titulares: el navegador iguala el largo de las líneas en vez
+   de llenar la primera y dejar la última coja. Solo actúa hasta 6 líneas,
+   así que ningún titular debe pasar de ahí (los actuales llegan a 3 como
+   mucho en el móvil más estrecho).
+   Importante: `balance` NO puede hacer nada si el salto está forzado con
+   <br> o con líneas apiladas en flex. Escribe el titular seguido y deja
+   que decida el navegador. */
+h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-head);
   color: var(--text);
   line-height: 1.15;
@@ -137,13 +145,20 @@ h1, h2, h3, h4, h5 {
 }
 
 h1, h2 { font-weight: 700; }
-h3, h4, h5 { font-weight: 600; }
+h3, h4, h5, h6 { font-weight: 600; }
 
 h1 { font-size: var(--fs-display); letter-spacing: -0.035em; line-height: 1.04; }
 h2 { font-size: var(--fs-h2); }
 h3 { font-size: var(--fs-h3); }
 
-p { text-wrap: pretty; }
+/* `pretty` en texto largo: evita que la última línea quede con una sola
+   palabra suelta. A diferencia de `balance`, no tiene límite de líneas. */
+p, li, dd, figcaption, blockquote { text-wrap: pretty; }
+
+/* El texto justificado abre "ríos" de espacio entre palabras que dificultan
+   la lectura a personas con dislexia o baja visión. Alineación a la
+   izquierda siempre: no usar `text-align: justify` en este proyecto. */
+
 strong, b { font-weight: 600; color: var(--text); }
 
 a { color: inherit; text-decoration: none; }
