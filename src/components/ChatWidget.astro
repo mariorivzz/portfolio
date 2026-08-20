@@ -19,9 +19,9 @@
       </div>
       <div class="chat-header__info">
         <span class="chat-header__name">Asistente virtual</span>
-        <span class="chat-header__status">
+        <span class="chat-header__status" id="chat-status">
           <span class="chat-header__dot"></span>
-          En línea
+          <span id="chat-status-text">En línea</span>
         </span>
       </div>
       <button id="chat-close" class="chat-header__close" aria-label="Cerrar chat">
@@ -186,6 +186,9 @@
     background: var(--support);
     border-radius: var(--radius-pill);
   }
+
+  /* Asistente sin configurar o con la clave caducada */
+  .chat-header__status.is-offline .chat-header__dot { background: var(--text-muted); }
 
   .chat-header__close {
     margin-left: auto;
@@ -406,6 +409,17 @@
   let isOpen   = false;
   let isTyping = false;
 
+  // El indicador no debe decir "En línea" si el asistente no puede responder:
+  // prometer disponibilidad y fallar da peor impresión que avisar de entrada.
+  function marcarNoDisponible() {
+    const estado = document.getElementById('chat-status');
+    const texto  = document.getElementById('chat-status-text');
+    if (texto)  texto.textContent = 'No disponible ahora';
+    if (estado) estado.classList.add('is-offline');
+    // Los atajos llevan a preguntas que nadie va a contestar.
+    quick.style.display = 'none';
+  }
+
   function openChat() {
     isOpen = true;
     toggle.classList.add('open');
@@ -470,12 +484,16 @@
       clearTimeout(timeoutId);
     }
 
-    // Handle specific error codes with friendly messages (no raw throw to console)
-    if (res.status === 401 || res.status === 403) {
-      return 'El asistente no está disponible en este momento. Por favor, escríbeme directamente por el formulario de contacto o WhatsApp.';
+    // 401/403 (clave inválida) y 503 (sin configurar) son fallos permanentes:
+    // insistir no sirve de nada, así que se marca el asistente como no
+    // disponible y se ofrece un camino que sí funciona.
+    if (res.status === 401 || res.status === 403 || res.status === 503) {
+      marcarNoDisponible();
+      return 'El asistente no está disponible en este momento. Escríbeme directamente por el formulario de contacto o por WhatsApp y te respondo yo en persona.';
     }
-    if (res.status === 503 || res.status === 504) {
-      return 'El servidor está tardando en responder. Por favor, inténtalo de nuevo en unos segundos o contáctame directamente.';
+    // 504 sí es temporal: aquí reintentar tiene sentido.
+    if (res.status === 504) {
+      return 'El servidor está tardando en responder. Inténtalo de nuevo en unos segundos o contáctame directamente.';
     }
     if (!res.ok) {
       throw new Error(`HTTP ${res.status}`);
