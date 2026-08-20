@@ -25,7 +25,17 @@ if (!globalThis.__chatStats) {
 // alojamiento se acerca al margen del plan mensual, hay que subir el precio o
 // limitar el número de mensajes por visita.
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const MODEL        = 'llama-3.3-70b-versatile'; // fast, high quality, generous free tier
+
+// ⚠️ Groq RETIRA modelos cada pocos meses. Cuando eso pasa, su API responde
+// 404 "model_not_found" y el asistente deja de contestar de un día para otro.
+// Si vuelve a ocurrir, mira qué modelos hay vivos con tu clave:
+//   curl -s https://api.groq.com/openai/v1/models -H "Authorization: Bearer $GROQ_API_KEY"
+// y cambia el identificador de aquí abajo.
+// (El anterior, llama-3.3-70b-versatile, se retiró y rompió el chat.)
+//
+// Se eligió el 120b y no el 20b tras compararlos: el pequeño se inventaba lo
+// que incluye cada plan al dar precios. En un asistente que vende, eso no vale.
+const MODEL        = 'openai/gpt-oss-120b';
 
 const SYSTEM_PROMPT = `Eres el asistente virtual de Mario Rivas, un desarrollador web con más de 8 años de experiencia especializado en crear páginas web para negocios locales: peluquerías, restaurantes, clínicas dentales, tiendas y más.
 
