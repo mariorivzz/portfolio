@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/:path((?!.*\\..*|_next).*)",
+      "destination": "https://mariorivashernandez.com/:path",
+      "permanent": true
+    }
+  ]
+}

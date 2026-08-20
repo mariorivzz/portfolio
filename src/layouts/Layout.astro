@@ -21,12 +21,12 @@ interface Props {
 }
 
 const {
-  title = 'Mario Rivas — Diseño Web para Negocios Locales',
-  description = 'Diseñador y desarrollador web con 5 años de experiencia. Webs profesionales para negocios locales que generan clientes de verdad, sin complicaciones ni tecnicismos.',
+  title = 'Mario Rivas Hernández — Diseño y desarrollo web para negocios en Salamanca',
+  description = 'Diseño y desarrollo de páginas web para negocios locales en Salamanca. 5 años de experiencia. Webs rápidas, claras y que generan clientes de verdad, sin complicaciones ni tecnicismos.',
   robots = 'index, follow',
 } = Astro.props;
 
-const siteUrl = 'https://portfolio-mariorivas.vercel.app';
+const siteUrl = 'https://mariorivashernandez.com';
 const ogImage = `${siteUrl}/og-image.png`;
 const canonicalUrl = Astro.url ? new URL(Astro.url.pathname, siteUrl).href : siteUrl;
 
@@ -84,11 +84,15 @@ const ofertas = allServices.map(s => ({
         {
           "@type": "Person",
           "@id": `${siteUrl}/#person`,
-          "name": "Mario Rivas",
+          "name": "Mario Rivas Hernández",
           "url": siteUrl,
           "jobTitle": "Desarrollador Web Freelance",
           "description": description,
-          "knowsAbout": ["Diseño Web", "PHP", "JavaScript", "MySQL", "SEO", "WordPress"],
+          "knowsAbout": ["Diseño Web", "PHP", "JavaScript", "MySQL", "WordPress"],
+          "areaServed": {
+            "@type": "City",
+            "name": "Salamanca"
+          },
           "sameAs": [
             "https://github.com/mariorivzz"
           ]
@@ -100,10 +104,16 @@ const ofertas = allServices.map(s => ({
           "url": siteUrl,
           "description": "Servicio de diseño y desarrollo web para negocios locales. Páginas web profesionales que generan clientes reales.",
           "founder": { "@id": `${siteUrl}/#person` },
-          "areaServed": {
-            "@type": "Country",
-            "name": "España"
-          },
+          "areaServed": [
+            {
+              "@type": "City",
+              "name": "Salamanca"
+            },
+            {
+              "@type": "AdministrativeArea",
+              "name": "Provincia de Salamanca"
+            }
+          ],
           "priceRange": "€€",
           "hasOfferCatalog": {
             "@type": "OfferCatalog",
