@@ -467,7 +467,7 @@
   }
 
   // ── Call /api/chat ─────────────────────────────────────────────
-  async function callAPI(userText: string): Promise<string> {
+  async function callAPI(_userText: string): Promise<string> {
     // 15-second timeout — prevents hanging fetch on slow/dead server
     const controller = new AbortController();
     const timeoutId  = setTimeout(() => controller.abort(), 15_000);
@@ -519,8 +519,8 @@
     let reply = FALLBACK;
     try {
       reply = await callAPI(userText);
-    } catch (err: any) {
-      if (err?.name === 'AbortError') {
+    } catch (err: unknown) {
+      if ((err as { name?: string })?.name === 'AbortError') {
         reply = 'La solicitud tardó demasiado. Por favor, inténtalo de nuevo.';
       } else {
         console.warn('[ChatWidget] API error, using fallback.', err?.message ?? err);

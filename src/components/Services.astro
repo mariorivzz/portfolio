@@ -35,7 +35,6 @@ const contactHref = (value) => (isHome ? '#contact' : `/?servicio=${value}#conta
     </div>
 
     {teaser ? (
-      <!-- ── Portada: solo un adelanto ─────────────────────────── -->
       <div class="services__grid services__grid--trio">
         {destacados.map(s => (
           <div class={`service-card reveal-up ${s.featured ? 'service-card--featured' : ''}`}>
