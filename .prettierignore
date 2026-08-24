@@ -1,5 +1,13 @@
 dist
 .astro
+.vercel
 node_modules
 package-lock.json
 *.lock
+
+# Config files and agent definitions (pre-configured, not meant for formatting)
+.github/
+.agents/
+.claude/
+.vscode/
+.wrangler/

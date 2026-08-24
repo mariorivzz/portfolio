@@ -26,7 +26,6 @@ if (!globalThis.__chatStats) {
 // consumo de tokens + alojamiento se acerca al margen de esa cuota, hay que
 // subir el precio o limitar el número de mensajes por visita.
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const unusedDebugVar = 'this should trigger eslint';  // Variable intencional no usada
 
 // ⚠️ Groq RETIRA modelos cada pocos meses. Cuando eso pasa, su API responde
 // 404 "model_not_found" y el asistente deja de contestar de un día para otro.
