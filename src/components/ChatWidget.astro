@@ -1,12 +1,34 @@
 <!-- Asistente virtual — habla con el endpoint /api/chat.
      El texto de cara al público evita tecnicismos a propósito: el visitante
      no necesita saber qué modelo hay detrás, solo que le van a contestar. -->
-
-<div id="chat-widget" class="chat-widget" role="complementary" aria-label="Chat con el asistente virtual">
+<div
+  id="chat-widget"
+  class="chat-widget"
+  role="complementary"
+  aria-label="Chat con el asistente virtual"
+>
   <!-- Chat toggle button -->
   <button id="chat-toggle" class="chat-toggle" aria-label="Abrir chat" aria-expanded="false">
-    <svg class="chat-toggle__icon chat-toggle__icon--open" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-    <svg class="chat-toggle__icon chat-toggle__icon--close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    <svg
+      class="chat-toggle__icon chat-toggle__icon--open"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      ><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"></path></svg
+    >
+    <svg
+      class="chat-toggle__icon chat-toggle__icon--close"
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.5"
+      ><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg
+    >
     <span class="chat-toggle__badge" id="chat-badge">1</span>
   </button>
 
@@ -15,7 +37,15 @@
     <!-- Header -->
     <div class="chat-header">
       <div class="chat-header__avatar">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          ><circle cx="12" cy="8" r="4"></circle><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"></path></svg
+        >
       </div>
       <div class="chat-header__info">
         <span class="chat-header__name">Asistente virtual</span>
@@ -25,7 +55,16 @@
         </span>
       </div>
       <button id="chat-close" class="chat-header__close" aria-label="Cerrar chat">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          ><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"
+          ></line></svg
+        >
       </button>
     </div>
 
@@ -38,7 +77,9 @@
     <div class="chat-quick" id="chat-quick" role="list">
       <button class="chat-chip" data-q="¿Qué servicios ofreces?" role="listitem">Servicios</button>
       <button class="chat-chip" data-q="¿Cuánto cuesta una web?" role="listitem">Precios</button>
-      <button class="chat-chip" data-q="¿Tienes disponibilidad ahora?" role="listitem">Disponibilidad</button>
+      <button class="chat-chip" data-q="¿Tienes disponibilidad ahora?" role="listitem"
+        >Disponibilidad</button
+      >
     </div>
 
     <!-- Input -->
@@ -52,7 +93,16 @@
         aria-label="Mensaje"
       />
       <button type="submit" class="chat-send" aria-label="Enviar">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          ><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"
+          ></polygon></svg
+        >
       </button>
     </form>
   </div>
@@ -80,8 +130,10 @@
     justify-content: center;
     color: var(--brand-contrast);
     box-shadow: var(--shadow-lg);
-    transition: background-color 0.2s var(--ease), transform 0.2s var(--ease),
-                box-shadow 0.2s var(--ease);
+    transition:
+      background-color 0.2s var(--ease),
+      transform 0.2s var(--ease),
+      box-shadow 0.2s var(--ease);
   }
 
   .chat-toggle:hover {
@@ -89,11 +141,25 @@
     transform: translateY(-2px);
   }
 
-  .chat-toggle__icon { position: absolute; transition: opacity 0.2s, transform 0.2s; }
-  .chat-toggle__icon--close { opacity: 0; transform: rotate(-90deg); }
+  .chat-toggle__icon {
+    position: absolute;
+    transition:
+      opacity 0.2s,
+      transform 0.2s;
+  }
+  .chat-toggle__icon--close {
+    opacity: 0;
+    transform: rotate(-90deg);
+  }
 
-  .chat-toggle.open .chat-toggle__icon--open  { opacity: 0; transform: rotate(90deg); }
-  .chat-toggle.open .chat-toggle__icon--close { opacity: 1; transform: rotate(0deg); }
+  .chat-toggle.open .chat-toggle__icon--open {
+    opacity: 0;
+    transform: rotate(90deg);
+  }
+  .chat-toggle.open .chat-toggle__icon--close {
+    opacity: 1;
+    transform: rotate(0deg);
+  }
 
   .chat-toggle__badge {
     position: absolute;
@@ -102,7 +168,7 @@
     width: 1.125rem;
     height: 1.125rem;
     background: var(--support);
-    color: #FFFFFF;
+    color: #ffffff;
     font-family: var(--font-mono);
     font-size: 0.6875rem;
     font-weight: 500;
@@ -130,7 +196,9 @@
     transform: translateY(12px) scale(0.98);
     opacity: 0;
     pointer-events: none;
-    transition: transform 0.3s var(--ease-out), opacity 0.25s var(--ease);
+    transition:
+      transform 0.3s var(--ease-out),
+      opacity 0.25s var(--ease);
     transform-origin: bottom right;
     max-height: 80vh;
   }
@@ -188,7 +256,9 @@
   }
 
   /* Asistente sin configurar o con la clave caducada */
-  .chat-header__status.is-offline .chat-header__dot { background: var(--text-muted); }
+  .chat-header__status.is-offline .chat-header__dot {
+    background: var(--text-muted);
+  }
 
   .chat-header__close {
     margin-left: auto;
@@ -198,13 +268,18 @@
     color: var(--text-muted);
     padding: var(--space-1);
     border-radius: var(--radius-sm);
-    transition: color 0.2s var(--ease), background-color 0.2s var(--ease);
+    transition:
+      color 0.2s var(--ease),
+      background-color 0.2s var(--ease);
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  .chat-header__close:hover { color: var(--text); background: var(--border); }
+  .chat-header__close:hover {
+    color: var(--text);
+    background: var(--border);
+  }
 
   /* Mensajes */
   .chat-messages {
@@ -227,8 +302,14 @@
   }
 
   @keyframes msg-in {
-    from { opacity: 0; transform: translateY(6px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .chat-msg--user {
@@ -275,12 +356,24 @@
     animation: typing-dot 1.4s ease-in-out infinite;
   }
 
-  .chat-typing span:nth-child(2) { animation-delay: 0.2s; }
-  .chat-typing span:nth-child(3) { animation-delay: 0.4s; }
+  .chat-typing span:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .chat-typing span:nth-child(3) {
+    animation-delay: 0.4s;
+  }
 
   @keyframes typing-dot {
-    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-    30% { transform: translateY(-5px); opacity: 1; }
+    0%,
+    60%,
+    100% {
+      transform: translateY(0);
+      opacity: 0.4;
+    }
+    30% {
+      transform: translateY(-5px);
+      opacity: 1;
+    }
   }
 
   /* Atajos */
@@ -303,7 +396,9 @@
     background: var(--surface);
     color: var(--brand);
     cursor: pointer;
-    transition: background-color 0.2s var(--ease), border-color 0.2s var(--ease);
+    transition:
+      background-color 0.2s var(--ease),
+      border-color 0.2s var(--ease);
     white-space: nowrap;
   }
 
@@ -332,10 +427,14 @@
     font-size: var(--fs-xs);
     padding: 0.5625rem 0.75rem;
     outline: none;
-    transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+    transition:
+      border-color 0.2s var(--ease),
+      box-shadow 0.2s var(--ease);
   }
 
-  .chat-input::placeholder { color: var(--text-muted); }
+  .chat-input::placeholder {
+    color: var(--text-muted);
+  }
   .chat-input:focus {
     border-color: var(--brand);
     box-shadow: 0 0 0 3px var(--brand-soft);
@@ -356,11 +455,19 @@
     flex-shrink: 0;
   }
 
-  .chat-send:hover { background: var(--brand-hover); }
+  .chat-send:hover {
+    background: var(--brand-hover);
+  }
 
   @media (max-width: 480px) {
-    .chat-widget { bottom: var(--space-2); right: var(--space-2); }
-    .chat-panel { width: calc(100vw - var(--space-4)); right: calc(var(--space-2) * -1); }
+    .chat-widget {
+      bottom: var(--space-2);
+      right: var(--space-2);
+    }
+    .chat-panel {
+      width: calc(100vw - var(--space-4));
+      right: calc(var(--space-2) * -1);
+    }
   }
 </style>
 
@@ -372,12 +479,12 @@
   const FALLBACK = `Disculpa, el asistente no está disponible en este momento. Escríbeme directamente desde la sección de contacto o por WhatsApp. ¡Estaré encantado de ayudarte!`;
 
   // ── Typewriter effect ─────────────────────────────────────────
-  function sleep(ms: number) { return new Promise(r => setTimeout(r, ms)); }
+  function sleep(ms: number) {
+    return new Promise((r) => setTimeout(r, ms));
+  }
 
   async function typeText(el: HTMLElement, text: string) {
-    const formatted = text
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\n/g, '<br/>');
+    const formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br/>');
     el.innerHTML = '';
     let html = '';
     const nodes = formatted.split(/(<[^>]+>)/g);
@@ -397,24 +504,24 @@
   }
 
   // ── DOM refs ──────────────────────────────────────────────────
-  const toggle   = document.getElementById('chat-toggle')!;
-  const panel    = document.getElementById('chat-panel')!;
+  const toggle = document.getElementById('chat-toggle')!;
+  const panel = document.getElementById('chat-panel')!;
   const closeBtn = document.getElementById('chat-close')!;
   const messages = document.getElementById('chat-messages')!;
-  const form     = document.getElementById('chat-form')!;
-  const input    = document.getElementById('chat-input') as HTMLInputElement;
-  const badge    = document.getElementById('chat-badge')!;
-  const quick    = document.getElementById('chat-quick')!;
+  const form = document.getElementById('chat-form')!;
+  const input = document.getElementById('chat-input') as HTMLInputElement;
+  const badge = document.getElementById('chat-badge')!;
+  const quick = document.getElementById('chat-quick')!;
 
-  let isOpen   = false;
+  let isOpen = false;
   let isTyping = false;
 
   // El indicador no debe decir "En línea" si el asistente no puede responder:
   // prometer disponibilidad y fallar da peor impresión que avisar de entrada.
   function marcarNoDisponible() {
     const estado = document.getElementById('chat-status');
-    const texto  = document.getElementById('chat-status-text');
-    if (texto)  texto.textContent = 'No disponible ahora';
+    const texto = document.getElementById('chat-status-text');
+    if (texto) texto.textContent = 'No disponible ahora';
     if (estado) estado.classList.add('is-offline');
     // Los atajos llevan a preguntas que nadie va a contestar.
     quick.style.display = 'none';
@@ -437,14 +544,14 @@
     panel.setAttribute('aria-hidden', 'true');
   }
 
-  toggle.addEventListener('click', () => isOpen ? closeChat() : openChat());
+  toggle.addEventListener('click', () => (isOpen ? closeChat() : openChat()));
   closeBtn.addEventListener('click', closeChat);
 
   // ── Add message ───────────────────────────────────────────────
   function addMessage(text: string, role: 'bot' | 'user') {
-    const msg    = document.createElement('div');
+    const msg = document.createElement('div');
     msg.className = `chat-msg chat-msg--${role}`;
-    const bubble  = document.createElement('div');
+    const bubble = document.createElement('div');
     bubble.className = 'chat-msg__bubble';
     bubble.textContent = text;
     msg.appendChild(bubble);
@@ -470,7 +577,7 @@
   async function callAPI(_userText: string): Promise<string> {
     // 15-second timeout — prevents hanging fetch on slow/dead server
     const controller = new AbortController();
-    const timeoutId  = setTimeout(() => controller.abort(), 15_000);
+    const timeoutId = setTimeout(() => controller.abort(), 15_000);
 
     let res: Response;
     try {
@@ -548,7 +655,7 @@
   });
 
   // ── Quick chips ────────────────────────────────────────────────
-  document.querySelectorAll<HTMLButtonElement>('.chat-chip').forEach(chip => {
+  document.querySelectorAll<HTMLButtonElement>('.chat-chip').forEach((chip) => {
     chip.addEventListener('click', () => handleSend(chip.dataset.q!));
   });
 

@@ -13,7 +13,7 @@ export default [
       'node_modules/**',
       '**/*.min.js',
       'eslint-report.txt',
-    ]
+    ],
   },
 
   // JavaScript baseline
@@ -25,13 +25,13 @@ export default [
       globals: {
         console: 'readonly',
         process: 'readonly',
-      }
+      },
     },
     rules: {
       ...js.configs.recommended.rules,
       'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
       'no-console': ['warn', { allow: ['warn', 'error'] }],
-    }
+    },
   },
 
   // TypeScript files
@@ -42,7 +42,7 @@ export default [
       parserOptions: {
         ecmaVersion: 2024,
         sourceType: 'module',
-      }
+      },
     },
     plugins: {
       '@typescript-eslint': tsPlugin,
@@ -52,7 +52,7 @@ export default [
       ...tsPlugin.configs.recommended.rules,
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/no-explicit-any': 'warn',
-    }
+    },
   },
 
   // Astro files — use recommended config directly
@@ -70,11 +70,10 @@ export default [
         URLSearchParams: 'readonly',
         TextDecoder: 'readonly',
         console: 'readonly',
-      }
+      },
     },
     rules: {
       'no-console': 'off',
-    }
-  }
+    },
+  },
 ];
-

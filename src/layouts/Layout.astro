@@ -2,9 +2,9 @@
 // Fuentes autoalojadas con @fontsource (patrón recomendado por Astro).
 // Se sirven desde el propio dominio: sin petición a Google, sin parpadeo y
 // sin salto de maquetación al cargar.
-import '@fontsource-variable/space-grotesk';  // titulares (600–700)
-import '@fontsource-variable/inter';          // cuerpo (400–600)
-import '@fontsource/ibm-plex-mono/400.css';   // etiquetas y precios
+import '@fontsource-variable/space-grotesk'; // titulares (600–700)
+import '@fontsource-variable/inter'; // cuerpo (400–600)
+import '@fontsource/ibm-plex-mono/400.css'; // etiquetas y precios
 import '@fontsource/ibm-plex-mono/500.css';
 
 import '../styles/global.css';
@@ -31,11 +31,11 @@ const ogImage = `${siteUrl}/og-image.png`;
 const canonicalUrl = Astro.url ? new URL(Astro.url.pathname, siteUrl).href : siteUrl;
 
 // "Desde 450 €" -> "450";  "45 € / mes" -> "45"
-const ofertas = allServices.map(s => ({
-  "@type": "Offer",
-  "itemOffered": { "@type": "Service", "name": s.title },
-  "price": s.price.replace(/[^\d]/g, ''),
-  "priceCurrency": "EUR",
+const ofertas = allServices.map((s) => ({
+  '@type': 'Offer',
+  itemOffered: { '@type': 'Service', name: s.title },
+  price: s.price.replace(/[^\d]/g, ''),
+  priceCurrency: 'EUR',
 }));
 ---
 
@@ -78,59 +78,61 @@ const ofertas = allServices.map(s => ({
     <meta name="generator" content={Astro.generator} />
 
     <!-- Structured Data: Person + LocalBusiness -->
-    <script type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "Person",
-          "@id": `${siteUrl}/#person`,
-          "name": "Mario Rivas Hernández",
-          "url": siteUrl,
-          "jobTitle": "Desarrollador Web Freelance",
-          "description": description,
-          "knowsAbout": ["Diseño Web", "PHP", "JavaScript", "MySQL", "WordPress"],
-          "areaServed": {
-            "@type": "City",
-            "name": "Salamanca"
-          },
-          "sameAs": [
-            "https://github.com/mariorivzz"
-          ]
-        },
-        {
-          "@type": "ProfessionalService",
-          "@id": `${siteUrl}/#business`,
-          "name": "Mario Rivas — Diseño Web",
-          "url": siteUrl,
-          "description": "Servicio de diseño y desarrollo web para negocios locales. Páginas web profesionales que generan clientes reales.",
-          "founder": { "@id": `${siteUrl}/#person` },
-          "areaServed": [
-            {
-              "@type": "City",
-              "name": "Salamanca"
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'Person',
+            '@id': `${siteUrl}/#person`,
+            name: 'Mario Rivas Hernández',
+            url: siteUrl,
+            jobTitle: 'Desarrollador Web Freelance',
+            description: description,
+            knowsAbout: ['Diseño Web', 'PHP', 'JavaScript', 'MySQL', 'WordPress'],
+            areaServed: {
+              '@type': 'City',
+              name: 'Salamanca',
             },
-            {
-              "@type": "AdministrativeArea",
-              "name": "Provincia de Salamanca"
-            }
-          ],
-          "priceRange": "€€",
-          "hasOfferCatalog": {
-            "@type": "OfferCatalog",
-            "name": "Servicios de Diseño Web",
-            "itemListElement": ofertas
-          }
-        },
-        {
-          "@type": "WebSite",
-          "@id": `${siteUrl}/#website`,
-          "url": siteUrl,
-          "name": "Mario Rivas — Diseño Web",
-          "publisher": { "@id": `${siteUrl}/#person` },
-          "inLanguage": "es-ES"
-        }
-      ]
-    })} />
+            sameAs: ['https://github.com/mariorivzz'],
+          },
+          {
+            '@type': 'ProfessionalService',
+            '@id': `${siteUrl}/#business`,
+            name: 'Mario Rivas — Diseño Web',
+            url: siteUrl,
+            description:
+              'Servicio de diseño y desarrollo web para negocios locales. Páginas web profesionales que generan clientes reales.',
+            founder: { '@id': `${siteUrl}/#person` },
+            areaServed: [
+              {
+                '@type': 'City',
+                name: 'Salamanca',
+              },
+              {
+                '@type': 'AdministrativeArea',
+                name: 'Provincia de Salamanca',
+              },
+            ],
+            priceRange: '€€',
+            hasOfferCatalog: {
+              '@type': 'OfferCatalog',
+              name: 'Servicios de Diseño Web',
+              itemListElement: ofertas,
+            },
+          },
+          {
+            '@type': 'WebSite',
+            '@id': `${siteUrl}/#website`,
+            url: siteUrl,
+            name: 'Mario Rivas — Diseño Web',
+            publisher: { '@id': `${siteUrl}/#person` },
+            inLanguage: 'es-ES',
+          },
+        ],
+      })}
+    />
 
     <!-- Color de la barra del navegador en móvil -->
     <meta name="theme-color" content="#FAF9F6" />
@@ -142,4 +144,3 @@ const ofertas = allServices.map(s => ({
     <slot />
   </body>
 </html>
-

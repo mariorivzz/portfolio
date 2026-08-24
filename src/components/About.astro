@@ -17,26 +17,29 @@ const pillars = [
 ];
 
 const stats = [
-  { number: 8,   suffix: '+', label: 'Años de experiencia' },
-  { number: 50,  suffix: '+', label: 'Proyectos entregados' },
-  { number: 30,  suffix: '+', label: 'Clientes satisfechos' },
-  { number: 100, suffix: '%', label: 'Compromiso total'     },
+  { number: 8, suffix: '+', label: 'Años de experiencia' },
+  { number: 50, suffix: '+', label: 'Proyectos entregados' },
+  { number: 30, suffix: '+', label: 'Clientes satisfechos' },
+  { number: 100, suffix: '%', label: 'Compromiso total' },
 ];
 ---
 
 <section id="about" class="about">
   <div class="container">
-
     <div class="about__grid">
       <!-- Stats column -->
       <div class="about__stats">
-        {stats.map(s => (
-          <div class="about__stat reveal-up">
-            <span class="about__stat-num" data-target={s.number}>{s.number}</span>
-            <span class="about__stat-suf">{s.suffix}</span>
-            <span class="about__stat-label">{s.label}</span>
-          </div>
-        ))}
+        {
+          stats.map((s) => (
+            <div class="about__stat reveal-up">
+              <span class="about__stat-num" data-target={s.number}>
+                {s.number}
+              </span>
+              <span class="about__stat-suf">{s.suffix}</span>
+              <span class="about__stat-label">{s.label}</span>
+            </div>
+          ))
+        }
       </div>
 
       <!-- Text column -->
@@ -52,29 +55,37 @@ const stats = [
           <p class="reveal-up">
             En 5 años y más de 50 proyectos exitosos, he aprendido lo que realmente importa:
             <strong>tu negocio</strong>. No buscas solo una web ‘bonita’, buscas una web que
-            funcione. Como desarrollador solo, te ofrezco la comunicación directa, la honestidad
-            y la transparencia que tu negocio local necesita, sin intermediarios ni costes ocultos.
+            funcione. Como desarrollador solo, te ofrezco la comunicación directa, la honestidad y
+            la transparencia que tu negocio local necesita, sin intermediarios ni costes ocultos.
           </p>
         </div>
 
         <!-- Differentiators -->
         <p class="about__pillars-title">Resultados que avalan mi compromiso</p>
         <ul class="about__pillars">
-          {pillars.map(p => (
-            <li class="reveal-up">
-              <span class="about__pillar-icon" set:html={p.icon} />
-              {p.text}
-            </li>
-          ))}
+          {
+            pillars.map((p) => (
+              <li class="reveal-up">
+                <span class="about__pillar-icon" set:html={p.icon} />
+                {p.text}
+              </li>
+            ))
+          }
         </ul>
 
         <a href="#contact" class="btn btn-primary reveal-up">
           <span>Hablemos de tu proyecto</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"></path></svg
+          >
         </a>
       </div>
     </div>
-
   </div>
 </section>
 
@@ -106,7 +117,9 @@ const stats = [
     border-radius: var(--radius-lg);
     background: var(--surface);
     box-shadow: var(--shadow-sm);
-    transition: border-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+    transition:
+      border-color 0.25s var(--ease),
+      box-shadow 0.25s var(--ease);
   }
 
   .about__stat:hover {
@@ -200,8 +213,13 @@ const stats = [
   }
 
   @media (max-width: 900px) {
-    .about__grid { grid-template-columns: 1fr; }
-    .about__stats { position: static; grid-template-columns: repeat(2, 1fr); }
+    .about__grid {
+      grid-template-columns: 1fr;
+    }
+    .about__stats {
+      position: static;
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 </style>
 
@@ -211,9 +229,12 @@ const stats = [
   gsap.registerPlugin(ScrollTrigger);
 
   // ── Scroll reveals ───────────────────────────────────────────
-  gsap.utils.toArray<HTMLElement>('#about .reveal-up').forEach(el => {
+  gsap.utils.toArray<HTMLElement>('#about .reveal-up').forEach((el) => {
     gsap.to(el, {
-      y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
+      y: 0,
+      opacity: 1,
+      duration: 0.8,
+      ease: 'power3.out',
       scrollTrigger: { trigger: el, start: 'top 88%', once: true },
     });
   });
@@ -236,25 +257,39 @@ const stats = [
       // nunca se queda visible en 0 si la animación no llega a arrancar.
       el.textContent = '0';
 
-      gsap.to({ val: 0 }, {
-        val: target,
-        duration: 1.8,
-        ease: 'power2.out',
-        onUpdate() { el.textContent = Math.round((this as { targets: () => Array<{ val: number }> }).targets()[0].val).toString(); },
-        // Red de seguridad: pase lo que pase, acaba en el valor real.
-        onComplete()  { el.textContent = target.toString(); },
-        onInterrupt() { el.textContent = target.toString(); },
-      });
+      gsap.to(
+        { val: 0 },
+        {
+          val: target,
+          duration: 1.8,
+          ease: 'power2.out',
+          onUpdate() {
+            el.textContent = Math.round(
+              (this as { targets: () => Array<{ val: number }> }).targets()[0].val
+            ).toString();
+          },
+          // Red de seguridad: pase lo que pase, acaba en el valor real.
+          onComplete() {
+            el.textContent = target.toString();
+          },
+          onInterrupt() {
+            el.textContent = target.toString();
+          },
+        }
+      );
     };
 
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        io.unobserve(entry.target);
-        countUp(entry.target as HTMLElement);
-      });
-    }, { threshold: 0.4 });
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          io.unobserve(entry.target);
+          countUp(entry.target as HTMLElement);
+        });
+      },
+      { threshold: 0.4 }
+    );
 
-    counters.forEach(el => io.observe(el));
+    counters.forEach((el) => io.observe(el));
   }
 </script>

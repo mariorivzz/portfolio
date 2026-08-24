@@ -11,10 +11,10 @@ export const prerender = false;
 // ── In-memory token stats (survives across requests, resets on server restart) ─
 if (!globalThis.__chatStats) {
   globalThis.__chatStats = {
-    inputTokens:  0,
+    inputTokens: 0,
     outputTokens: 0,
-    requests:     0,
-    startTime:    Date.now(),
+    requests: 0,
+    startTime: Date.now(),
   };
 }
 
@@ -87,10 +87,10 @@ export async function POST({ request }) {
   // Validate Content-Type
   const contentType = request.headers.get('content-type') ?? '';
   if (!contentType.includes('application/json')) {
-    return new Response(
-      JSON.stringify({ error: 'Content-Type must be application/json' }),
-      { status: 415, headers: { 'Content-Type': 'application/json' } }
-    );
+    return new Response(JSON.stringify({ error: 'Content-Type must be application/json' }), {
+      status: 415,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
   // Parse body
@@ -98,10 +98,10 @@ export async function POST({ request }) {
   try {
     body = await request.json();
   } catch {
-    return new Response(
-      JSON.stringify({ error: 'Invalid JSON body' }),
-      { status: 400, headers: { 'Content-Type': 'application/json' } }
-    );
+    return new Response(JSON.stringify({ error: 'Invalid JSON body' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
   // Guard: API key must be configured
@@ -118,8 +118,8 @@ export async function POST({ request }) {
   const messages = Array.isArray(body?.messages) ? body.messages : [];
   const safeMessages = messages
     .slice(-10)
-    .filter(m => m && typeof m.role === 'string' && typeof m.content === 'string')
-    .map(m => ({ role: m.role, content: String(m.content).slice(0, 2000) }));
+    .filter((m) => m && typeof m.role === 'string' && typeof m.content === 'string')
+    .map((m) => ({ role: m.role, content: String(m.content).slice(0, 2000) }));
 
   // ── Call Groq API ────────────────────────────────────────────────────────
   try {
@@ -127,12 +127,12 @@ export async function POST({ request }) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model:       MODEL,
-        messages:    [{ role: 'system', content: SYSTEM_PROMPT }, ...safeMessages],
-        max_tokens:  300,
+        model: MODEL,
+        messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...safeMessages],
+        max_tokens: 300,
         temperature: 0.7,
       }),
     });
@@ -146,32 +146,31 @@ export async function POST({ request }) {
       );
     }
 
-    const data  = await res.json();
+    const data = await res.json();
     const reply = data.choices?.[0]?.message?.content ?? '';
     const usage = data.usage ?? {};
 
     // Update in-memory stats (consumed by /api/stats dashboard)
-    globalThis.__chatStats.inputTokens  += usage.prompt_tokens     ?? 0;
+    globalThis.__chatStats.inputTokens += usage.prompt_tokens ?? 0;
     globalThis.__chatStats.outputTokens += usage.completion_tokens ?? 0;
-    globalThis.__chatStats.requests     += 1;
+    globalThis.__chatStats.requests += 1;
 
     return new Response(
       JSON.stringify({
         reply,
         usage: {
-          prompt_tokens:     usage.prompt_tokens     ?? 0,
+          prompt_tokens: usage.prompt_tokens ?? 0,
           completion_tokens: usage.completion_tokens ?? 0,
-          total_tokens:      usage.total_tokens      ?? 0,
+          total_tokens: usage.total_tokens ?? 0,
         },
       }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }
     );
-
   } catch (err) {
     console.error('[/api/chat] Network error:', err?.message ?? err);
-    return new Response(
-      JSON.stringify({ error: 'Failed to get AI response. Please try again.' }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
-    );
+    return new Response(JSON.stringify({ error: 'Failed to get AI response. Please try again.' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 }

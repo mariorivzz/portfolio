@@ -25,13 +25,20 @@
 
     <!-- Subtitle -->
     <p class="hero__sub reveal-up">
-      Desarrollador experto con 5 años de experiencia. Olvida los tecnicismos;
-      hablemos de cómo conseguir más clientes para tu negocio hoy mismo.
+      Desarrollador experto con 5 años de experiencia. Olvida los tecnicismos; hablemos de cómo
+      conseguir más clientes para tu negocio hoy mismo.
     </p>
 
     <!-- SEO tagline -->
     <p class="hero__seo-tag reveal-up">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      <svg
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg
+      >
       Webs que cargan rápido, aparecen en Google y convierten visitas en clientes.
     </p>
 
@@ -39,7 +46,14 @@
     <div class="hero__actions reveal-up">
       <a href="#services" class="btn btn-primary">
         <span>Ver mis servicios</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"></path></svg
+        >
       </a>
       <a href="#contact" class="btn btn-outline">Contrátame</a>
     </div>
@@ -74,7 +88,7 @@
     z-index: 0;
     pointer-events: none;
     background-image:
-      linear-gradient(to right,  rgba(29, 53, 87, 0.055) 1px, transparent 1px),
+      linear-gradient(to right, rgba(29, 53, 87, 0.055) 1px, transparent 1px),
       linear-gradient(to bottom, rgba(29, 53, 87, 0.055) 1px, transparent 1px);
     background-size: 64px 64px;
     -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 42%, #000 30%, transparent 78%);
@@ -130,8 +144,13 @@
   }
 
   @keyframes pulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(45,106,79,0.35); }
-    50% { box-shadow: 0 0 0 7px rgba(45,106,79,0); }
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 rgba(45, 106, 79, 0.35);
+    }
+    50% {
+      box-shadow: 0 0 0 7px rgba(45, 106, 79, 0);
+    }
   }
 
   /* Titular — sin flex ni saltos forzados, para que el texto fluya y el
@@ -144,7 +163,9 @@
     max-width: 22ch;
   }
 
-  .hero__accent { color: var(--brand); }
+  .hero__accent {
+    color: var(--brand);
+  }
 
   /* Subtitle */
   .hero__sub {
@@ -166,7 +187,9 @@
     margin-bottom: var(--space-5);
   }
 
-  .hero__seo-tag svg { flex-shrink: 0; }
+  .hero__seo-tag svg {
+    flex-shrink: 0;
+  }
 
   /* Actions */
   .hero__actions {
@@ -209,15 +232,27 @@
   }
 
   @keyframes scanline {
-    0% { left: -100%; }
-    100% { left: 100%; }
+    0% {
+      left: -100%;
+    }
+    100% {
+      left: 100%;
+    }
   }
 
   @media (max-width: 768px) {
-    .hero__actions .btn { width: 100%; }
-    .hero__scroll { display: none; }
-    .hero__actions { flex-direction: column; }
-    .hero__actions .btn { justify-content: center; }
+    .hero__actions .btn {
+      width: 100%;
+    }
+    .hero__scroll {
+      display: none;
+    }
+    .hero__actions {
+      flex-direction: column;
+    }
+    .hero__actions .btn {
+      justify-content: center;
+    }
   }
 </style>
 
@@ -240,24 +275,39 @@
     });
 
     gsap.to('.hero__badge', {
-      y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.05,
+      y: 0,
+      opacity: 1,
+      duration: 0.8,
+      ease: 'power3.out',
+      delay: 0.05,
     });
 
     gsap.to('.hero__sub', {
-      y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.5,
+      y: 0,
+      opacity: 1,
+      duration: 0.8,
+      ease: 'power3.out',
+      delay: 0.5,
     });
 
     gsap.to('.hero__actions', {
-      y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.65,
+      y: 0,
+      opacity: 1,
+      duration: 0.8,
+      ease: 'power3.out',
+      delay: 0.65,
     });
 
     gsap.from('.hero__scroll', {
-      y: 20, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 0.8,
+      y: 20,
+      opacity: 0,
+      duration: 0.8,
+      ease: 'power3.out',
+      delay: 0.8,
     });
   }
 
   document.body.addEventListener('loader:done', initHero, { once: true });
   // Fallback if loader is already done (e.g. HMR)
   if (document.getElementById('loader')?.style.display === 'none') initHero();
-
 </script>
