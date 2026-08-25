@@ -1,0 +1,163 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout
+  title="Política de Privacidad — Mario Rivas"
+  description="Política de privacidad y tratamiento de datos personales"
+>
+  <Nav />
+  <main>
+    <section class="legal">
+      <div class="container">
+        <h1>Política de Privacidad</h1>
+
+        <h2>1. Responsable del Tratamiento</h2>
+        <p>
+          <strong>Mario Rivas Hernández</strong> es el responsable del tratamiento de tus datos personales
+          en este sitio web.
+        </p>
+
+        <h2>2. Datos que Recopilamos</h2>
+        <p>Cuando utilizas el formulario de contacto, recopilamos:</p>
+        <ul>
+          <li>Nombre</li>
+          <li>Email</li>
+          <li>Teléfono (opcional)</li>
+          <li>Mensaje</li>
+        </ul>
+
+        <h2>3. Finalidad del Tratamiento</h2>
+        <p>Tus datos se utilizan exclusivamente para:</p>
+        <ul>
+          <li>Responder a tu consulta o presupuesto</li>
+          <li>Establecer contacto comercial</li>
+          <li>Mantener un registro de comunicaciones</li>
+        </ul>
+        <p>
+          <strong>No compartimos tus datos con terceros</strong> ni los utilizamos para publicidad o marketing
+          sin tu consentimiento explícito.
+        </p>
+
+        <h2>4. Base Legal</h2>
+        <p>El tratamiento de tus datos se basa en:</p>
+        <ul>
+          <li>Tu consentimiento al enviar el formulario</li>
+          <li>Interés legítimo en responder consultas comerciales</li>
+        </ul>
+
+        <h2>5. Tiempo de Conservación</h2>
+        <p>
+          Los datos del formulario se conservan mientras sea necesario para responder tu consulta y
+          durante 3 años después para fines contables y legales, conforme a la normativa fiscal
+          española.
+        </p>
+
+        <h2>6. Tus Derechos</h2>
+        <p>Conforme al RGPD (Reglamento General de Protección de Datos), tienes derecho a:</p>
+        <ul>
+          <li><strong>Acceso:</strong> Conocer qué datos tenemos sobre ti</li>
+          <li><strong>Rectificación:</strong> Corregir datos inexactos</li>
+          <li><strong>Supresión:</strong> Solicitar la eliminación de tus datos</li>
+          <li><strong>Portabilidad:</strong> Recibir tus datos en formato estructurado</li>
+          <li><strong>Oposición:</strong> Oponerte al tratamiento de tus datos</li>
+        </ul>
+        <p>
+          Para ejercer estos derechos, envía un email a
+          <strong>mariorivashernandez.web@gmail.com</strong> con el asunto "RGPD - [tu solicitud]".
+        </p>
+
+        <h2>7. Cookies y Tracking</h2>
+        <p>
+          Este sitio web no utiliza cookies de seguimiento, analytics, ni publicidad. No recopilamos
+          información sobre tu navegación.
+        </p>
+
+        <h2>8. Chat Widget (Groq AI)</h2>
+        <p>
+          El asistente de IA funciona a través de la API de Groq. Los mensajes que envíes al chat se
+          procesan en servidores de Groq conforme a su
+          <a href="https://console.groq.com/docs/privacy" target="_blank" rel="noopener"
+            >política de privacidad</a
+          >. No almacenamos un registro permanente de tus mensajes.
+        </p>
+
+        <h2>9. Enlaces Externos</h2>
+        <p>
+          Este sitio contiene enlaces a otros sitios web. No somos responsables de sus políticas de
+          privacidad.
+        </p>
+
+        <h2>10. Cambios en Esta Política</h2>
+        <p>
+          Nos reservamos el derecho de actualizar esta política. Los cambios importantes se
+          notificarán en esta página.
+        </p>
+
+        <h2>11. Contacto</h2>
+        <p>Para cualquier duda sobre privacidad:</p>
+        <ul>
+          <li>Email: <strong>mariorivashernandez.web@gmail.com</strong></li>
+          <li>Ubicación: Salamanca, España</li>
+        </ul>
+
+        <p class="legal-date">
+          <em>Última actualización: agosto de 2026</em>
+        </p>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .legal {
+    padding: var(--section-py) 0;
+  }
+
+  .legal h1 {
+    font-size: var(--fs-h1);
+    margin-bottom: var(--space-6);
+  }
+
+  .legal h2 {
+    font-size: var(--fs-h3);
+    margin-top: var(--space-5);
+    margin-bottom: var(--space-2);
+    color: var(--brand);
+  }
+
+  .legal p {
+    color: var(--text-2);
+    line-height: 1.8;
+    margin-bottom: var(--space-2);
+  }
+
+  .legal ul {
+    margin-left: var(--space-4);
+    margin-bottom: var(--space-3);
+    color: var(--text-2);
+    line-height: 1.8;
+  }
+
+  .legal li {
+    margin-bottom: var(--space-1);
+  }
+
+  .legal a {
+    color: var(--brand);
+    text-decoration: underline;
+  }
+
+  .legal a:hover {
+    opacity: 0.8;
+  }
+
+  .legal-date {
+    color: var(--text-muted);
+    font-size: var(--fs-sm);
+    margin-top: var(--space-8);
+  }
+</style>
