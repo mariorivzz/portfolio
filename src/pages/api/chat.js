@@ -1,22 +1,13 @@
 // src/pages/api/chat.js
 // POST /api/chat
 // Body: { messages: [{role, content}] }
-// Returns: { reply: string, usage: { prompt_tokens, completion_tokens, total_tokens } }
+// Returns: { reply: string }
+// Requires: Origin header (CORS validation)
 //
 // Uses Groq's OpenAI-compatible REST API via native fetch — no SDK, no CJS packages.
 // Set GROQ_API_KEY in your .env file (get one free at console.groq.com).
 
 export const prerender = false;
-
-// ── In-memory token stats (survives across requests, resets on server restart) ─
-if (!globalThis.__chatStats) {
-  globalThis.__chatStats = {
-    inputTokens: 0,
-    outputTokens: 0,
-    requests: 0,
-    startTime: Date.now(),
-  };
-}
 
 // ── Groq API config ──────────────────────────────────────────────────────────
 // ⚠️ NOTA INTERNA — margen: este endpoint es el que genera coste por consumo.
@@ -104,6 +95,16 @@ export async function POST({ request }) {
     });
   }
 
+  // Validate Origin header (reject missing — browsers always send it; curl doesn't)
+  const origin = request.headers.get('origin');
+  if (!origin) {
+    console.warn('[/api/chat] Missing Origin header — rejecting');
+    return new Response(JSON.stringify({ error: 'Forbidden' }), {
+      status: 403,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
   // Guard: API key must be configured
   const apiKey = import.meta.env.GROQ_API_KEY;
   if (!apiKey) {
@@ -150,20 +151,11 @@ export async function POST({ request }) {
     const reply = data.choices?.[0]?.message?.content ?? '';
     const usage = data.usage ?? {};
 
-    // Update in-memory stats (consumed by /api/stats dashboard)
-    globalThis.__chatStats.inputTokens += usage.prompt_tokens ?? 0;
-    globalThis.__chatStats.outputTokens += usage.completion_tokens ?? 0;
-    globalThis.__chatStats.requests += 1;
+    // Log token usage server-side for monitoring (no exposure to client)
+    console.log('[/api/chat] Tokens consumed — input: ' + (usage.prompt_tokens ?? 0) + ', output: ' + (usage.completion_tokens ?? 0));
 
     return new Response(
-      JSON.stringify({
-        reply,
-        usage: {
-          prompt_tokens: usage.prompt_tokens ?? 0,
-          completion_tokens: usage.completion_tokens ?? 0,
-          total_tokens: usage.total_tokens ?? 0,
-        },
-      }),
+      JSON.stringify({ reply }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }
     );
   } catch (err) {
