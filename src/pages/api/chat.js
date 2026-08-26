@@ -147,32 +147,15 @@ export async function POST({ request }) {
       );
     }
 
-    const data  = await res.json();
+    const data = await res.json();
     const reply = data.choices?.[0]?.message?.content ?? '';
     const usage = data.usage ?? {};
 
-<<<<<<< HEAD
-    // Update in-memory stats (consumed by /api/stats dashboard)
-    globalThis.__chatStats.inputTokens  += usage.prompt_tokens     ?? 0;
-    globalThis.__chatStats.outputTokens += usage.completion_tokens ?? 0;
-    globalThis.__chatStats.requests     += 1;
-
-    return new Response(
-      JSON.stringify({
-        reply,
-        usage: {
-          prompt_tokens:     usage.prompt_tokens     ?? 0,
-          completion_tokens: usage.completion_tokens ?? 0,
-          total_tokens:      usage.total_tokens      ?? 0,
-        },
-      }),
-=======
     // Log token usage server-side for monitoring (no exposure to client)
     console.log('[/api/chat] Tokens consumed — input: ' + (usage.prompt_tokens ?? 0) + ', output: ' + (usage.completion_tokens ?? 0));
 
     return new Response(
       JSON.stringify({ reply }),
->>>>>>> d2c474a (fix: complete Phase 2 security hardening of /api/chat endpoint)
       { status: 200, headers: { 'Content-Type': 'application/json' } }
     );
 
