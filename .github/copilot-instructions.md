@@ -1,9 +1,11 @@
 # @astro-webs — Monorepo de sitios web profesionales
 
 ## Arquitectura
+
 Monorepo gestionado con **pnpm workspaces**. Cada sitio web es una app Astro independiente que se despliega a Vercel.
 
 ## Tech Stack
+
 - **Framework**: Astro 6 (static + on-demand rendering)
 - **Backend**: Supabase (Postgres DB, Auth, Edge Functions)
 - **Deployment**: Vercel (un proyecto por app)
@@ -12,6 +14,7 @@ Monorepo gestionado con **pnpm workspaces**. Cada sitio web es una app Astro ind
 - **Package manager**: pnpm con workspaces
 
 ## Estructura del monorepo
+
 ```
 ├── .github/                  ← instrucciones, skills, agents, workflows
 ├── AGENTS.md                 ← agentes IA (root)
@@ -29,6 +32,7 @@ Monorepo gestionado con **pnpm workspaces**. Cada sitio web es una app Astro ind
 ```
 
 ## Estructura de cada app
+
 ```
 apps/<categoría>/<nombre>/
   src/
@@ -44,6 +48,7 @@ apps/<categoría>/<nombre>/
 ```
 
 ## Convenciones de código
+
 - Usar componentes Astro (.astro) — no React/Vue/Svelte salvo necesidad explícita
 - Usar `import.meta.env` para variables de entorno (nunca `process.env`)
 - Supabase client en `src/lib/supabase.ts` de cada app
@@ -53,12 +58,14 @@ apps/<categoría>/<nombre>/
 - Forms envían datos a Supabase vía JS client, no API endpoints
 
 ## Variables de entorno
+
 ```
 PUBLIC_SUPABASE_URL=...
 PUBLIC_SUPABASE_ANON_KEY=...
 ```
 
 ## Comandos
+
 ```bash
 pnpm install                                          # Instalar todo
 pnpm --filter @astro-webs/<app-name> dev              # Dev server
@@ -66,6 +73,7 @@ pnpm --filter @astro-webs/<app-name> build            # Build
 ```
 
 ## Crear un sitio nuevo
+
 1. Copiar `apps/plantilla/` a `apps/<categoría>/<nombre>/`
 2. Actualizar `package.json` → `"name": "@astro-webs/<nombre>"`
 3. Personalizar colores, textos, servicios
@@ -80,6 +88,7 @@ pnpm --filter @astro-webs/<app-name> build            # Build
 
 **ui-ux-pro-max** (instalado en `.github/prompts/ui-ux-pro-max/`):
 Genera el design system completo antes de implementar cualquier página.
+
 ```bash
 python3 .github/prompts/ui-ux-pro-max/scripts/search.py "<sector> <keywords>" --design-system -p "NombreNegocio"
 ```
@@ -101,16 +110,16 @@ Iconos SVG para TODOS los iconos. **Nunca emojis como iconos estructurales.**
 
 ### Skills de diseño disponibles
 
-| Skill | Cuándo usarlo |
-|---|---|
-| `maquetacion-no-ia` | Diseñar o revisar cualquier layout, componente o sección |
-| `seo-performance` | Añadir meta tags, mejorar Core Web Vitals, configurar sitemap |
-| `accesibilidad` | Forms, navegación, componentes interactivos, revisión general |
-| `ui-ux-pro-max` | Design system sector-specific (comando en `.github/prompts/`) |
+| Skill               | Cuándo usarlo                                                 |
+| ------------------- | ------------------------------------------------------------- |
+| `maquetacion-no-ia` | Diseñar o revisar cualquier layout, componente o sección      |
+| `seo-performance`   | Añadir meta tags, mejorar Core Web Vitals, configurar sitemap |
+| `accesibilidad`     | Forms, navegación, componentes interactivos, revisión general |
+| `ui-ux-pro-max`     | Design system sector-specific (comando en `.github/prompts/`) |
 
 ### Agentes de diseño disponibles
 
-| Agente | Cuándo usarlo |
-|---|---|
-| `ui-designer` | Diseñar páginas completas o secciones desde cero |
-| `layout-reviewer` | Revisar y mejorar diseños existentes |
+| Agente            | Cuándo usarlo                                    |
+| ----------------- | ------------------------------------------------ |
+| `ui-designer`     | Diseñar páginas completas o secciones desde cero |
+| `layout-reviewer` | Revisar y mejorar diseños existentes             |

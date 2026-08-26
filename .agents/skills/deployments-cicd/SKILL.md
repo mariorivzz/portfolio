@@ -4,9 +4,9 @@ description: Vercel deployment and CI/CD expert guidance. Use when deploying, pr
 metadata:
   priority: 6
   docs:
-    - "https://vercel.com/docs/deployments/overview"
-    - "https://vercel.com/docs/git"
-  sitemap: "https://vercel.com/sitemap/docs.xml"
+    - 'https://vercel.com/docs/deployments/overview'
+    - 'https://vercel.com/docs/git'
+  sitemap: 'https://vercel.com/sitemap/docs.xml'
   pathPatterns:
     - '.github/workflows/*.yml'
     - '.github/workflows/*.yaml'
@@ -23,8 +23,7 @@ metadata:
     - '\bvercel\s+build\b'
     - '\bvercel\s+deploy\s+--prebuilt\b'
 validate:
-  -
-    pattern: 'cron:\s*[''"]|from\s+[''"](node-cron)[''"]|cron\.schedule\('
+  - pattern: 'cron:\s*[''"]|from\s+[''"](node-cron)[''"]|cron\.schedule\('
     message: 'Manual cron scheduling detected. Use Vercel Cron Jobs (vercel.json crons) for platform-native scheduled tasks.'
     severity: recommended
     skipIfFileContains: 'vercel\.json.*crons|@vercel/cron'
@@ -172,6 +171,7 @@ Vercel OIDC federation is for **secure backend access** — letting your deploye
 **What OIDC does not do:** Authenticate the Vercel CLI in CI pipelines. All `vercel pull`, `vercel build`, and `vercel deploy` commands still require `--token=${{ secrets.VERCEL_TOKEN }}`.
 
 **When to use OIDC:**
+
 - Serverless functions that need to call AWS APIs (S3, DynamoDB, SQS)
 - Functions authenticating to GCP services via Workload Identity Federation
 - Any runtime service-to-service auth where you want to avoid storing static secrets in Vercel env vars
@@ -265,12 +265,12 @@ jobs:
 
 ## Global CLI Flags for CI
 
-| Flag | Purpose |
-|------|---------|
+| Flag              | Purpose                       |
+| ----------------- | ----------------------------- |
 | `--token <token>` | Authenticate (required in CI) |
-| `--yes` / `-y` | Skip confirmation prompts |
-| `--scope <team>` | Execute as a specific team |
-| `--cwd <dir>` | Set working directory |
+| `--yes` / `-y`    | Skip confirmation prompts     |
+| `--scope <team>`  | Execute as a specific team    |
+| `--cwd <dir>`     | Set working directory         |
 
 ## Best Practices
 
@@ -283,25 +283,25 @@ jobs:
 
 ## Deployment Strategy Matrix
 
-| Scenario | Strategy | Commands |
-|----------|----------|----------|
-| Standard team workflow | Git-push deploy | Push to main/feature branches |
-| Custom CI/CD (Actions, CircleCI) | Prebuilt deploy | `vercel build && vercel deploy --prebuilt` |
-| Monorepo with Turborepo | Affected + remote cache | `turbo run build --affected --remote-cache` |
-| Preview for every PR | Default behavior | Auto-creates preview URL per branch |
-| Promote preview to production | CLI promotion | `vercel promote <url>` |
-| Atomic deploys with DB migrations | Two-phase | Run migration → verify → `vercel promote` |
-| Edge-first architecture | Edge Functions | Set `runtime: 'edge'` in route config |
+| Scenario                          | Strategy                | Commands                                    |
+| --------------------------------- | ----------------------- | ------------------------------------------- |
+| Standard team workflow            | Git-push deploy         | Push to main/feature branches               |
+| Custom CI/CD (Actions, CircleCI)  | Prebuilt deploy         | `vercel build && vercel deploy --prebuilt`  |
+| Monorepo with Turborepo           | Affected + remote cache | `turbo run build --affected --remote-cache` |
+| Preview for every PR              | Default behavior        | Auto-creates preview URL per branch         |
+| Promote preview to production     | CLI promotion           | `vercel promote <url>`                      |
+| Atomic deploys with DB migrations | Two-phase               | Run migration → verify → `vercel promote`   |
+| Edge-first architecture           | Edge Functions          | Set `runtime: 'edge'` in route config       |
 
 ## Common Build Errors
 
-| Error | Cause | Fix |
-|-------|-------|-----|
-| `ERR_PNPM_OUTDATED_LOCKFILE` | Lockfile doesn't match package.json | Run `pnpm install`, commit lockfile |
-| `NEXT_NOT_FOUND` | Root directory misconfigured | Set `rootDirectory` in Project Settings |
-| `Invalid next.config.js` | Config syntax error | Validate config locally with `next build` |
-| `functions/api/*.js` mismatch | Wrong file structure | Move to `app/api/` directory (App Router) |
-| `Error: EPERM` | File permission issue in build | Don't `chmod` in build scripts; use postinstall |
+| Error                         | Cause                               | Fix                                             |
+| ----------------------------- | ----------------------------------- | ----------------------------------------------- |
+| `ERR_PNPM_OUTDATED_LOCKFILE`  | Lockfile doesn't match package.json | Run `pnpm install`, commit lockfile             |
+| `NEXT_NOT_FOUND`              | Root directory misconfigured        | Set `rootDirectory` in Project Settings         |
+| `Invalid next.config.js`      | Config syntax error                 | Validate config locally with `next build`       |
+| `functions/api/*.js` mismatch | Wrong file structure                | Move to `app/api/` directory (App Router)       |
+| `Error: EPERM`                | File permission issue in build      | Don't `chmod` in build scripts; use postinstall |
 
 ## Deploy Summary Format
 

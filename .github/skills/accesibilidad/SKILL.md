@@ -1,6 +1,6 @@
 ---
 name: accesibilidad
-description: "Use when: building forms, navigation, interactive components, or reviewing any page for accessibility compliance. Covers WCAG AA, keyboard navigation, screen readers, and focus management."
+description: 'Use when: building forms, navigation, interactive components, or reviewing any page for accessibility compliance. Covers WCAG AA, keyboard navigation, screen readers, and focus management.'
 argument-hint: "Describe what to make accessible (e.g., 'form de citas', 'navigation menu', 'review full page')"
 ---
 
@@ -59,20 +59,20 @@ argument-hint: "Describe what to make accessible (e.g., 'form de citas', 'naviga
 
 ## 2. Contraste mínimo (WCAG)
 
-| Tipo de texto | Ratio mínimo | Recomendado |
-|---|---|---|
-| Texto normal (< 18px) | 4.5:1 | 7:1 |
-| Texto grande (≥ 18px bold o ≥ 24px) | 3:1 | 4.5:1 |
-| Iconos/controles UI | 3:1 | — |
+| Tipo de texto                       | Ratio mínimo | Recomendado |
+| ----------------------------------- | ------------ | ----------- |
+| Texto normal (< 18px)               | 4.5:1        | 7:1         |
+| Texto grande (≥ 18px bold o ≥ 24px) | 3:1          | 4.5:1       |
+| Iconos/controles UI                 | 3:1          | —           |
 
 ### Verificar contraste en CSS
 
 ```css
 :root {
   /* Pares verificados WCAG AA */
-  --color-text: #1a1a2e;          /* sobre #fff: 16.5:1 ✓ */
+  --color-text: #1a1a2e; /* sobre #fff: 16.5:1 ✓ */
   --color-text-secondary: #555e68; /* sobre #fff: 6.3:1 ✓ */
-  --color-text-tertiary: #8a919a;  /* sobre #fff: 3.9:1 — solo para texto >18px */
+  --color-text-tertiary: #8a919a; /* sobre #fff: 3.9:1 — solo para texto >18px */
 
   /* Verificar tu --color-primary con https://webaim.org/resources/contrastchecker/ */
 }
@@ -84,7 +84,6 @@ argument-hint: "Describe what to make accessible (e.g., 'form de citas', 'naviga
 
 ```astro
 <form id="form-citas" aria-label="Formulario de reserva de cita" novalidate>
-
   <!-- Campo con label explícito y manejo de error -->
   <div class="form__field">
     <label for="nombre" id="nombre-label">
@@ -99,7 +98,16 @@ argument-hint: "Describe what to make accessible (e.g., 'form de citas', 'naviga
       autocomplete="name"
       aria-required="true"
       aria-describedby="nombre-hint nombre-error"
-      aria-invalid="false"   <!-- cambiar a "true" cuando hay error -->
+      aria-invalid="false"
+      <!--
+      cambiar
+      a
+      "true"
+      cuando
+      hay
+      error
+      --
+    />
     />
     <span id="nombre-hint" class="form__hint">Tal como aparece en tu DNI</span>
     <span id="nombre-error" class="form__error" role="alert" aria-live="polite">
@@ -123,24 +131,13 @@ argument-hint: "Describe what to make accessible (e.g., 'form de citas', 'naviga
       Mensaje
       <span class="form__optional">(opcional)</span>
     </label>
-    <textarea
-      id="mensaje"
-      name="mensaje"
-      rows="4"
-      maxlength="500"
-      aria-describedby="mensaje-count"
+    <textarea id="mensaje" name="mensaje" rows="4" maxlength="500" aria-describedby="mensaje-count"
     ></textarea>
-    <span id="mensaje-count" class="form__hint" aria-live="polite">
-      0 / 500 caracteres
-    </span>
+    <span id="mensaje-count" class="form__hint" aria-live="polite"> 0 / 500 caracteres </span>
   </div>
 
-  <button type="submit" aria-describedby="submit-hint">
-    Solicitar cita
-  </button>
-  <p id="submit-hint" class="form__hint">
-    Recibirás confirmación por email en 24h
-  </p>
+  <button type="submit" aria-describedby="submit-hint"> Solicitar cita </button>
+  <p id="submit-hint" class="form__hint">Recibirás confirmación por email en 24h</p>
 </form>
 ```
 
@@ -215,7 +212,8 @@ form.addEventListener('submit', async (e) => {
 hamburger.addEventListener('click', () => {
   const isOpen = nav.classList.toggle('is-open');
   hamburger.setAttribute('aria-expanded', String(isOpen));
-  hamburger.setAttribute('aria-label',
+  hamburger.setAttribute(
+    'aria-label',
     isOpen ? 'Cerrar menú de navegación' : 'Abrir menú de navegación'
   );
 
@@ -233,9 +231,12 @@ hamburger.addEventListener('click', () => {
 
 ```astro
 <!-- Imagen informativa: alt descriptivo y específico -->
-<img src="/foto-consulta.jpg"
-     alt="Sala de consulta con sillones cómodos y luz natural"
-     width="800" height="600" />
+<img
+  src="/foto-consulta.jpg"
+  alt="Sala de consulta con sillones cómodos y luz natural"
+  width="800"
+  height="600"
+/>
 
 <!-- Imagen decorativa: alt vacío (no null) -->
 <img src="/fondo-decorativo.svg" alt="" role="presentation" />
@@ -273,7 +274,9 @@ hamburger.addEventListener('click', () => {
 .reveal {
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
 }
 .reveal.is-visible {
   opacity: 1;
@@ -330,6 +333,7 @@ hamburger.addEventListener('click', () => {
 ## Checklist de accesibilidad
 
 ### Estructura
+
 - [ ] Skip link como primer elemento del body
 - [ ] Un único `<h1>` por página
 - [ ] Jerarquía de headings lógica (no saltar de H1 a H3)
@@ -337,12 +341,14 @@ hamburger.addEventListener('click', () => {
 - [ ] `lang="es"` en `<html>`
 
 ### Formularios
+
 - [ ] Todos los `<input>` tienen `<label>` asociado con `for/id`
 - [ ] Los campos requeridos tienen `aria-required="true"` y marca visual
 - [ ] Los errores usan `aria-invalid`, `aria-describedby` y `role="alert"`
 - [ ] Autocompletado configurado (`autocomplete="name"`, `"email"`, etc.)
 
 ### Interactividad
+
 - [ ] `:focus-visible` visible en todos los elementos interactivos
 - [ ] `aria-expanded` en toggles (menú, acordeón, dropdown)
 - [ ] `aria-label` en botones icon-only
@@ -350,11 +356,13 @@ hamburger.addEventListener('click', () => {
 - [ ] Trampa de foco en modales/menús overlay
 
 ### Imágenes y media
+
 - [ ] Alt text descriptivo en imágenes de contenido
 - [ ] `alt=""` en imágenes decorativas
 - [ ] Vídeos con subtítulos si aplica
 
 ### Color y contraste
+
 - [ ] Contraste de texto normal ≥ 4.5:1
 - [ ] Contraste de texto grande ≥ 3:1
 - [ ] La información no se transmite solo por color

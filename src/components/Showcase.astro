@@ -3,11 +3,11 @@
 // casos reales, reactivar cuando tenga proyectos aprobados por el cliente para
 // mostrar. El componente se conserva entero y listo para volver a enchufarlo:
 // ver las instrucciones en src/pages/_proyectos.astro.
-import plannormal       from '../assets/images/plannormal.png';
-import asistenteIA      from '../assets/images/asistenteIA.png';
+import plannormal from '../assets/images/plannormal.png';
+import asistenteIA from '../assets/images/asistenteIA.png';
 import negociointegraciones from '../assets/images/negociointegraciones.png';
-import plancompleto     from '../assets/images/plancompleto.png';
-import migracion        from '../assets/images/migracion.png';
+import plancompleto from '../assets/images/plancompleto.png';
+import migracion from '../assets/images/migracion.png';
 
 interface Props {
   /** true = resumen para la portada (3 proyectos + enlace a /proyectos). */
@@ -24,52 +24,52 @@ const contactHref = (value) => (isHome ? '#contact' : `/?servicio=${value}#conta
 const projects = [
   {
     title: 'Una Sola Página, Todo lo Importante',
-    tag:   'Presentación · Servicios · WhatsApp',
-    tier:  'Landing Page',
-    desc:  'Página única para clínica de fisioterapia: quiénes son, qué hacen y un botón directo a WhatsApp. Pensada para el móvil, que es por donde la mira casi todo el mundo.',
-    img:   plannormal,
-    alt:   'Landing page de una clínica de fisioterapia vista en el móvil',
-    url:   '#contact',
+    tag: 'Presentación · Servicios · WhatsApp',
+    tier: 'Landing Page',
+    desc: 'Página única para clínica de fisioterapia: quiénes son, qué hacen y un botón directo a WhatsApp. Pensada para el móvil, que es por donde la mira casi todo el mundo.',
+    img: plannormal,
+    alt: 'Landing page de una clínica de fisioterapia vista en el móvil',
+    url: '#contact',
     prefill: 'pagina-basica',
   },
   {
     title: 'Web con Asistente de IA',
-    tag:   'Atiende solo · Avisos automáticos',
-    tier:  'Con asistente',
-    desc:  'Un ayudante virtual que responde a los clientes al instante, a cualquier hora, como tener a alguien siempre en recepción. Resuelve las dudas de siempre y avisa por correo cuando alguien quiere contratar.',
-    img:   asistenteIA,
-    alt:   'Web de una cafetería con un asistente virtual atendiendo en el chat',
-    url:   '#contact',
+    tag: 'Atiende solo · Avisos automáticos',
+    tier: 'Con asistente',
+    desc: 'Un ayudante virtual que responde a los clientes al instante, a cualquier hora, como tener a alguien siempre en recepción. Resuelve las dudas de siempre y avisa por correo cuando alguien quiere contratar.',
+    img: asistenteIA,
+    alt: 'Web de una cafetería con un asistente virtual atendiendo en el chat',
+    url: '#contact',
     prefill: 'pagina-ia',
   },
   {
     title: 'Asistente Añadido a una Web Existente',
-    tag:   'Ayudante virtual · Correo · WhatsApp',
-    tier:  'Sobre tu web',
-    desc:  'La web de siempre de un restaurante, con un ayudante virtual que contesta por su cuenta, aviso automático por correo y botón de WhatsApp. Sin tocar el diseño que ya tenían.',
-    img:   negociointegraciones,
-    alt:   'Web de restaurante con asistente virtual, correo y WhatsApp conectados',
-    url:   '#contact',
+    tag: 'Ayudante virtual · Correo · WhatsApp',
+    tier: 'Sobre tu web',
+    desc: 'La web de siempre de un restaurante, con un ayudante virtual que contesta por su cuenta, aviso automático por correo y botón de WhatsApp. Sin tocar el diseño que ya tenían.',
+    img: negociointegraciones,
+    alt: 'Web de restaurante con asistente virtual, correo y WhatsApp conectados',
+    url: '#contact',
     prefill: 'ia-existente',
   },
   {
     title: 'Agenda de Citas Conectada',
-    tag:   'Reservas · Cambios · Vigilancia',
-    tier:  'Mantenimiento mensual',
-    desc:  'Sus clientes reservan cita solos desde la web, conectando una herramienta de agenda ya existente. Yo me ocupo cada mes de las actualizaciones y de los cambios que van pidiendo.',
-    img:   plancompleto,
-    alt:   'Agenda de citas online conectada a la web de una clínica',
-    url:   '#contact',
+    tag: 'Reservas · Cambios · Vigilancia',
+    tier: 'Mantenimiento mensual',
+    desc: 'Sus clientes reservan cita solos desde la web, conectando una herramienta de agenda ya existente. Yo me ocupo cada mes de las actualizaciones y de los cambios que van pidiendo.',
+    img: plancompleto,
+    alt: 'Agenda de citas online conectada a la web de una clínica',
+    url: '#contact',
     prefill: 'mantenimiento',
   },
   {
     title: 'Renovación de una Web Antigua',
-    tag:   'Antes y después',
-    tier:  'Lo vemos juntos',
-    desc:  'Una web anticuada convertida en algo moderno y rápido. Cada caso es distinto según cómo esté montada la web de partida, así que esto se habla antes: cuéntame la tuya y vemos qué necesita.',
-    img:   migracion,
-    alt:   'Comparación de una web antigua junto a su versión renovada',
-    url:   '#contact',
+    tag: 'Antes y después',
+    tier: 'Lo vemos juntos',
+    desc: 'Una web anticuada convertida en algo moderno y rápido. Cada caso es distinto según cómo esté montada la web de partida, así que esto se habla antes: cuéntame la tuya y vemos qué necesita.',
+    img: migracion,
+    alt: 'Comparación de una web antigua junto a su versión renovada',
+    url: '#contact',
     prefill: 'renovar',
   },
 ];
@@ -81,7 +81,6 @@ const list = teaser ? projects.slice(0, 3) : projects;
 
 <section id="proyectos" class="showcase">
   <div class="container">
-
     <div class="showcase__header reveal-up">
       <span class="section-tag">Trabajos reales — clientes reales</span>
       <h2 class="showcase__heading">
@@ -93,55 +92,69 @@ const list = teaser ? projects.slice(0, 3) : projects;
     </div>
 
     <div class="showcase__grid">
-      {list.map((p, i) => (
-        <article class="project-card reveal-up">
-          <!-- 16/9 image container — uniform regardless of source dimensions -->
-          <div class="project-card__img-wrap">
-            <img
-              src={p.img.src}
-              alt={p.alt}
-              loading="lazy"
-              decoding="async"
-              width={p.img.width}
-              height={p.img.height}
-            />
-            <div class="project-card__img-overlay" />
-          </div>
-
-          <div class="project-card__body">
-            <div class="project-card__meta">
-              <span class="project-card__tag">{p.tag}</span>
-              <span class="project-card__tier-badge">{p.tier}</span>
+      {
+        list.map((p, i) => (
+          <article class="project-card reveal-up">
+            <div class="project-card__img-wrap">
+              <img
+                src={p.img.src}
+                alt={p.alt}
+                loading="lazy"
+                decoding="async"
+                width={p.img.width}
+                height={p.img.height}
+              />
+              <div class="project-card__img-overlay" />
             </div>
-            <h3 class="project-card__title">{p.title}</h3>
-            <p class="project-card__desc">{p.desc}</p>
-            <a href={contactHref(p.prefill)} class="project-card__cta" data-prefill={p.prefill}>
-              Quiero algo así para mi negocio
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-          </div>
-        </article>
-      ))}
+
+            <div class="project-card__body">
+              <div class="project-card__meta">
+                <span class="project-card__tag">{p.tag}</span>
+                <span class="project-card__tier-badge">{p.tier}</span>
+              </div>
+              <h3 class="project-card__title">{p.title}</h3>
+              <p class="project-card__desc">{p.desc}</p>
+              <a href={contactHref(p.prefill)} class="project-card__cta" data-prefill={p.prefill}>
+                Quiero algo así para mi negocio
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  aria-hidden="true"
+                >
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </a>
+            </div>
+          </article>
+        ))
+      }
     </div>
 
     <!-- Bottom CTA -->
     <div class="showcase__cta-wrap reveal-up">
       <p class="showcase__cta-text">
-        {teaser
-          ? `Estos son solo 3 de los ${projects.length} trabajos que puedes ver.`
-          : '¿Quieres que tu negocio sea el próximo caso de éxito?'}
+        {
+          teaser
+            ? `Estos son solo 3 de los ${projects.length} trabajos que puedes ver.`
+            : '¿Quieres que tu negocio sea el próximo caso de éxito?'
+        }
       </p>
-      {teaser ? (
-        <a href="/proyectos" class="btn btn-primary">
-          <span>Ver todos los proyectos</span>
-        </a>
-      ) : (
-        <a href={isHome ? '#contact' : '/#contact'} class="btn btn-primary">
-          <span>Solicitar presupuesto gratuito</span>
-        </a>
-      )}
+      {
+        teaser ? (
+          <a href="/proyectos" class="btn btn-primary">
+            <span>Ver todos los proyectos</span>
+          </a>
+        ) : (
+          <a href={isHome ? '#contact' : '/#contact'} class="btn btn-primary">
+            <span>Solicitar presupuesto gratuito</span>
+          </a>
+        )
+      }
     </div>
-
   </div>
 </section>
 
@@ -180,9 +193,15 @@ const list = teaser ? projects.slice(0, 3) : projects;
     gap: var(--space-3);
     margin-bottom: var(--space-4);
   }
-  .showcase__grid > .project-card              { grid-column: span 2; }
-  .showcase__grid > .project-card:nth-child(4) { grid-column: 2 / 4; }
-  .showcase__grid > .project-card:nth-child(5) { grid-column: 4 / 6; }
+  .showcase__grid > .project-card {
+    grid-column: span 2;
+  }
+  .showcase__grid > .project-card:nth-child(4) {
+    grid-column: 2 / 4;
+  }
+  .showcase__grid > .project-card:nth-child(5) {
+    grid-column: 4 / 6;
+  }
 
   /* ── Tarjeta ─────────────────────────────────── */
   .project-card {
@@ -193,7 +212,9 @@ const list = teaser ? projects.slice(0, 3) : projects;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    transition: border-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+    transition:
+      border-color 0.25s var(--ease),
+      box-shadow 0.25s var(--ease);
   }
 
   .project-card:hover {
@@ -219,13 +240,15 @@ const list = teaser ? projects.slice(0, 3) : projects;
     transition: transform 0.5s var(--ease);
   }
 
-  .project-card:hover .project-card__img-wrap img { transform: scale(1.03); }
+  .project-card:hover .project-card__img-wrap img {
+    transform: scale(1.03);
+  }
 
   /* Velo muy leve para asentar la imagen sobre el fondo claro */
   .project-card__img-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, transparent 60%, rgba(31, 35, 40, 0.10) 100%);
+    background: linear-gradient(to bottom, transparent 60%, rgba(31, 35, 40, 0.1) 100%);
     pointer-events: none;
   }
 
@@ -294,7 +317,9 @@ const list = teaser ? projects.slice(0, 3) : projects;
     transition: gap 0.2s var(--ease);
   }
 
-  .project-card__cta:hover { gap: 0.75rem; }
+  .project-card__cta:hover {
+    gap: 0.75rem;
+  }
 
   /* ── Franja final ────────────────────────────── */
   .showcase__cta-wrap {
@@ -319,20 +344,32 @@ const list = teaser ? projects.slice(0, 3) : projects;
   }
 
   @media (max-width: 1024px) {
-    .showcase__grid { grid-template-columns: repeat(2, 1fr); }
-    .showcase__grid > .project-card              { grid-column: span 1; }
+    .showcase__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .showcase__grid > .project-card {
+      grid-column: span 1;
+    }
     .showcase__grid > .project-card:nth-child(4),
-    .showcase__grid > .project-card:nth-child(5) { grid-column: span 1; }
+    .showcase__grid > .project-card:nth-child(5) {
+      grid-column: span 1;
+    }
   }
 
   @media (max-width: 640px) {
-    .showcase__grid { grid-template-columns: 1fr; max-width: 32rem; margin-inline: auto; }
+    .showcase__grid {
+      grid-template-columns: 1fr;
+      max-width: 32rem;
+      margin-inline: auto;
+    }
     .showcase__cta-wrap {
       flex-direction: column;
       align-items: flex-start;
       padding: var(--space-3);
     }
-    .showcase__cta-wrap .btn { width: 100%; }
+    .showcase__cta-wrap .btn {
+      width: 100%;
+    }
   }
 </style>
 
@@ -343,7 +380,10 @@ const list = teaser ? projects.slice(0, 3) : projects;
 
   gsap.utils.toArray<HTMLElement>('#proyectos .reveal-up').forEach((el, i) => {
     gsap.to(el, {
-      y: 0, opacity: 1, duration: 0.85, ease: 'power3.out',
+      y: 0,
+      opacity: 1,
+      duration: 0.85,
+      ease: 'power3.out',
       delay: i * 0.07,
       scrollTrigger: { trigger: el, start: 'top 88%', once: true },
     });

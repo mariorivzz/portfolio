@@ -78,10 +78,10 @@ export async function POST({ request }) {
   // Validate Content-Type
   const contentType = request.headers.get('content-type') ?? '';
   if (!contentType.includes('application/json')) {
-    return new Response(
-      JSON.stringify({ error: 'Content-Type must be application/json' }),
-      { status: 415, headers: { 'Content-Type': 'application/json' } }
-    );
+    return new Response(JSON.stringify({ error: 'Content-Type must be application/json' }), {
+      status: 415,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
   // Parse body
@@ -89,10 +89,10 @@ export async function POST({ request }) {
   try {
     body = await request.json();
   } catch {
-    return new Response(
-      JSON.stringify({ error: 'Invalid JSON body' }),
-      { status: 400, headers: { 'Content-Type': 'application/json' } }
-    );
+    return new Response(JSON.stringify({ error: 'Invalid JSON body' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
   // Validate Origin header (reject missing — browsers always send it; curl doesn't)
@@ -119,8 +119,8 @@ export async function POST({ request }) {
   const messages = Array.isArray(body?.messages) ? body.messages : [];
   const safeMessages = messages
     .slice(-10)
-    .filter(m => m && typeof m.role === 'string' && typeof m.content === 'string')
-    .map(m => ({ role: m.role, content: String(m.content).slice(0, 2000) }));
+    .filter((m) => m && typeof m.role === 'string' && typeof m.content === 'string')
+    .map((m) => ({ role: m.role, content: String(m.content).slice(0, 2000) }));
 
   // ── Call Groq API ────────────────────────────────────────────────────────
   try {
@@ -128,12 +128,12 @@ export async function POST({ request }) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model:       MODEL,
-        messages:    [{ role: 'system', content: SYSTEM_PROMPT }, ...safeMessages],
-        max_tokens:  300,
+        model: MODEL,
+        messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...safeMessages],
+        max_tokens: 300,
         temperature: 0.7,
       }),
     });
@@ -152,18 +152,22 @@ export async function POST({ request }) {
     const usage = data.usage ?? {};
 
     // Log token usage server-side for monitoring (no exposure to client)
-    console.log('[/api/chat] Tokens consumed — input: ' + (usage.prompt_tokens ?? 0) + ', output: ' + (usage.completion_tokens ?? 0));
-
-    return new Response(
-      JSON.stringify({ reply }),
-      { status: 200, headers: { 'Content-Type': 'application/json' } }
+    console.log(
+      '[/api/chat] Tokens consumed — input: ' +
+        (usage.prompt_tokens ?? 0) +
+        ', output: ' +
+        (usage.completion_tokens ?? 0)
     );
 
+    return new Response(JSON.stringify({ reply }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
   } catch (err) {
     console.error('[/api/chat] Network error:', err?.message ?? err);
-    return new Response(
-      JSON.stringify({ error: 'Failed to get AI response. Please try again.' }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
-    );
+    return new Response(JSON.stringify({ error: 'Failed to get AI response. Please try again.' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 }

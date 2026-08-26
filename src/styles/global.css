@@ -12,29 +12,29 @@
      COLOR — 3 colores principales (fondo, texto, marca) + neutros de apoyo.
      Contrastes comprobados sobre --bg para cumplir WCAG AA (mínimo 4.5:1).
      --------------------------------------------------------------------- */
-  --bg:             #FAF9F6;  /* blanco cálido, nunca blanco puro          */
-  --bg-subtle:      #F2F0EA;  /* franjas y zonas alternas                  */
-  --surface:        #FFFFFF;  /* tarjetas sobre el fondo cálido            */
+  --bg: #faf9f6; /* blanco cálido, nunca blanco puro          */
+  --bg-subtle: #f2f0ea; /* franjas y zonas alternas                  */
+  --surface: #ffffff; /* tarjetas sobre el fondo cálido            */
 
-  --text:           #1F2328;  /* carbón — 15.9:1 sobre --bg                */
-  --text-2:         #454B54;  /* secundario — 8.6:1                        */
-  --text-muted:     #5A6270;  /* apoyo — 5.8:1, sigue cumpliendo AA        */
+  --text: #1f2328; /* carbón — 15.9:1 sobre --bg                */
+  --text-2: #454b54; /* secundario — 8.6:1                        */
+  --text-muted: #5a6270; /* apoyo — 5.8:1, sigue cumpliendo AA        */
 
-  --brand:          #1D3557;  /* azul marino — 11.7:1 sobre --bg           */
-  --brand-hover:    #16283F;
-  --brand-contrast: #FFFFFF;  /* texto sobre marca — 12.4:1                */
-  --brand-soft:     rgba(29, 53, 87, 0.06);
-  --brand-line:     rgba(29, 53, 87, 0.20);
+  --brand: #1d3557; /* azul marino — 11.7:1 sobre --bg           */
+  --brand-hover: #16283f;
+  --brand-contrast: #ffffff; /* texto sobre marca — 12.4:1                */
+  --brand-soft: rgba(29, 53, 87, 0.06);
+  --brand-line: rgba(29, 53, 87, 0.2);
 
-  --support:        #2D6A4F;  /* verde apagado: disponible, checks — 6.1:1 */
-  --support-soft:   rgba(45, 106, 79, 0.10);
+  --support: #2d6a4f; /* verde apagado: disponible, checks — 6.1:1 */
+  --support-soft: rgba(45, 106, 79, 0.1);
 
   /* Color funcional, solo para errores de formulario. No es color de marca. */
-  --danger:         #9B2C2C;
-  --danger-soft:    rgba(155, 44, 44, 0.07);
+  --danger: #9b2c2c;
+  --danger-soft: rgba(155, 44, 44, 0.07);
 
-  --border:         rgba(31, 35, 40, 0.10);
-  --border-strong:  rgba(31, 35, 40, 0.18);
+  --border: rgba(31, 35, 40, 0.1);
+  --border-strong: rgba(31, 35, 40, 0.18);
 
   /* ---------------------------------------------------------------------
      TIPOGRAFÍA — 3 familias con un papel claro cada una.
@@ -46,56 +46,59 @@
   --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
 
   /* Escala tipográfica — fluida entre móvil y escritorio */
-  --fs-display: clamp(2.75rem, 7vw, 5.25rem);  /* h1 del hero              */
-  --fs-h2:      clamp(2rem, 4vw, 3rem);
-  --fs-h3:      clamp(1.125rem, 1.6vw, 1.3125rem);
-  --fs-lead:    clamp(1rem, 1.4vw, 1.125rem);  /* entradillas              */
-  --fs-body:    1rem;
-  --fs-sm:      0.9375rem;
-  --fs-xs:      0.8125rem;
-  --fs-label:   0.75rem;                       /* etiquetas monoespaciadas */
+  --fs-display: clamp(2.75rem, 7vw, 5.25rem); /* h1 del hero              */
+  --fs-h2: clamp(2rem, 4vw, 3rem);
+  --fs-h3: clamp(1.125rem, 1.6vw, 1.3125rem);
+  --fs-lead: clamp(1rem, 1.4vw, 1.125rem); /* entradillas              */
+  --fs-body: 1rem;
+  --fs-sm: 0.9375rem;
+  --fs-xs: 0.8125rem;
+  --fs-label: 0.75rem; /* etiquetas monoespaciadas */
 
   /* ---------------------------------------------------------------------
      ESPACIADO — escala de 8px. Se usa siempre un peldaño de la escala,
      nunca un valor suelto.
      --------------------------------------------------------------------- */
-  --space-1:  0.5rem;   /*  8px */
-  --space-2:  1rem;     /* 16px */
-  --space-3:  1.5rem;   /* 24px */
-  --space-4:  2rem;     /* 32px */
-  --space-5:  2.5rem;   /* 40px */
-  --space-6:  3rem;     /* 48px */
-  --space-8:  4rem;     /* 64px */
-  --space-12: 6rem;     /* 96px */
+  --space-1: 0.5rem; /*  8px */
+  --space-2: 1rem; /* 16px */
+  --space-3: 1.5rem; /* 24px */
+  --space-4: 2rem; /* 32px */
+  --space-5: 2.5rem; /* 40px */
+  --space-6: 3rem; /* 48px */
+  --space-8: 4rem; /* 64px */
+  --space-12: 6rem; /* 96px */
 
   --section-py: clamp(var(--space-8), 9vw, var(--space-12));
-  --container:  1200px;
-  --pad-x:      clamp(var(--space-3), 5vw, var(--space-5));
+  --container: 1200px;
+  --pad-x: clamp(var(--space-3), 5vw, var(--space-5));
 
   /* ---------------------------------------------------------------------
      RADIOS — solo dos valores en toda la web.
      --------------------------------------------------------------------- */
-  --radius-sm: 8px;    /* botones, campos de formulario, etiquetas */
-  --radius-lg: 16px;   /* tarjetas y bloques grandes               */
-  --radius-pill: 999px;/* píldoras y puntos                        */
+  --radius-sm: 8px; /* botones, campos de formulario, etiquetas */
+  --radius-lg: 16px; /* tarjetas y bloques grandes               */
+  --radius-pill: 999px; /* píldoras y puntos                        */
 
   /* ---------------------------------------------------------------------
      SOMBRAS — suaves y de bajo contraste. Nada de sombras duras.
      --------------------------------------------------------------------- */
-  --shadow-sm: 0 1px 2px rgba(31, 35, 40, 0.04),
-               0 1px 3px rgba(31, 35, 40, 0.05);
-  --shadow-md: 0 2px 4px rgba(31, 35, 40, 0.03),
-               0 8px 24px rgba(31, 35, 40, 0.06);
-  --shadow-lg: 0 4px 8px rgba(31, 35, 40, 0.03),
-               0 16px 40px rgba(31, 35, 40, 0.08);
+  --shadow-sm: 0 1px 2px rgba(31, 35, 40, 0.04), 0 1px 3px rgba(31, 35, 40, 0.05);
+  --shadow-md: 0 2px 4px rgba(31, 35, 40, 0.03), 0 8px 24px rgba(31, 35, 40, 0.06);
+  --shadow-lg: 0 4px 8px rgba(31, 35, 40, 0.03), 0 16px 40px rgba(31, 35, 40, 0.08);
 
   /* ---- Transiciones ---- */
-  --ease:      cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-out:  cubic-bezier(0.16, 1, 0.3, 1);
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ============================ RESET ============================ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 html {
   scroll-behavior: smooth;
@@ -115,12 +118,22 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-::selection { background: var(--brand); color: var(--brand-contrast); }
+::selection {
+  background: var(--brand);
+  color: var(--brand-contrast);
+}
 
 /* Barra de desplazamiento discreta */
-html { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
-::-webkit-scrollbar { width: 10px; }
-::-webkit-scrollbar-track { background: transparent; }
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
 ::-webkit-scrollbar-thumb {
   background: var(--border-strong);
   border-radius: var(--radius-pill);
@@ -136,7 +149,12 @@ html { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent;
    Importante: `balance` NO puede hacer nada si el salto está forzado con
    <br> o con líneas apiladas en flex. Escribe el titular seguido y deja
    que decida el navegador. */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-head);
   color: var(--text);
   line-height: 1.15;
@@ -144,25 +162,57 @@ h1, h2, h3, h4, h5, h6 {
   text-wrap: balance;
 }
 
-h1, h2 { font-weight: 700; }
-h3, h4, h5, h6 { font-weight: 600; }
+h1,
+h2 {
+  font-weight: 700;
+}
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+}
 
-h1 { font-size: var(--fs-display); letter-spacing: -0.035em; line-height: 1.04; }
-h2 { font-size: var(--fs-h2); }
-h3 { font-size: var(--fs-h3); }
+h1 {
+  font-size: var(--fs-display);
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+}
+h2 {
+  font-size: var(--fs-h2);
+}
+h3 {
+  font-size: var(--fs-h3);
+}
 
 /* `pretty` en texto largo: evita que la última línea quede con una sola
    palabra suelta. A diferencia de `balance`, no tiene límite de líneas. */
-p, li, dd, figcaption, blockquote { text-wrap: pretty; }
+p,
+li,
+dd,
+figcaption,
+blockquote {
+  text-wrap: pretty;
+}
 
 /* El texto justificado abre "ríos" de espacio entre palabras que dificultan
    la lectura a personas con dislexia o baja visión. Alineación a la
    izquierda siempre: no usar `text-align: justify` en este proyecto. */
 
-strong, b { font-weight: 600; color: var(--text); }
+strong,
+b {
+  font-weight: 600;
+  color: var(--text);
+}
 
-a { color: inherit; text-decoration: none; }
-img { display: block; max-width: 100%; }
+a {
+  color: inherit;
+  text-decoration: none;
+}
+img {
+  display: block;
+  max-width: 100%;
+}
 
 /* Foco visible y coherente en todo el sitio (accesibilidad por teclado) */
 :focus-visible {
@@ -174,7 +224,9 @@ img { display: block; max-width: 100%; }
 /* El atributo [hidden] debe ganar siempre. Sin esto, cualquier regla propia
    que fije `display` (por ejemplo `.form-success { display: flex }`) anula el
    ocultado del navegador y el elemento se ve aunque tenga hidden. */
-[hidden] { display: none !important; }
+[hidden] {
+  display: none !important;
+}
 
 /* ========================== LAYOUT ============================= */
 .container {
@@ -224,14 +276,17 @@ img { display: block; max-width: 100%; }
   border: 1px solid transparent;
   cursor: pointer;
   text-align: center;
-  transition: background-color 0.2s var(--ease),
-              border-color 0.2s var(--ease),
-              color 0.2s var(--ease),
-              box-shadow 0.2s var(--ease),
-              transform 0.2s var(--ease);
+  transition:
+    background-color 0.2s var(--ease),
+    border-color 0.2s var(--ease),
+    color 0.2s var(--ease),
+    box-shadow 0.2s var(--ease),
+    transform 0.2s var(--ease);
 }
 
-.btn svg { flex-shrink: 0; }
+.btn svg {
+  flex-shrink: 0;
+}
 
 .btn-primary {
   background: var(--brand);
@@ -266,14 +321,18 @@ img { display: block; max-width: 100%; }
 /* Si el usuario pide menos movimiento, el contenido se muestra ya visible
    y sin animaciones de entrada. */
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
+  html {
+    scroll-behavior: auto;
+  }
 
   .reveal-up {
     opacity: 1;
     transform: none;
   }
 
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -282,7 +341,13 @@ img { display: block; max-width: 100%; }
 
 /* ========================= UTILIDADES ========================== */
 .sr-only {
-  position: absolute; width: 1px; height: 1px;
-  padding: 0; margin: -1px; overflow: hidden;
-  clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

@@ -1,6 +1,6 @@
 ---
 name: añadir-chat
-description: "Use when: adding a chat widget or AI assistant to a website. Covers the ChatWidget component, API endpoint, and OpenAI/Groq integration for business-specific chatbots."
+description: 'Use when: adding a chat widget or AI assistant to a website. Covers the ChatWidget component, API endpoint, and OpenAI/Groq integration for business-specific chatbots.'
 argument-hint: "Describe the chat feature (e.g., 'add chat widget to psicologo-martinez', 'customize chatbot personality')"
 ---
 
@@ -9,15 +9,18 @@ argument-hint: "Describe the chat feature (e.g., 'add chat widget to psicologo-m
 ## Procedimiento
 
 ### 1. Crear el componente ChatWidget
+
 Copiar desde `apps/veterinarios/veterinario-sedano/src/components/ChatWidget.astro` o crear uno nuevo.
 
 El ChatWidget es un componente autocontenido que incluye:
+
 - Botón flotante (esquina inferior derecha)
 - Ventana de chat con historial
 - Indicador de escritura
 - Envío de mensajes al API endpoint
 
 ### 2. Crear el API endpoint
+
 Crear `src/pages/api/chat.ts`:
 
 ```ts
@@ -62,10 +65,7 @@ export const POST: APIRoute = async ({ request }) => {
     },
     body: JSON.stringify({
       model: 'llama-3.3-70b-versatile',
-      messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        ...recentMessages,
-      ],
+      messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...recentMessages],
       max_tokens: 300,
       temperature: 0.7,
     }),
@@ -87,17 +87,22 @@ export const POST: APIRoute = async ({ request }) => {
 ```
 
 ### 3. Añadir al Layout
+
 En `src/layouts/Layout.astro`:
+
 ```astro
 ---
 import ChatWidget from '../components/ChatWidget.astro';
 ---
+
 <!-- antes de </body> -->
 <ChatWidget />
 ```
 
 ### 4. Variables de entorno
+
 Añadir la API key del proveedor de IA:
+
 ```
 GROQ_API_KEY=gsk_...
 ```
@@ -105,15 +110,17 @@ GROQ_API_KEY=gsk_...
 **Nota**: Esta variable NO lleva prefijo `PUBLIC_` porque solo se usa en el servidor.
 
 ### 5. Personalización del chatbot
+
 El `SYSTEM_PROMPT` define la personalidad y conocimiento del bot. Adaptar:
 
-| Tipo negocio | Tono | Ejemplo de prompt |
-|-------------|------|-------------------|
-| Veterinaria | Cálido, empático | "Eres el asistente de VetCare. Amas a los animales..." |
-| Psicología | Profesional, sereno | "Eres el asistente de la consulta. Mantén tono respetuoso..." |
-| Dentista | Cercano, tranquilizador | "Eres el asistente de la clínica dental. Tranquiliza..." |
+| Tipo negocio | Tono                    | Ejemplo de prompt                                             |
+| ------------ | ----------------------- | ------------------------------------------------------------- |
+| Veterinaria  | Cálido, empático        | "Eres el asistente de VetCare. Amas a los animales..."        |
+| Psicología   | Profesional, sereno     | "Eres el asistente de la consulta. Mantén tono respetuoso..." |
+| Dentista     | Cercano, tranquilizador | "Eres el asistente de la clínica dental. Tranquiliza..."      |
 
 ### 6. Verificar
+
 - [ ] Bot responde en español
 - [ ] Respuestas son relevantes al negocio
 - [ ] No inventa precios ni servicios falsos
