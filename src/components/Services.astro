@@ -10,9 +10,7 @@ interface Props {
 
 const { teaser = false } = Astro.props;
 
-const destacados = teaserValues
-  .map(v => allServices.find(s => s.value === v))
-  .filter(Boolean);
+const destacados = teaserValues.map((v) => allServices.find((s) => s.value === v)).filter(Boolean);
 
 // El formulario vive en la portada. Desde /servicios hay que volver a ella
 // pasando el servicio por la URL (?servicio=…), que Contact.astro ya sabe leer.
@@ -22,70 +20,22 @@ const contactHref = (value) => (isHome ? '#contact' : `/?servicio=${value}#conta
 
 <section id="services" class="services">
   <div class="container">
-
     <div class="services__header reveal-up">
       <span class="section-tag">De la página más sencilla al mantenimiento mensual</span>
       <h2 class="services__heading">
         Soluciones web diseñadas <em>para tu negocio local</em>
       </h2>
       <p class="services__subhead reveal-up">
-        Sin tecnicismos. Sin complicaciones. Solo resultados reales para tu negocio.
-        Trabajo solo y de forma directa: hablas siempre conmigo, no con un comercial.
+        Sin tecnicismos. Sin complicaciones. Solo resultados reales para tu negocio. Trabajo solo y
+        de forma directa: hablas siempre conmigo, no con un comercial.
       </p>
     </div>
 
-    {teaser ? (
-      <div class="services__grid services__grid--trio">
-        {destacados.map(s => (
-          <div class={`service-card reveal-up ${s.featured ? 'service-card--featured' : ''}`}>
-            {s.featured && <span class="service-card__badge">Más recomendado</span>}
-            <div class="service-card__head">
-              <span class="service-card__icon" set:html={s.icon} />
-              <span class="service-card__label">{s.label}</span>
-            </div>
-            <h3 class="service-card__title">{s.title}</h3>
-            <p class="service-card__tagline">{s.tagline}</p>
-            <p class="service-card__desc">{s.description}</p>
-            <ul class="service-card__features">
-              {s.features.map(f => (
-                <li>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                  <span>{f}</span>
-                </li>
-              ))}
-            </ul>
-            <p class="service-card__result">{s.result}</p>
-            <div class="service-card__footer">
-              <span class="service-card__price">{s.price}</span>
-              <a href={contactHref(s.value)} class="btn btn-primary service-card__cta" data-prefill={s.value}>
-                {s.cta}
-              </a>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div class="services__more reveal-up">
-        <p class="services__more-text">
-          Hay {allServices.length} servicios en total, desde una página sencilla
-          hasta el mantenimiento mes a mes, cada uno con su precio a la vista.
-        </p>
-        <a href="/servicios" class="btn btn-primary services__more-cta">
-          <span>Ver todos los servicios y precios</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-    ) : (
-      <>
-        <!-- ── Bloque 1: creación de la web (pago único) ────────── -->
-        <div class="services__block">
-          <div class="services__block-head reveal-up">
-            <h3 class="services__block-title">Crear tu web</h3>
-            <span class="services__block-note">Pago único</span>
-          </div>
-
-          <div class="services__grid services__grid--plans">
-            {plans.map(s => (
+    {
+      teaser ? (
+        <>
+          <div class="services__grid services__grid--trio">
+            {destacados.map((s) => (
               <div class={`service-card reveal-up ${s.featured ? 'service-card--featured' : ''}`}>
                 {s.featured && <span class="service-card__badge">Más recomendado</span>}
                 <div class="service-card__head">
@@ -96,9 +46,21 @@ const contactHref = (value) => (isHome ? '#contact' : `/?servicio=${value}#conta
                 <p class="service-card__tagline">{s.tagline}</p>
                 <p class="service-card__desc">{s.description}</p>
                 <ul class="service-card__features">
-                  {s.features.map(f => (
+                  {s.features.map((f) => (
                     <li>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
                       <span>{f}</span>
                     </li>
                   ))}
@@ -106,132 +68,282 @@ const contactHref = (value) => (isHome ? '#contact' : `/?servicio=${value}#conta
                 <p class="service-card__result">{s.result}</p>
                 <div class="service-card__footer">
                   <span class="service-card__price">{s.price}</span>
-                  <a href={contactHref(s.value)} class="btn btn-primary service-card__cta" data-prefill={s.value}>
+                  <a
+                    href={contactHref(s.value)}
+                    class="btn btn-primary service-card__cta"
+                    data-prefill={s.value}
+                  >
                     {s.cta}
                   </a>
                 </div>
               </div>
             ))}
           </div>
-        </div>
 
-        <!-- ── Bloque 2: añadidos ───────────────────────────────── -->
-        <div class="services__block">
-          <div class="services__block-head reveal-up">
-            <h3 class="services__block-title">Añadidos</h3>
-            <span class="services__block-note">Sobre cualquier plan, o por separado</span>
-          </div>
-
-          <div class="services__grid services__grid--addons">
-            {addons.map(s => (
-              <div class="service-card service-card--addon reveal-up">
-                <div class="service-card__head">
-                  <span class="service-card__icon" set:html={s.icon} />
-                  <span class="service-card__label">{s.label}</span>
-                </div>
-                <h3 class="service-card__title">{s.title}</h3>
-                <p class="service-card__tagline">{s.tagline}</p>
-                <p class="service-card__desc">{s.description}</p>
-                <ul class="service-card__features">
-                  {s.features.map(f => (
-                    <li>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-                <p class="service-card__result">{s.result}</p>
-                <div class="service-card__footer">
-                  <span class="service-card__price">{s.price}</span>
-                  <a href={contactHref(s.value)} class="btn btn-primary service-card__cta" data-prefill={s.value}>
-                    {s.cta}
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <!-- ── ¿Web antigua? — sin precio de catálogo: el alcance real
-             depende de cómo esté montada la web actual del cliente. ── -->
-        <div class="services__renew reveal-up">
-          <div class="services__renew-copy">
-            <span class="services__renew-tag">Antes de dar un precio, lo miramos</span>
-            <h3 class="services__renew-title">
-              ¿Web antigua que renovar o migrar?
-            </h3>
-            <p class="services__renew-text">
-              Cada web vieja es un mundo, así que prefiero no darte un precio de
-              catálogo que luego no encaje. Hablemos primero, gratis y sin
-              compromiso, para ver exactamente qué necesita tu web. El presupuesto
-              te lo doy después de revisar tu caso.
+          <div class="services__more reveal-up">
+            <p class="services__more-text">
+              Hay {allServices.length} servicios en total, desde una página sencilla hasta el
+              mantenimiento mes a mes, cada uno con su precio a la vista.
             </p>
+            <a href="/servicios" class="btn btn-primary services__more-cta">
+              <span>Ver todos los servicios y precios</span>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </a>
           </div>
-          <a href={contactHref('renovar')} class="btn btn-primary services__renew-cta" data-prefill="renovar">
-            <span>Hablemos de tu caso</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
+        </>
+      ) : (
+        <>
+          <div class="services__block">
+            <div class="services__block-head reveal-up">
+              <h3 class="services__block-title">Crear tu web</h3>
+              <span class="services__block-note">Pago único</span>
+            </div>
 
-        <!-- ── Bloque 3: mantenimiento mensual ──────────────────── -->
-        <div class="services__block">
-          <div class="services__block-head reveal-up">
-            <h3 class="services__block-title">Mantenimiento mensual</h3>
-            <span class="services__block-note">Elige el nivel que necesites</span>
+            <div class="services__grid services__grid--plans">
+              {plans.map((s) => (
+                <div class={`service-card reveal-up ${s.featured ? 'service-card--featured' : ''}`}>
+                  {s.featured && <span class="service-card__badge">Más recomendado</span>}
+                  <div class="service-card__head">
+                    <span class="service-card__icon" set:html={s.icon} />
+                    <span class="service-card__label">{s.label}</span>
+                  </div>
+                  <h3 class="service-card__title">{s.title}</h3>
+                  <p class="service-card__tagline">{s.tagline}</p>
+                  <p class="service-card__desc">{s.description}</p>
+                  <ul class="service-card__features">
+                    {s.features.map((f) => (
+                      <li>
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        <span>{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <p class="service-card__result">{s.result}</p>
+                  <div class="service-card__footer">
+                    <span class="service-card__price">{s.price}</span>
+                    <a
+                      href={contactHref(s.value)}
+                      class="btn btn-primary service-card__cta"
+                      data-prefill={s.value}
+                    >
+                      {s.cta}
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div class="services__grid services__grid--maint">
-            {maintenance.map(s => (
-              <div class="service-card reveal-up">
-                <div class="service-card__head">
-                  <span class="service-card__icon" set:html={s.icon} />
-                  <span class="service-card__label">{s.label}</span>
+          <div class="services__block">
+            <div class="services__block-head reveal-up">
+              <h3 class="services__block-title">Añadidos</h3>
+              <span class="services__block-note">Sobre cualquier plan, o por separado</span>
+            </div>
+
+            <div class="services__grid services__grid--addons">
+              {addons.map((s) => (
+                <div class="service-card service-card--addon reveal-up">
+                  <div class="service-card__head">
+                    <span class="service-card__icon" set:html={s.icon} />
+                    <span class="service-card__label">{s.label}</span>
+                  </div>
+                  <h3 class="service-card__title">{s.title}</h3>
+                  <p class="service-card__tagline">{s.tagline}</p>
+                  <p class="service-card__desc">{s.description}</p>
+                  <ul class="service-card__features">
+                    {s.features.map((f) => (
+                      <li>
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        <span>{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <p class="service-card__result">{s.result}</p>
+                  <div class="service-card__footer">
+                    <span class="service-card__price">{s.price}</span>
+                    <a
+                      href={contactHref(s.value)}
+                      class="btn btn-primary service-card__cta"
+                      data-prefill={s.value}
+                    >
+                      {s.cta}
+                    </a>
+                  </div>
                 </div>
-                <h3 class="service-card__title">{s.title}</h3>
-                <p class="service-card__tagline">{s.tagline}</p>
-                <p class="service-card__desc">{s.description}</p>
-                <ul class="service-card__features">
-                  {s.features.map(f => (
-                    <li>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-                <p class="service-card__result">{s.result}</p>
-                <div class="service-card__footer">
-                  <span class="service-card__price">{s.price}</span>
-                  <a href={contactHref(s.value)} class="btn btn-primary service-card__cta" data-prefill={s.value}>
-                    {s.cta}
-                  </a>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </>
-    )}
+
+          <div class="services__renew reveal-up">
+            <div class="services__renew-copy">
+              <span class="services__renew-tag">Antes de dar un precio, lo miramos</span>
+              <h3 class="services__renew-title">¿Web antigua que renovar o migrar?</h3>
+              <p class="services__renew-text">
+                Cada web vieja es un mundo, así que prefiero no darte un precio de catálogo que
+                luego no encaje. Hablemos primero, gratis y sin compromiso, para ver exactamente qué
+                necesita tu web. El presupuesto te lo doy después de revisar tu caso.
+              </p>
+            </div>
+            <a
+              href={contactHref('renovar')}
+              class="btn btn-primary services__renew-cta"
+              data-prefill="renovar"
+            >
+              <span>Hablemos de tu caso</span>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </a>
+          </div>
+
+          <div class="services__block">
+            <div class="services__block-head reveal-up">
+              <h3 class="services__block-title">Mantenimiento mensual</h3>
+              <span class="services__block-note">Elige el nivel que necesites</span>
+            </div>
+
+            <div class="services__grid services__grid--maint">
+              {maintenance.map((s) => (
+                <div class="service-card reveal-up">
+                  <div class="service-card__head">
+                    <span class="service-card__icon" set:html={s.icon} />
+                    <span class="service-card__label">{s.label}</span>
+                  </div>
+                  <h3 class="service-card__title">{s.title}</h3>
+                  <p class="service-card__tagline">{s.tagline}</p>
+                  <p class="service-card__desc">{s.description}</p>
+                  <ul class="service-card__features">
+                    {s.features.map((f) => (
+                      <li>
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        <span>{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <p class="service-card__result">{s.result}</p>
+                  <div class="service-card__footer">
+                    <span class="service-card__price">{s.price}</span>
+                    <a
+                      href={contactHref(s.value)}
+                      class="btn btn-primary service-card__cta"
+                      data-prefill={s.value}
+                    >
+                      {s.cta}
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      )
+    }
 
     <!-- Barra de confianza -->
     <div class="services__trust-bar reveal-up">
       <div class="trust-item">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg
+        >
         Sin contratos de permanencia
       </div>
       <div class="trust-item">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg
+        >
         Comunicación directa — sin intermediarios
       </div>
       <div class="trust-item">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          ><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"
+          ></polyline></svg
+        >
         Respuesta en menos de 24 horas
       </div>
       <div class="trust-item">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          ><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path><polyline
+            points="14 2 14 8 20 8"></polyline></svg
+        >
         Presupuesto gratis y sin compromiso
       </div>
     </div>
-
   </div>
 </section>
 
@@ -266,7 +378,9 @@ const contactHref = (value) => (isHome ? '#contact' : `/?servicio=${value}#conta
   }
 
   /* ── Bloques (crear / añadidos / mantenimiento) ──────────────── */
-  .services__block { margin-bottom: var(--space-8); }
+  .services__block {
+    margin-bottom: var(--space-8);
+  }
 
   .services__block-head {
     display: flex;
@@ -305,18 +419,30 @@ const contactHref = (value) => (isHome ? '#contact' : `/?servicio=${value}#conta
   .services__grid--plans {
     grid-template-columns: repeat(6, 1fr);
   }
-  .services__grid--plans > .service-card              { grid-column: span 2; }
-  .services__grid--plans > .service-card:nth-child(4) { grid-column: 2 / 4; }
-  .services__grid--plans > .service-card:nth-child(5) { grid-column: 4 / 6; }
+  .services__grid--plans > .service-card {
+    grid-column: span 2;
+  }
+  .services__grid--plans > .service-card:nth-child(4) {
+    grid-column: 2 / 4;
+  }
+  .services__grid--plans > .service-card:nth-child(5) {
+    grid-column: 4 / 6;
+  }
 
   /* 2 añadidos, a media anchura */
-  .services__grid--addons { grid-template-columns: repeat(2, 1fr); }
+  .services__grid--addons {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
   /* 3 niveles de mantenimiento y 3 tarjetas del resumen de portada */
   .services__grid--maint,
-  .services__grid--trio { grid-template-columns: repeat(3, 1fr); }
+  .services__grid--trio {
+    grid-template-columns: repeat(3, 1fr);
+  }
 
-  .services__grid--trio { margin-bottom: var(--space-3); }
+  .services__grid--trio {
+    margin-bottom: var(--space-3);
+  }
 
   /* ── Tarjeta ─────────────────────────────────── */
   .service-card {
@@ -326,7 +452,9 @@ const contactHref = (value) => (isHome ? '#contact' : `/?servicio=${value}#conta
     border-radius: var(--radius-lg);
     background: var(--surface);
     box-shadow: var(--shadow-sm);
-    transition: border-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+    transition:
+      border-color 0.25s var(--ease),
+      box-shadow 0.25s var(--ease);
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
@@ -345,7 +473,9 @@ const contactHref = (value) => (isHome ? '#contact' : `/?servicio=${value}#conta
   }
 
   /* Los añadidos no compiten con los planes principales */
-  .service-card--addon { background: var(--bg-subtle); }
+  .service-card--addon {
+    background: var(--bg-subtle);
+  }
 
   .service-card__badge {
     position: absolute;
@@ -383,7 +513,10 @@ const contactHref = (value) => (isHome ? '#contact' : `/?servicio=${value}#conta
     flex-shrink: 0;
   }
 
-  .service-card__icon :global(svg) { width: 20px; height: 20px; }
+  .service-card__icon :global(svg) {
+    width: 20px;
+    height: 20px;
+  }
 
   .service-card__label {
     font-family: var(--font-mono);
@@ -468,7 +601,9 @@ const contactHref = (value) => (isHome ? '#contact' : `/?servicio=${value}#conta
     color: var(--text);
   }
 
-  .service-card__cta { width: 100%; }
+  .service-card__cta {
+    width: 100%;
+  }
 
   /* ── Portada: enlace al listado completo ─────── */
   .services__more,
@@ -486,7 +621,9 @@ const contactHref = (value) => (isHome ? '#contact' : `/?servicio=${value}#conta
     box-shadow: var(--shadow-sm);
   }
 
-  .services__more { margin-bottom: var(--space-3); }
+  .services__more {
+    margin-bottom: var(--space-3);
+  }
 
   .services__more-text {
     font-size: var(--fs-sm);
@@ -496,12 +633,19 @@ const contactHref = (value) => (isHome ? '#contact' : `/?servicio=${value}#conta
   }
 
   .services__more-cta,
-  .services__renew-cta { flex-shrink: 0; }
+  .services__renew-cta {
+    flex-shrink: 0;
+  }
 
   /* ── Bloque "renovar web antigua" ────────────── */
-  .services__renew { border-style: dashed; border-color: var(--brand-line); }
+  .services__renew {
+    border-style: dashed;
+    border-color: var(--brand-line);
+  }
 
-  .services__renew-copy { max-width: 38rem; }
+  .services__renew-copy {
+    max-width: 38rem;
+  }
 
   .services__renew-tag {
     display: block;
@@ -547,15 +691,22 @@ const contactHref = (value) => (isHome ? '#contact' : `/?servicio=${value}#conta
     white-space: nowrap;
   }
 
-  .trust-item svg { color: var(--support); flex-shrink: 0; }
+  .trust-item svg {
+    color: var(--support);
+    flex-shrink: 0;
+  }
 
   @media (max-width: 1024px) {
     .services__grid--plans,
     .services__grid--maint,
-    .services__grid--trio { grid-template-columns: repeat(2, 1fr); }
+    .services__grid--trio {
+      grid-template-columns: repeat(2, 1fr);
+    }
     .services__grid--plans > .service-card,
     .services__grid--plans > .service-card:nth-child(4),
-    .services__grid--plans > .service-card:nth-child(5) { grid-column: span 1; }
+    .services__grid--plans > .service-card:nth-child(5) {
+      grid-column: span 1;
+    }
   }
 
   @media (max-width: 768px) {
@@ -566,7 +717,9 @@ const contactHref = (value) => (isHome ? '#contact' : `/?servicio=${value}#conta
       padding: var(--space-3);
     }
     .services__more-cta,
-    .services__renew-cta { width: 100%; }
+    .services__renew-cta {
+      width: 100%;
+    }
   }
 
   @media (max-width: 640px) {
@@ -578,7 +731,9 @@ const contactHref = (value) => (isHome ? '#contact' : `/?servicio=${value}#conta
       max-width: 32rem;
       margin-inline: auto;
     }
-    .trust-item { white-space: normal; }
+    .trust-item {
+      white-space: normal;
+    }
   }
 </style>
 
@@ -589,7 +744,10 @@ const contactHref = (value) => (isHome ? '#contact' : `/?servicio=${value}#conta
 
   gsap.utils.toArray<HTMLElement>('#services .reveal-up').forEach((el, i) => {
     gsap.to(el, {
-      y: 0, opacity: 1, duration: 0.85, ease: 'power3.out',
+      y: 0,
+      opacity: 1,
+      duration: 0.85,
+      ease: 'power3.out',
       delay: (i % 3) * 0.08,
       scrollTrigger: { trigger: el, start: 'top 88%', once: true },
     });

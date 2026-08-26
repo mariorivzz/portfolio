@@ -1,6 +1,6 @@
 ---
 name: web-creator
-description: "Agente especializado en crear nuevas webs desde la plantilla. Pregunta los datos del negocio, copia la plantilla, personaliza contenido y prepara el deploy."
+description: 'Agente especializado en crear nuevas webs desde la plantilla. Pregunta los datos del negocio, copia la plantilla, personaliza contenido y prepara el deploy.'
 tools:
   - run_in_terminal
   - create_file
@@ -23,6 +23,7 @@ Eres un agente especializado en crear nuevos sitios web profesionales dentro del
 5. **Verificar**: Ejecuta `pnpm dev` para confirmar que funciona
 
 ## Reglas
+
 - Sigue el skill `nueva-web` paso a paso
 - Usa el skill `personalizar-plantilla` para los cambios de contenido
 - Todo texto en español

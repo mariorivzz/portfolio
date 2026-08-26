@@ -1,6 +1,6 @@
 ---
 name: deployer
-description: "Agente especializado en desplegar webs a Vercel y diagnosticar problemas de deployment. Maneja builds, env vars y configuración de dominios."
+description: 'Agente especializado en desplegar webs a Vercel y diagnosticar problemas de deployment. Maneja builds, env vars y configuración de dominios.'
 tools:
   - run_in_terminal
   - read_file
@@ -21,6 +21,7 @@ Eres un agente especializado en desplegar las webs del monorepo @astro-webs a Ve
 5. **Verificar**: Comprobar que todo funciona post-deploy
 
 ## Reglas
+
 - Sigue el skill `deploy-vercel`
 - Siempre verificar el build local antes de desplegar
 - Nunca hacer deploy a producción sin preview primero

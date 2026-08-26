@@ -2,12 +2,12 @@
 // "Sobre mí" y "Contacto" son secciones de la portada; Servicios y Proyectos
 // tienen página propia. El prefijo "/" hace que funcionen también desde ellas.
 const links = [
-  { href: '/#about',    label: 'Sobre mí'  },
+  { href: '/#about', label: 'Sobre mí' },
   { href: '/servicios', label: 'Servicios' },
   // Sección Proyectos: pendiente de añadir casos reales, reactivar cuando tenga
   // proyectos aprobados por el cliente para mostrar.
   // { href: '/proyectos', label: 'Proyectos' },
-  { href: '/#contact',  label: 'Contacto'  },
+  { href: '/#contact', label: 'Contacto' },
 ];
 ---
 
@@ -20,11 +20,15 @@ const links = [
 
     <!-- Desktop links -->
     <ul class="nav__links" role="list">
-      {links.map(l => (
-        <li>
-          <a href={l.href} class="nav__link">{l.label}</a>
-        </li>
-      ))}
+      {
+        links.map((l) => (
+          <li>
+            <a href={l.href} class="nav__link">
+              {l.label}
+            </a>
+          </li>
+        ))
+      }
     </ul>
 
     <!-- Mobile hamburger -->
@@ -36,9 +40,15 @@ const links = [
   <!-- Mobile menu -->
   <div class="nav__mobile" id="nav-mobile" aria-hidden="true">
     <ul role="list">
-      {links.map(l => (
-        <li><a href={l.href} class="nav__mobile-link">{l.label}</a></li>
-      ))}
+      {
+        links.map((l) => (
+          <li>
+            <a href={l.href} class="nav__mobile-link">
+              {l.label}
+            </a>
+          </li>
+        ))
+      }
     </ul>
   </div>
 </nav>
@@ -51,8 +61,11 @@ const links = [
     right: 0;
     z-index: 1000;
     padding: var(--space-3) 0;
-    transition: padding 0.3s var(--ease), background-color 0.3s var(--ease),
-                border-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
+    transition:
+      padding 0.3s var(--ease),
+      background-color 0.3s var(--ease),
+      border-color 0.3s var(--ease),
+      box-shadow 0.3s var(--ease);
     border-bottom: 1px solid transparent;
   }
 
@@ -81,8 +94,13 @@ const links = [
     transition: color 0.2s var(--ease);
     flex-shrink: 0;
   }
-  .nav__logo-symbol { color: var(--brand); font-weight: 600; }
-  .nav__logo:hover { color: var(--brand); }
+  .nav__logo-symbol {
+    color: var(--brand);
+    font-weight: 600;
+  }
+  .nav__logo:hover {
+    color: var(--brand);
+  }
 
   /* Enlaces */
   .nav__links {
@@ -115,8 +133,12 @@ const links = [
     transition: width 0.3s var(--ease-out);
   }
 
-  .nav__link:hover { color: var(--brand); }
-  .nav__link:hover::after { width: 100%; }
+  .nav__link:hover {
+    color: var(--brand);
+  }
+  .nav__link:hover::after {
+    width: 100%;
+  }
 
   /* Botón de menú en móvil */
   .nav__burger {
@@ -136,13 +158,21 @@ const links = [
     height: 2px;
     border-radius: var(--radius-pill);
     background: var(--text);
-    transition: transform 0.3s var(--ease), opacity 0.3s var(--ease);
+    transition:
+      transform 0.3s var(--ease),
+      opacity 0.3s var(--ease);
     transform-origin: center;
   }
 
-  .nav__burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-  .nav__burger.open span:nth-child(2) { opacity: 0; }
-  .nav__burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .nav__burger.open span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .nav__burger.open span:nth-child(2) {
+    opacity: 0;
+  }
+  .nav__burger.open span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
 
   /* Menú desplegable en móvil */
   .nav__mobile {
@@ -154,7 +184,11 @@ const links = [
     box-shadow: var(--shadow-md);
   }
 
-  .nav__mobile ul { list-style: none; display: flex; flex-direction: column; }
+  .nav__mobile ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+  }
 
   .nav__mobile-link {
     display: block;
@@ -167,21 +201,33 @@ const links = [
     transition: color 0.2s var(--ease);
   }
 
-  .nav__mobile-link:last-child { border-bottom: none; }
-  .nav__mobile-link:hover { color: var(--brand); }
+  .nav__mobile-link:last-child {
+    border-bottom: none;
+  }
+  .nav__mobile-link:hover {
+    color: var(--brand);
+  }
 
   @media (max-width: 768px) {
-    .nav__links { display: none; }
-    .nav__burger { display: flex; }
-    .nav__mobile { display: block; }
-    .nav__mobile[aria-hidden="true"] { display: none; }
+    .nav__links {
+      display: none;
+    }
+    .nav__burger {
+      display: flex;
+    }
+    .nav__mobile {
+      display: block;
+    }
+    .nav__mobile[aria-hidden='true'] {
+      display: none;
+    }
   }
 </style>
 
 <script>
   import gsap from 'gsap';
 
-  const nav    = document.getElementById('nav')!;
+  const nav = document.getElementById('nav')!;
   const burger = document.getElementById('nav-burger')!;
   const mobile = document.getElementById('nav-mobile')!;
 
@@ -200,7 +246,7 @@ const links = [
   });
 
   // ── Close on link click ─────────────────────────────────────
-  mobile.querySelectorAll('a').forEach(a => {
+  mobile.querySelectorAll('a').forEach((a) => {
     a.addEventListener('click', () => {
       burger.classList.remove('open');
       burger.setAttribute('aria-expanded', 'false');
@@ -211,8 +257,11 @@ const links = [
   // ── Entrance animation ──────────────────────────────────────
   function initNav() {
     gsap.from('.nav__inner', {
-      y: -30, opacity: 0, duration: 0.9,
-      ease: 'power4.out', delay: 0.1,
+      y: -30,
+      opacity: 0,
+      duration: 0.9,
+      ease: 'power4.out',
+      delay: 0.1,
     });
   }
   document.body.addEventListener('loader:done', initNav, { once: true });

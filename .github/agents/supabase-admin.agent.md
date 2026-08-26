@@ -1,6 +1,6 @@
 ---
 name: supabase-admin
-description: "Agente especializado en configurar y gestionar Supabase: tablas, RLS, auth, migraciones SQL y troubleshooting de la base de datos."
+description: 'Agente especializado en configurar y gestionar Supabase: tablas, RLS, auth, migraciones SQL y troubleshooting de la base de datos.'
 tools:
   - run_in_terminal
   - read_file
@@ -20,6 +20,7 @@ Eres un agente experto en Supabase para el monorepo @astro-webs.
 4. **Orientar**: Indicar cómo ejecutar el SQL en Supabase Dashboard
 
 ## Reglas
+
 - Sigue el skill `supabase-setup`
 - Siempre habilitar RLS en tablas nuevas
 - Usar `gen_random_uuid()` para IDs

@@ -32,10 +32,21 @@ import Layout from '../layouts/Layout.astro';
       <section class="stats-info">
         <h2>How tokens work</h2>
         <ul>
-          <li><strong>Input tokens</strong> — every character you type + the system prompt sent to OpenAI each turn.</li>
+          <li>
+            <strong>Input tokens</strong> — every character you type + the system prompt sent to OpenAI
+            each turn.
+          </li>
           <li><strong>Output tokens</strong> — the characters in the AI's reply.</li>
-          <li><strong>Cost</strong> — calculated at gpt-4o-mini rates: $0.15 / 1M input · $0.60 / 1M output (billed by OpenAI).</li>
-          <li><strong>Copilot tokens</strong> — shown separately in your GitHub Copilot billing dashboard at <a href="https://github.com/settings/billing" target="_blank" rel="noopener">github.com/settings/billing</a>.</li>
+          <li>
+            <strong>Cost</strong> — calculated at gpt-4o-mini rates: $0.15 / 1M input · $0.60 / 1M output
+            (billed by OpenAI).
+          </li>
+          <li>
+            <strong>Copilot tokens</strong> — shown separately in your GitHub Copilot billing dashboard
+            at <a href="https://github.com/settings/billing" target="_blank" rel="noopener"
+              >github.com/settings/billing</a
+            >.
+          </li>
         </ul>
       </section>
     </div>
@@ -96,7 +107,9 @@ import Layout from '../layouts/Layout.astro';
     transition: border-color 0.3s;
   }
 
-  .stats-card:hover { border-color: var(--brand-line); }
+  .stats-card:hover {
+    border-color: var(--brand-line);
+  }
 
   .stats-card__label {
     font-family: var(--font-mono);
@@ -130,8 +143,13 @@ import Layout from '../layouts/Layout.astro';
   }
 
   @keyframes pulse {
-    0%, 100% { opacity: 0.5; }
-    50%       { opacity: 1;   }
+    0%,
+    100% {
+      opacity: 0.5;
+    }
+    50% {
+      opacity: 1;
+    }
   }
 
   /* ── Meta bar ────────────────────────────────── */

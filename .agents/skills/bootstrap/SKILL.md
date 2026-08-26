@@ -4,9 +4,9 @@ description: Project bootstrapping orchestrator for repos that depend on Vercel-
 metadata:
   priority: 8
   docs:
-    - "https://vercel.com/docs/getting-started-with-vercel"
-    - "https://nextjs.org/docs/getting-started/installation"
-  sitemap: "https://vercel.com/sitemap/docs.xml"
+    - 'https://vercel.com/docs/getting-started-with-vercel'
+    - 'https://nextjs.org/docs/getting-started/installation'
+  sitemap: 'https://vercel.com/sitemap/docs.xml'
   pathPatterns:
     - '.env.example'
     - '.env.sample'
@@ -35,16 +35,13 @@ metadata:
     - '@auth/core'
     - 'better-auth'
 chainTo:
-  -
-    pattern: '@vercel/(postgres|kv)|\b(KV_REST_API_URL|POSTGRES_URL)\b'
+  - pattern: '@vercel/(postgres|kv)|\b(KV_REST_API_URL|POSTGRES_URL)\b'
     targetSkill: vercel-storage
     message: '@vercel/postgres and @vercel/kv are sunset — loading Vercel Storage guidance for Neon and Upstash migration.'
-  -
-    pattern: 'from\s+[''""](next-auth|@auth/core|@clerk/nextjs|better-auth)[''""]'
+  - pattern: 'from\s+[''""](next-auth|@auth/core|@clerk/nextjs|better-auth)[''""]'
     targetSkill: auth
     message: 'Auth library detected during bootstrap — loading Auth guidance for Clerk Marketplace setup and middleware patterns.'
-  -
-    pattern: 'OPENAI_API_KEY|ANTHROPIC_API_KEY|AI_GATEWAY'
+  - pattern: 'OPENAI_API_KEY|ANTHROPIC_API_KEY|AI_GATEWAY'
     targetSkill: env-vars
     message: 'AI provider env vars detected — loading Environment Variables guidance for OIDC-based auth via vercel env pull.'
     skipIfFileContains: 'VERCEL_OIDC|vercel env pull'
@@ -64,7 +61,6 @@ retrieval:
     - env pull
     - database setup
     - first run
-
 ---
 
 # Project Bootstrap Orchestrator
@@ -181,6 +177,7 @@ Use the repository package manager (`npm`, `pnpm`, `bun`, or `yarn`) and run onl
 ## UI Baseline for Next.js + shadcn Projects
 
 After linkage and env verification, establish the UI foundation before feature work:
+
 1. Add a baseline primitive set: `npx shadcn@latest add button card input label textarea select switch tabs dialog alert-dialog sheet dropdown-menu badge separator skeleton table`
 2. Apply the Geist font fix in `layout.tsx` and `globals.css`.
 3. Confirm the app shell uses `bg-background text-foreground`.
@@ -206,6 +203,7 @@ Return a final bootstrap summary in this format:
 
 ```md
 ## Bootstrap Result
+
 - **Linked Project**: <team>/<project>
 - **Resource Path**: vercel-integration-neon | dashboard-neon | neon-cli
 - **Env Keys**: <count> required, <count> present, <count> missing

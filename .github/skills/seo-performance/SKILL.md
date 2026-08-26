@@ -1,16 +1,18 @@
 ---
 name: seo-performance
-description: "Use when: adding SEO meta tags, improving Core Web Vitals, optimizing images, configuring sitemap, or improving Lighthouse scores in any Astro app."
+description: 'Use when: adding SEO meta tags, improving Core Web Vitals, optimizing images, configuring sitemap, or improving Lighthouse scores in any Astro app.'
 argument-hint: "Describe what to optimize (e.g., 'add SEO to psicologo-mariorivas', 'improve LCP', 'configure sitemap')"
 ---
 
 # Skill: SEO y Rendimiento para Astro
 
 ## Paquetes necesarios
+
 ```bash
 # Desde la raíz del monorepo, instalar en la app objetivo
 pnpm --filter @astro-webs/<nombre> add @astrojs/sitemap
 ```
+
 `@astrojs/sitemap` ya está en la plantilla base.
 
 ---
@@ -22,7 +24,7 @@ pnpm --filter @astro-webs/<nombre> add @astrojs/sitemap
 interface Props {
   title: string;
   description?: string;
-  image?: string;        // URL absoluta para OG
+  image?: string; // URL absoluta para OG
   type?: 'website' | 'article';
   noindex?: boolean;
 }
@@ -63,27 +65,30 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl);
   <meta name="twitter:image" content={new URL(image, siteUrl)} />
 
   <!-- Schema.org LocalBusiness (adaptar por tipo) -->
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": "NombreNegocio",
-    "description": description,
-    "url": siteUrl,
-    "telephone": "+34600000000",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "Calle Ejemplo 45",
-      "addressLocality": "Madrid",
-      "postalCode": "28001",
-      "addressCountry": "ES"
-    },
-    "openingHoursSpecification": {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
-      "opens": "09:00",
-      "closes": "20:00"
-    }
-  })} />
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'LocalBusiness',
+      name: 'NombreNegocio',
+      description: description,
+      url: siteUrl,
+      telephone: '+34600000000',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'Calle Ejemplo 45',
+        addressLocality: 'Madrid',
+        postalCode: '28001',
+        addressCountry: 'ES',
+      },
+      openingHoursSpecification: {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        opens: '09:00',
+        closes: '20:00',
+      },
+    })}
+  />
 </head>
 ```
 
@@ -95,7 +100,7 @@ import vercel from '@astrojs/vercel';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://tudominio.com',  // OBLIGATORIO para sitemap y canonicals
+  site: 'https://tudominio.com', // OBLIGATORIO para sitemap y canonicals
   integrations: [
     sitemap({
       changefreq: 'weekly',
@@ -129,9 +134,18 @@ import heroImage from '../assets/hero.jpg';
   height={630}
   format="webp"
   quality={85}
-  loading="eager"      <!-- Para LCP: cargar de inmediato -->
+  loading="eager"
+  <!--
+  Para
+  LCP:
+  cargar
+  de
+  inmediato
+  --
+>
   fetchpriority="high" <!-- Para LCP: prioridad máxima -->
-/>
+  /></Image
+>
 ```
 
 ### Imágenes de contenido (below the fold)
@@ -167,7 +181,10 @@ import heroImage from '../assets/hero.jpg';
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
 <!-- font-display=swap para no bloquear render -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+  rel="stylesheet"
+/>
 ```
 
 ```css
@@ -192,9 +209,18 @@ Para páginas con mucho CSS, inlinear los estilos above-the-fold en `<head>`:
 ```html
 <style>
   /* Solo estilos críticos: header, hero, fuentes */
-  :root { --color-primary: #6b5b95; }
-  body { margin: 0; font-family: system-ui, sans-serif; }
-  .header { position: sticky; top: 0; background: #fff; }
+  :root {
+    --color-primary: #6b5b95;
+  }
+  body {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+  }
+  .header {
+    position: sticky;
+    top: 0;
+    background: #fff;
+  }
 </style>
 <!-- El resto del CSS se carga de forma diferida (ya lo hace Astro por defecto) -->
 ```
@@ -216,12 +242,12 @@ Sitemap: https://tudominio.com/sitemap-index.xml
 
 ## 7. Core Web Vitals — checklist
 
-| Métrica | Target | Acciones |
-|---|---|---|
-| **LCP** < 2.5s | Contenido principal | `loading="eager"` + `fetchpriority="high"` en imagen hero |
-| **CLS** < 0.1 | Estabilidad visual | `width/height` explícitos en `<Image>`, `font-display: swap` |
-| **INP** < 200ms | Interactividad | Evitar JS bloqueante, usar `client:idle` en componentes no críticos |
-| **FCP** < 1.8s | Primer render | CSS crítico inline, preconnect a fonts |
+| Métrica         | Target              | Acciones                                                            |
+| --------------- | ------------------- | ------------------------------------------------------------------- |
+| **LCP** < 2.5s  | Contenido principal | `loading="eager"` + `fetchpriority="high"` en imagen hero           |
+| **CLS** < 0.1   | Estabilidad visual  | `width/height` explícitos en `<Image>`, `font-display: swap`        |
+| **INP** < 200ms | Interactividad      | Evitar JS bloqueante, usar `client:idle` en componentes no críticos |
+| **FCP** < 1.8s  | Primer render       | CSS crítico inline, preconnect a fonts                              |
 
 ---
 

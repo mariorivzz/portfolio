@@ -4,8 +4,8 @@ description: Vercel environment variable expert guidance. Use when working with 
 metadata:
   priority: 7
   docs:
-    - "https://vercel.com/docs/environment-variables"
-  sitemap: "https://vercel.com/sitemap/docs.xml"
+    - 'https://vercel.com/docs/environment-variables'
+  sitemap: 'https://vercel.com/sitemap/docs.xml'
   pathPatterns:
     - '.env'
     - '.env.*'
@@ -23,8 +23,7 @@ metadata:
     - '\bvercel\s+env\s+rm\b'
     - '\bvercel\s+env\s+ls\b'
 chainTo:
-  -
-    pattern: '\b(OPENAI_API_KEY|ANTHROPIC_API_KEY|GOOGLE_API_KEY)\b'
+  - pattern: '\b(OPENAI_API_KEY|ANTHROPIC_API_KEY|GOOGLE_API_KEY)\b'
     targetSkill: ai-gateway
     message: 'Direct provider API key detected — loading AI Gateway guidance for OIDC auth (no manual keys needed on Vercel).'
 retrieval:
@@ -43,7 +42,6 @@ retrieval:
     - vercel env
     - OIDC
     - environment variable
-
 ---
 
 # Vercel Environment Variables
@@ -54,16 +52,16 @@ You are an expert in Vercel environment variable management — `.env` file conv
 
 Vercel and Next.js load environment variables in a specific order. Later files override earlier ones:
 
-| File | Purpose | Git-tracked? |
-|------|---------|-------------|
-| `.env` | Default values for all environments | Yes |
-| `.env.local` | Local overrides and secrets | **No** (gitignored) |
-| `.env.development` | Development-specific defaults | Yes |
-| `.env.development.local` | Local dev overrides | **No** |
-| `.env.production` | Production-specific defaults | Yes |
-| `.env.production.local` | Local prod overrides | **No** |
-| `.env.test` | Test-specific defaults | Yes |
-| `.env.test.local` | Local test overrides | **No** |
+| File                     | Purpose                             | Git-tracked?        |
+| ------------------------ | ----------------------------------- | ------------------- |
+| `.env`                   | Default values for all environments | Yes                 |
+| `.env.local`             | Local overrides and secrets         | **No** (gitignored) |
+| `.env.development`       | Development-specific defaults       | Yes                 |
+| `.env.development.local` | Local dev overrides                 | **No**              |
+| `.env.production`        | Production-specific defaults        | Yes                 |
+| `.env.production.local`  | Local prod overrides                | **No**              |
+| `.env.test`              | Test-specific defaults              | Yes                 |
+| `.env.test.local`        | Local test overrides                | **No**              |
 
 ### Load Order (Next.js)
 
@@ -185,35 +183,35 @@ Vercel uses **OIDC (OpenID Connect)** tokens for secure, keyless authentication 
 
 ```ts
 // The @vercel/oidc package reads VERCEL_OIDC_TOKEN automatically
-import { getVercelOidcToken } from '@vercel/oidc'
+import { getVercelOidcToken } from '@vercel/oidc';
 
 // AI Gateway uses OIDC by default — no manual token handling needed
-import { gateway } from 'ai'
+import { gateway } from 'ai';
 const result = await generateText({
   model: gateway('openai/gpt-5.2'),
   prompt: 'Hello',
-})
+});
 ```
 
 ### Troubleshooting OIDC
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| `VERCEL_OIDC_TOKEN` missing locally | Haven't pulled env vars | `vercel env pull .env.local` |
-| Auth errors after ~12h locally | Token expired | `vercel env pull .env.local --yes` |
-| Works on Vercel, fails locally | Token not in `.env.local` | `vercel env pull .env.local` |
-| `AI_GATEWAY_API_KEY` vs OIDC | Both set, key takes priority | Remove `AI_GATEWAY_API_KEY` to use OIDC |
+| Symptom                             | Cause                        | Fix                                     |
+| ----------------------------------- | ---------------------------- | --------------------------------------- |
+| `VERCEL_OIDC_TOKEN` missing locally | Haven't pulled env vars      | `vercel env pull .env.local`            |
+| Auth errors after ~12h locally      | Token expired                | `vercel env pull .env.local --yes`      |
+| Works on Vercel, fails locally      | Token not in `.env.local`    | `vercel env pull .env.local`            |
+| `AI_GATEWAY_API_KEY` vs OIDC        | Both set, key takes priority | Remove `AI_GATEWAY_API_KEY` to use OIDC |
 
 ## Environment-Specific Configuration
 
 ### Vercel Dashboard vs .env Files
 
-| Use Case | Where to Set |
-|----------|-------------|
-| Secrets (API keys, tokens) | Vercel Dashboard (`https://vercel.com/{team}/{project}/settings/environment-variables`) or `vercel env add` |
-| Public config (site URL, feature flags) | `.env` or `.env.[environment]` files |
-| Local-only overrides | `.env.local` |
-| CI/CD secrets | Vercel Dashboard (`https://vercel.com/{team}/{project}/settings/environment-variables`) with environment scoping |
+| Use Case                                | Where to Set                                                                                                     |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Secrets (API keys, tokens)              | Vercel Dashboard (`https://vercel.com/{team}/{project}/settings/environment-variables`) or `vercel env add`      |
+| Public config (site URL, feature flags) | `.env` or `.env.[environment]` files                                                                             |
+| Local-only overrides                    | `.env.local`                                                                                                     |
+| CI/CD secrets                           | Vercel Dashboard (`https://vercel.com/{team}/{project}/settings/environment-variables`) with environment scoping |
 
 ### Environment Scoping on Vercel
 

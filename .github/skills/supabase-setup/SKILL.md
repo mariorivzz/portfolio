@@ -1,6 +1,6 @@
 ---
 name: supabase-setup
-description: "Use when: creating Supabase tables, configuring Row Level Security, writing database migrations, setting up Supabase Auth, or designing the database schema for any business type."
+description: 'Use when: creating Supabase tables, configuring Row Level Security, writing database migrations, setting up Supabase Auth, or designing the database schema for any business type.'
 argument-hint: "Describe the database task (e.g., 'create tables for a psychology clinic', 'add RLS policies', 'set up auth for admin')"
 ---
 
@@ -9,11 +9,13 @@ argument-hint: "Describe the database task (e.g., 'create tables for a psycholog
 ## Procedimiento
 
 ### 1. Crear proyecto Supabase
+
 1. Ir a [supabase.com](https://supabase.com)
 2. Crear nuevo proyecto (región EU para España)
 3. Copiar URL y anon key
 
 ### 2. Esquema base (todas las webs)
+
 Ejecutar en SQL Editor:
 
 ```sql
@@ -78,6 +80,7 @@ CREATE POLICY "Authenticated can manage contenidos" ON contenidos
 ### 3. Tablas específicas por tipo de negocio
 
 #### Veterinaria
+
 ```sql
 CREATE TABLE IF NOT EXISTS mascotas (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -93,6 +96,7 @@ CREATE TABLE IF NOT EXISTS mascotas (
 ```
 
 #### Psicología
+
 ```sql
 -- Solo se usa tabla citas con campos extra
 ALTER TABLE citas ADD COLUMN IF NOT EXISTS tipo_sesion TEXT;
@@ -100,12 +104,14 @@ ALTER TABLE citas ADD COLUMN IF NOT EXISTS tipo_sesion TEXT;
 ```
 
 #### Dentista
+
 ```sql
 ALTER TABLE citas ADD COLUMN IF NOT EXISTS urgente BOOLEAN DEFAULT false;
 ALTER TABLE citas ADD COLUMN IF NOT EXISTS tipo_tratamiento TEXT;
 ```
 
 ### 4. Autenticación admin
+
 Para el panel de administración:
 
 ```sql
@@ -114,6 +120,7 @@ Para el panel de administración:
 ```
 
 Patron en Astro para proteger rutas admin:
+
 ```astro
 ---
 // src/pages/admin/index.astro
@@ -136,7 +143,9 @@ if (error) return redirect('/admin/login');
 ```
 
 ### 5. Variables de entorno
+
 Crear `.env` en la raíz de la app:
+
 ```
 PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
 PUBLIC_SUPABASE_ANON_KEY=eyJhbGci...
@@ -145,6 +154,7 @@ PUBLIC_SUPABASE_ANON_KEY=eyJhbGci...
 **NUNCA** incluir la `service_role` key en el código cliente.
 
 ### 6. Seguridad checklist
+
 - [ ] RLS habilitado en TODAS las tablas
 - [ ] Tablas públicas: solo INSERT para anon
 - [ ] Tablas con datos sensibles: solo authenticated

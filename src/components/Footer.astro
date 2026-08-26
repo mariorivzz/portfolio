@@ -2,12 +2,12 @@
 const year = new Date().getFullYear();
 
 const links = [
-  { href: '/#about',    label: 'Sobre mí'  },
+  { href: '/#about', label: 'Sobre mí' },
   { href: '/servicios', label: 'Servicios' },
   // Sección Proyectos: pendiente de añadir casos reales, reactivar cuando tenga
   // proyectos aprobados por el cliente para mostrar.
   // { href: '/proyectos', label: 'Proyectos' },
-  { href: '/#contact',  label: 'Contacto'  },
+  { href: '/#contact', label: 'Contacto' },
 ];
 
 // Solo se muestran los perfiles reales. Para añadir LinkedIn o X más adelante,
@@ -49,29 +49,37 @@ const socials = [
       <nav class="footer__nav" aria-label="Footer navigation">
         <span class="footer__nav-title">Navegación</span>
         <ul>
-          {links.map(l => <li><a href={l.href}>{l.label}</a></li>)}
+          {
+            links.map((l) => (
+              <li>
+                <a href={l.href}>{l.label}</a>
+              </li>
+            ))
+          }
         </ul>
       </nav>
 
       <!-- Socials -->
       <div class="footer__socials-wrap">
-        {socials.length > 0 && (
-          <>
-            <span class="footer__nav-title">Redes</span>
-            <div class="footer__socials">
-              {socials.map(s => (
-                <a
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="footer__social-link"
-                  aria-label={s.name}
-                  set:html={s.icon}
-                />
-              ))}
-            </div>
-          </>
-        )}
+        {
+          socials.length > 0 && (
+            <>
+              <span class="footer__nav-title">Redes</span>
+              <div class="footer__socials">
+                {socials.map((s) => (
+                  <a
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="footer__social-link"
+                    aria-label={s.name}
+                    set:html={s.icon}
+                  />
+                ))}
+              </div>
+            </>
+          )
+        }
         <a href="/#contact" class="btn btn-outline footer__cta">Empecemos →</a>
       </div>
     </div>
@@ -79,17 +87,28 @@ const socials = [
     <!-- Bottom -->
     <div class="footer__bottom">
       <p class="footer__copy">
-        © {year} <a href="/">Mario Rivas</a>. Todos los derechos reservados.
+        © {year}
+        <a href="/">Mario Rivas</a>. Todos los derechos reservados.
       </p>
-      <p class="footer__made">
-        Diseño y desarrollo propios
-      </p>
+      <p class="footer__made">Diseño y desarrollo propios</p>
     </div>
   </div>
 
   <!-- Back to top -->
-  <button id="back-to-top" class="back-to-top" aria-label="Volver al inicio" title="Volver al inicio">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+  <button
+    id="back-to-top"
+    class="back-to-top"
+    aria-label="Volver al inicio"
+    title="Volver al inicio"
+  >
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.5"><polyline points="18 15 12 9 6 15"></polyline></svg
+    >
   </button>
 </footer>
 
@@ -121,8 +140,13 @@ const socials = [
     transition: color 0.2s var(--ease);
   }
 
-  .footer__logo:hover { color: var(--brand); }
-  .footer__logo-sym { color: var(--brand); font-weight: 600; }
+  .footer__logo:hover {
+    color: var(--brand);
+  }
+  .footer__logo-sym {
+    color: var(--brand);
+    font-weight: 600;
+  }
 
   .footer__tagline {
     font-size: var(--fs-sm);
@@ -156,7 +180,9 @@ const socials = [
     transition: color 0.2s var(--ease);
   }
 
-  .footer__nav a:hover { color: var(--brand); }
+  .footer__nav a:hover {
+    color: var(--brand);
+  }
 
   /* ── Redes ─────────────────────────────────── */
   .footer__socials {
@@ -175,8 +201,10 @@ const socials = [
     align-items: center;
     justify-content: center;
     color: var(--text-2);
-    transition: color 0.2s var(--ease), border-color 0.2s var(--ease),
-                background-color 0.2s var(--ease);
+    transition:
+      color 0.2s var(--ease),
+      border-color 0.2s var(--ease),
+      background-color 0.2s var(--ease);
   }
 
   .footer__social-link:hover {
@@ -202,8 +230,13 @@ const socials = [
     color: var(--text-muted);
   }
 
-  .footer__copy a { color: var(--text-2); transition: color 0.2s var(--ease); }
-  .footer__copy a:hover { color: var(--brand); }
+  .footer__copy a {
+    color: var(--text-2);
+    transition: color 0.2s var(--ease);
+  }
+  .footer__copy a:hover {
+    color: var(--brand);
+  }
 
   /* ── Volver arriba ─────────────────────────── */
   .back-to-top {
@@ -221,14 +254,20 @@ const socials = [
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: color 0.2s var(--ease), border-color 0.2s var(--ease),
-                background-color 0.2s var(--ease), opacity 0.25s var(--ease),
-                transform 0.2s var(--ease);
+    transition:
+      color 0.2s var(--ease),
+      border-color 0.2s var(--ease),
+      background-color 0.2s var(--ease),
+      opacity 0.25s var(--ease),
+      transform 0.2s var(--ease);
     opacity: 0;
     pointer-events: none;
   }
 
-  .back-to-top.visible { opacity: 1; pointer-events: auto; }
+  .back-to-top.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
 
   .back-to-top:hover {
     color: var(--brand);
@@ -238,21 +277,36 @@ const socials = [
   }
 
   @media (max-width: 768px) {
-    .footer__top { grid-template-columns: 1fr 1fr; }
-    .footer__brand { grid-column: 1 / -1; }
-    .back-to-top { bottom: var(--space-3); }
+    .footer__top {
+      grid-template-columns: 1fr 1fr;
+    }
+    .footer__brand {
+      grid-column: 1 / -1;
+    }
+    .back-to-top {
+      bottom: var(--space-3);
+    }
   }
 
   @media (max-width: 480px) {
-    .footer__top { grid-template-columns: 1fr; }
-    .footer__bottom { flex-direction: column; align-items: flex-start; }
+    .footer__top {
+      grid-template-columns: 1fr;
+    }
+    .footer__bottom {
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
 </style>
 
 <script>
   const btn = document.getElementById('back-to-top')!;
-  window.addEventListener('scroll', () => {
-    btn.classList.toggle('visible', window.scrollY > 600);
-  }, { passive: true });
+  window.addEventListener(
+    'scroll',
+    () => {
+      btn.classList.toggle('visible', window.scrollY > 600);
+    },
+    { passive: true }
+  );
   btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 </script>
