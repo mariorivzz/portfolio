@@ -95,10 +95,31 @@ export async function POST({ request }) {
     });
   }
 
-  // Validate Origin header (reject missing — browsers always send it; curl doesn't)
-  const origin = request.headers.get('origin');
+  // Validate Origin header (reject missing or invalid)
+  const origin = request.headers.get('origin')?.toLowerCase();
   if (!origin) {
     console.warn('[/api/chat] Missing Origin header — rejecting');
+    return new Response(JSON.stringify({ error: 'Forbidden' }), {
+      status: 403,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  // Whitelist of allowed origins
+  const allowedOrigins = [
+    /^http:\/\/localhost(:\d+)?$/, // localhost:3000, localhost:4321, etc
+    /^http:\/\/127\.0\.0\.1(:\d+)?$/, // 127.0.0.1:PORT
+    /^https:\/\/mariorivashernandez\.com$/, // production domain
+  ];
+
+  // Check preview deployments (Vercel)
+  if (process.env.VERCEL_ENV === 'preview' && process.env.VERCEL_URL) {
+    allowedOrigins.push(new RegExp(`^https:\\/\\/${process.env.VERCEL_URL.replace(/\./g, '\\.')}$`));
+  }
+
+  const isOriginAllowed = allowedOrigins.some((pattern) => pattern.test(origin));
+  if (!isOriginAllowed) {
+    console.warn(`[/api/chat] Invalid Origin: ${origin} — rejecting`);
     return new Response(JSON.stringify({ error: 'Forbidden' }), {
       status: 403,
       headers: { 'Content-Type': 'application/json' },
@@ -115,11 +136,12 @@ export async function POST({ request }) {
     );
   }
 
-  // Sanitise history — keep last 10 turns, cap content length
+  // Sanitise history — keep last 10 turns, cap content length, whitelist roles
   const messages = Array.isArray(body?.messages) ? body.messages : [];
+  const validRoles = ['user', 'assistant'];
   const safeMessages = messages
     .slice(-10)
-    .filter((m) => m && typeof m.role === 'string' && typeof m.content === 'string')
+    .filter((m) => m && validRoles.includes(m.role) && typeof m.content === 'string')
     .map((m) => ({ role: m.role, content: String(m.content).slice(0, 2000) }));
 
   // ── Call Groq API ────────────────────────────────────────────────────────
