@@ -206,7 +206,10 @@ export async function POST({ request, clientAddress }) {
         console.log('[/api/chat] 400 error body:', errText);
         if (errText.includes('blocked_api_access')) {
           console.error('[/api/chat] SPENDING LIMIT EXCEEDED or API access blocked');
-          return errorResponse(503, 'AI assistant is temporarily unavailable. Please try again later.');
+          return errorResponse(
+            503,
+            'AI assistant is temporarily unavailable. Please try again later.'
+          );
         }
         // Regular 400 Bad Request
         return errorResponse(400, 'Invalid request. Please try again.');
