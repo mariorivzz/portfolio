@@ -83,36 +83,32 @@ function errorResponse(status, message, extraHeaders = {}) {
   });
 }
 
-// ── Helper: Hash IP for rate limiting and logging ──────────────────────────
-function hashIp(ip, logContext = false) {
-  if (!ip) return 'undefined';
+// ── Helper: Hash IP for rate limiting ──────────────────────────────────────
+function hashIp(ip) {
   const salt = import.meta.env.IP_HASH_SALT;
-  if (!salt) {
-    if (logContext) console.error('[/api/chat] IP_HASH_SALT NOT CONFIGURED — using fallback');
-    // Fallback: hash with empty salt to detect misconfiguration in logs
-    const input = `${ip}:UNCONFIGURED-SALT`;
-    return createHash('sha256').update(input).digest('hex');
+
+  if (!ip) {
+    // clientAddress should always be populated by Vercel, but if not:
+    // Use a fixed shared key (not random) so all missing-IP requests
+    // share the same rate limit bucket and hit the ceiling quickly
+    if (!salt) {
+      return 'no-ip:no-salt';
+    }
+    console.error('[/api/chat] clientAddress is empty (should not happen on Vercel)');
+    return 'no-ip';
   }
+
+  if (!salt) {
+    console.error('[/api/chat] IP_HASH_SALT is not configured');
+    return 'no-salt';
+  }
+
   const input = `${ip}:${salt}`;
   return createHash('sha256').update(input).digest('hex');
 }
 
 // ── Request handler ──────────────────────────────────────────────────────────
 export async function POST({ request, clientAddress }) {
-  // Hash IP to protect privacy; log only presence of forwarding headers
-  const hashedIp = hashIp(clientAddress, true);
-  const headers = {
-    'x-forwarded-for': request.headers.has('x-forwarded-for'),
-    'x-real-ip': request.headers.has('x-real-ip'),
-  };
-  // TEMP: remove after verifying clientAddress populates in production
-  console.log(
-    '[/api/chat] Request from IP (hashed):',
-    hashedIp,
-    '| Headers:',
-    JSON.stringify(headers)
-  );
-
   // Validate Content-Type
   const contentType = request.headers.get('content-type') ?? '';
   if (!contentType.includes('application/json')) {
@@ -154,6 +150,9 @@ export async function POST({ request, clientAddress }) {
     console.warn(`[/api/chat] Invalid Origin: ${origin} — rejecting`);
     return errorResponse(403, 'Forbidden');
   }
+
+  // Hash IP AFTER Origin validation (don't hash traffic we'll reject)
+  const hashedIp = hashIp(clientAddress);
 
   // Guard: API key must be configured
   const apiKey = import.meta.env.GROQ_API_KEY;
