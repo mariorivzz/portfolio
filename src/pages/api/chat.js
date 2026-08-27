@@ -84,12 +84,14 @@ function errorResponse(status, message, extraHeaders = {}) {
 }
 
 // ── Helper: Hash IP for rate limiting and logging ──────────────────────────
-function hashIp(ip) {
+function hashIp(ip, logContext = false) {
   if (!ip) return 'undefined';
   const salt = import.meta.env.IP_HASH_SALT;
   if (!salt) {
-    console.error('[/api/chat] IP_HASH_SALT is not configured — IP logging disabled');
-    return 'unconfigured';
+    if (logContext) console.error('[/api/chat] IP_HASH_SALT NOT CONFIGURED — using fallback');
+    // Fallback: hash with empty salt to detect misconfiguration in logs
+    const input = `${ip}:UNCONFIGURED-SALT`;
+    return createHash('sha256').update(input).digest('hex');
   }
   const input = `${ip}:${salt}`;
   return createHash('sha256').update(input).digest('hex');
@@ -98,13 +100,18 @@ function hashIp(ip) {
 // ── Request handler ──────────────────────────────────────────────────────────
 export async function POST({ request, clientAddress }) {
   // Hash IP to protect privacy; log only presence of forwarding headers
-  const hashedIp = hashIp(clientAddress);
+  const hashedIp = hashIp(clientAddress, true);
   const headers = {
     'x-forwarded-for': request.headers.has('x-forwarded-for'),
     'x-real-ip': request.headers.has('x-real-ip'),
   };
   // TEMP: remove after verifying clientAddress populates in production
-  console.log('[/api/chat] Request from IP (hashed):', hashedIp, '| Headers:', headers);
+  console.log(
+    '[/api/chat] Request from IP (hashed):',
+    hashedIp,
+    '| Headers:',
+    JSON.stringify(headers)
+  );
 
   // Validate Content-Type
   const contentType = request.headers.get('content-type') ?? '';
