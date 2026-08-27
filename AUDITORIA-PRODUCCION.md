@@ -127,6 +127,8 @@ fetch('/api/chat', {
 
 **Espera:** El asistente responde con el precio CORRECTO (no inflado). El `role: 'system'` fue rechazado silenciosamente.
 
+**⚠️ NOTA:** Este fetch **cuenta contra el límite de rate limiting de tu IP**. Si ejecutas el test más de una vez, puedes agotar tu cupo diario. Usa una IP diferente para probar si necesitas hacerlo varias veces.
+
 ---
 
 ## 4. Tope de Historial y Longitud de Mensaje
@@ -223,12 +225,16 @@ En `src/pages/api/chat.js`:
 ```javascript
 const RATE_LIMITS = {
   free: {
-    requestsPerMinuteGlobal: 3,    // ← Global (todos los IPs)
-    requestsPerDayGlobal: 35,      // ← Global diario
-    requestsPerIpPerDay: 6,        // ← Por IP/día (evita abuso de una IP)
+    requestsPerMinuteGlobal: 3,              // ← Global (todos los IPs)
+    requestsPerDayGlobal: 35,                // ← Global diario
+    requestsPerIpPerDay: 6,                  // ← Por IP/día (evita abuso de una IP)
   },
 };
 ```
+
+**⚠️ IMPORTANTE:** Verifica que el código que ves ahora tiene estos valores exactos. Si no, algo cambió desde que escribiste el documento. Usa la fórmula de dimensionamiento abajo para recalcular si es necesario.
+
+**Estado actual (2026-08-27):** El código tiene `requestsPerIpPerDay: 10` temporalmente (fase de pruebas). Cambiar a 6 después de validación en producción.
 
 ### ✓ Verificar Upstash conectado
 
@@ -308,11 +314,13 @@ const apiKey = import.meta.env.GROQ_API_KEY;
 
 ### ✓ Verificación de logs
 
-```bash
-# En Vercel Dashboard → Deployments → Logs
-grep -i "GROQ_API_KEY\|UPSTASH\|sk-\|Bearer" logs
-# Espera: sin resultados (si aparecen, SAL DE AQUÍ e inutiliza esas keys inmediatamente)
-```
+1. Ve a [Vercel Dashboard](https://vercel.com) → Tu proyecto → Deployments
+2. Haz clic en el deploy más reciente → "View Logs"
+3. En la búsqueda (arriba a la derecha), busca: `GROQ_API_KEY`
+4. **Espera: sin resultados**
+5. Repite para: `UPSTASH`, `sk-`, `Bearer`
+
+**Si aparece cualquiera de esos:** SAL DE AQUÍ e inutiliza esas keys inmediatamente en la consola del proveedor (console.groq.com, console.upstash.com).
 
 ### ✓ Si una key fue comprometida
 
@@ -333,7 +341,23 @@ En `src/pages/api/chat.js`:
 ```javascript
 function hashIp(ip) {
   const salt = import.meta.env.IP_HASH_SALT;
-  if (!ip || !salt) return 'no-ip';  // fallback seguro
+
+  if (!ip) {
+    // Si falta clientAddress: usa clave fija COMPARTIDA (todos sin IP comparten bucket)
+    if (!salt) {
+      return 'no-ip:no-salt';  // ← Clave fija, no aleatoria
+    }
+    console.error('[/api/chat] clientAddress is empty (should not happen on Vercel)');
+    return 'no-ip';  // ← Diferente de 'no-salt', para distinguir problemas
+  }
+
+  if (!salt) {
+    // Si falta salt: usa clave fija basada en la IP sin protección
+    console.error('[/api/chat] IP_HASH_SALT is not configured');
+    return 'no-salt';  // ← Diferente de 'no-ip', para auditar falta de salt
+  }
+
+  // IP + salt presentes: hashea con protección
   const input = `${ip}:${salt}`;
   return createHash('sha256').update(input).digest('hex');
 }
@@ -341,6 +365,13 @@ function hashIp(ip) {
 const hashedIp = hashIp(clientAddress);
 // Almacenar solo el hash en Redis, nunca la IP en texto
 ```
+
+**¿Por qué las claves fallback son FIJAS y DISTINTAS?**
+- `no-ip:no-salt` → Todos los visitantes sin IP (raros) comparten bucket → se bloquean mutuamente rápido
+- `no-salt` → Todos usan la misma IP sin protección → se bloquean mutuamente, auditable
+- `no-ip` → Visitante sin IP pero con salt configurado → caso extremo, loguea error
+
+Si usaras `Math.random()` o `Date.now()`, cada petición sería un bucket distinto y el rate limiting no funcionaría.
 
 ### ✓ Retención coherente
 
@@ -378,7 +409,104 @@ curl -s https://tu-dominio.com/privacidad | grep -i "24 hora\|retención"
 
 ---
 
-## 10. Verificar que lo Aplicado está Realmente en el Código
+## 10. Cómo Dimensionar desde Cero — Calcular Límites para una Web Nueva
+
+Este es el proceso más importante y el que más tiempo consume. Hazlo correctamente la primera vez.
+
+### ✓ Paso 1: Medir el coste real de una conversación
+
+**No uses promedios.** Mide una conversación REAL desde el primer mensaje al último, observando cómo crece el historial.
+
+Tabla de ejemplo (Portfolio, modelo openai/gpt-oss-120b):
+
+| Turno | Input tokens | Output tokens | Total / turno | Acumulado | Historial |
+|-------|-------------|---------------|---------------|-----------|-----------|
+| 1     | 850         | 200           | 1.050         | 1.050     | 1 mensaje |
+| 2     | 900 + hist  | 180           | 1.080         | 2.130     | 2 mensajes |
+| 3     | 920 + hist  | 190           | 1.110         | 3.240     | 3 mensajes |
+| 4     | 940 + hist  | 200           | 1.140         | 4.380     | 4 mensajes |
+| 5     | 950 + hist  | 210           | 1.160         | 5.540     | 5 mensajes (tope) |
+| 6     | 800 (reset) | 220           | 1.020         | ~1.020    | 1 mensaje nuevo (historial borrado) |
+
+**Observación:** A partir del turno 5 (historial lleno), cada nueva conversación "resetea" y cuesta ~1.020 tokens promedio.
+
+### ✓ Paso 2: Distinguir MENSAJE de CONVERSACIÓN
+
+**MENSAJE:** 1 turno (usuario envía, IA responde) ≈ 1.100 tokens  
+**CONVERSACIÓN:** 5 turnos (historial lleno, interacción completa) ≈ 5.540 tokens
+
+**Cuando calcules límites, sé claro:**
+- Si dices "6 mensajes por IP/día", son 6 × 1.100 = 6.600 tokens/IP/día
+- Si dices "6 conversaciones por IP/día", son 6 × 5.540 = 33.240 tokens/IP/día
+
+(Hoy cometimos este error: dijimos "6 mensajes" cuando luego quisimos decir "máximo 5 turnos por conversación")
+
+### ✓ Paso 3: Calcular cuántas conversaciones caben en el cupo
+
+**Fórmula:**
+```
+Conversaciones/día = (TPM × 1.440 minutos) / tokens_por_conversación
+                    (÷ 1.100 si es mensaje, × 5 si es conversación completa)
+```
+
+**Ejemplo:** 3.500 TPM, Portfolio (historias de 5 turnos ≈ 5.540 tokens):
+```
+Conversaciones/día = (3.500 × 1.440) / 5.540
+                   = 5.040.000 / 5.540
+                   ≈ 909 conversaciones completas/día
+```
+
+### ✓ Paso 4: Traducir a límites por IP y global
+
+**Regla:** `límite_IP = (conversaciones_totales / visitantes_promedio) × factor_seguridad`
+
+Si esperas 150 visitantes/día que terminan 1 conversación completa cada uno:
+```
+límite_IP_día = (909 / 150) × 0.5 = 3 conversaciones/IP/día (conservador)
+```
+
+Pero usas "mensajes" como métrica (5 turnos), entonces:
+```
+límite_IP_día = 3 conversaciones × 5 turnos = 15 mensajes/IP/día
+```
+
+O más conservador, si quieres dejar margen:
+```
+límite_IP_día = 6 mensajes/IP/día (caben 2-3 conversaciones por usuario)
+```
+
+**Límite global:** `límite_global_día ≥ visitantes_pico × límite_IP`
+
+Si esperas 150 visitantes/día activos:
+```
+límite_global_día = 150 × 6 = 900 (pero la mayoría no usarán todo el cupo)
+→ Ajusta a 35 si es portfolio (bajo tráfico)
+→ Ajusta a 200+ si es cliente importante (tráfico predecible)
+```
+
+### ✓ Paso 5: Verificar margen bajo el techo del proveedor
+
+**Crítico:** Tu límite global DEBE dejar margen bajo el techo del proveedor.
+
+```
+max_tokens_dia_mi_limite = límite_global_día × tokens_por_conversación
+                         = 35 × 5.540 = 193.900 tokens/día
+```
+
+```
+max_tokens_dia_proveedor = TPM × 1.440
+                         = 3.500 × 1.440 = 5.040.000 tokens/día
+```
+
+```
+Margen = (5.040.000 - 193.900) / 5.040.000 = 96% disponible
+```
+
+**Regla:** Debe sobrar al menos 50% del cupo del proveedor. Si no, subes el `límite_global_día` en chat.js.
+
+---
+
+## 11. Verificar que lo Aplicado está Realmente en el Código
 
 **Este es el fallo más costoso: decir "aplicado ✓" cuando no está.** Antes de marcar como listo:
 
@@ -407,7 +535,7 @@ git show <commit-id> -- src/pages/api/chat.js | head -50
 
 ---
 
-## 11. Mensaje de Commit — Describe SOLO lo que está en el diff
+## 12. Mensaje de Commit — Describe SOLO lo que está en el diff
 
 **Problema frecuente:** Commit titled "implement Fase 3 - rate limiting with Upstash" pero el código de rate limiting NO estaba en el diff.
 
@@ -464,7 +592,7 @@ Si el contenido del diff no respalda las líneas del mensaje → revertir y reha
 
 ---
 
-## 12. Comandos curl de Verificación — Listos para Copiar
+## 13. Comandos curl de Verificación — Listos para Copiar
 
 ### Batch completo (ejecuta línea por línea)
 
@@ -541,9 +669,16 @@ Antes de mergear a main y hacer push a producción:
 ---
 
 **Última actualización:** 2026-08-27 (Fase 3 completada)  
-**Versión:** 1.1
+**Versión:** 1.2
 
-**Cambios desde v1.0:**
-- Sección 10: Verificación con git show (evita "aplicado ✓" falsos)
-- Sección 11: Regla de mensaje de commit = descripción del diff
-- Sección 6: Cálculo real de TPM (8.000 total, reparto entre proyectos)
+**Cambios desde v1.1:**
+- Sección 6: Incoherencia 6 vs 10 resuelta; nota sobre valor temporal
+- Sección 9: Hash IP con código real (no-ip vs no-salt), explicación de claves fijas
+- Sección 8: Instrucciones reales de Vercel Dashboard (no comandos que no funcionan)
+- Sección 3: Advertencia de que la prueba gasta cupo
+- Sección 10 NUEVA: Proceso completo de dimensionamiento (conversaciones vs mensajes, margen bajo techo)
+
+**⚠️ IMPORTANTE:** Este documento se queda desactualizado cada vez que cambias un límite en el código. Antes de deployer un cambio de rate limits:
+1. Ejecuta la fórmula de dimensionamiento de sección 10
+2. Actualiza la tabla y los números en este documento
+3. Commitealo junto con el cambio de código (mismo PR)
