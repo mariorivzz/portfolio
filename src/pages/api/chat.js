@@ -73,15 +73,20 @@ MUY IMPORTANTE — quién te lee: la mayoría son dueños de pequeños negocios,
 Si alguien quiere un presupuesto o más información, invítale a usar el formulario de contacto o WhatsApp.
 Si te preguntan algo completamente ajeno a Mario y sus servicios, redirige amablemente la conversación.`;
 
+// ── Error response helper ────────────────────────────────────────────────────
+function errorResponse(status, message, extraHeaders = {}) {
+  return new Response(JSON.stringify({ error: message }), {
+    status,
+    headers: { 'Content-Type': 'application/json', ...extraHeaders },
+  });
+}
+
 // ── Request handler ──────────────────────────────────────────────────────────
 export async function POST({ request }) {
   // Validate Content-Type
   const contentType = request.headers.get('content-type') ?? '';
   if (!contentType.includes('application/json')) {
-    return new Response(JSON.stringify({ error: 'Content-Type must be application/json' }), {
-      status: 415,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return errorResponse(415, 'Content-Type must be application/json');
   }
 
   // Parse body
@@ -89,38 +94,51 @@ export async function POST({ request }) {
   try {
     body = await request.json();
   } catch {
-    return new Response(JSON.stringify({ error: 'Invalid JSON body' }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return errorResponse(400, 'Invalid JSON body');
   }
 
-  // Validate Origin header (reject missing — browsers always send it; curl doesn't)
-  const origin = request.headers.get('origin');
+  // Validate Origin header (reject missing or invalid)
+  const origin = request.headers.get('origin')?.toLowerCase();
   if (!origin) {
     console.warn('[/api/chat] Missing Origin header — rejecting');
-    return new Response(JSON.stringify({ error: 'Forbidden' }), {
-      status: 403,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return errorResponse(403, 'Forbidden');
+  }
+
+  // Whitelist of allowed origins
+  const allowedOrigins = [
+    /^http:\/\/localhost(:\d+)?$/, // localhost:3000, localhost:4321, etc
+    /^http:\/\/127\.0\.0\.1(:\d+)?$/, // 127.0.0.1:PORT
+    /^https:\/\/mariorivashernandez\.com$/, // production domain
+    /^https:\/\/www\.mariorivashernandez\.com$/, // www variant
+  ];
+
+  // Check preview deployments (Vercel)
+  if (process.env.VERCEL_ENV === 'preview' && process.env.VERCEL_URL) {
+    allowedOrigins.push(
+      new RegExp(`^https:\\/\\/${process.env.VERCEL_URL.replace(/\./g, '\\.')}$`)
+    );
+  }
+
+  const isOriginAllowed = allowedOrigins.some((pattern) => pattern.test(origin));
+  if (!isOriginAllowed) {
+    console.warn(`[/api/chat] Invalid Origin: ${origin} — rejecting`);
+    return errorResponse(403, 'Forbidden');
   }
 
   // Guard: API key must be configured
   const apiKey = import.meta.env.GROQ_API_KEY;
   if (!apiKey) {
     console.warn('[/api/chat] GROQ_API_KEY is not set — returning 503');
-    return new Response(
-      JSON.stringify({ error: 'AI assistant is not configured. Please contact Mario directly.' }),
-      { status: 503, headers: { 'Content-Type': 'application/json' } }
-    );
+    return errorResponse(503, 'AI assistant is not configured. Please contact Mario directly.');
   }
 
-  // Sanitise history — keep last 10 turns, cap content length
+  // Sanitise history — keep last 5 turns, cap content to 600 chars, whitelist roles
   const messages = Array.isArray(body?.messages) ? body.messages : [];
+  const validRoles = ['user', 'assistant'];
   const safeMessages = messages
-    .slice(-10)
-    .filter((m) => m && typeof m.role === 'string' && typeof m.content === 'string')
-    .map((m) => ({ role: m.role, content: String(m.content).slice(0, 2000) }));
+    .slice(-5)
+    .filter((m) => m && validRoles.includes(m.role) && typeof m.content === 'string')
+    .map((m) => ({ role: m.role, content: String(m.content).slice(0, 600) }));
 
   // ── Call Groq API ────────────────────────────────────────────────────────
   try {
@@ -141,10 +159,14 @@ export async function POST({ request }) {
     if (!res.ok) {
       const errText = await res.text().catch(() => '');
       console.error(`[/api/chat] Groq error ${res.status}:`, errText);
-      return new Response(
-        JSON.stringify({ error: 'Failed to get AI response. Please try again.' }),
-        { status: res.status, headers: { 'Content-Type': 'application/json' } }
-      );
+
+      // Distinguish between transient (502) and permanent (503) errors
+      if (res.status >= 500 && res.status !== 503) {
+        // 5xx from Groq (transient) — 502 Bad Gateway
+        return errorResponse(502, 'Failed to get AI response. Please try again.');
+      }
+      // Other errors (400, 401, 403, 404, etc) — pass through or map
+      return errorResponse(res.status, 'Failed to get AI response. Please try again.');
     }
 
     const data = await res.json();
@@ -165,9 +187,7 @@ export async function POST({ request }) {
     });
   } catch (err) {
     console.error('[/api/chat] Network error:', err?.message ?? err);
-    return new Response(JSON.stringify({ error: 'Failed to get AI response. Please try again.' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    // Network error — transient (502)
+    return errorResponse(502, 'Failed to get AI response. Please try again.');
   }
 }
