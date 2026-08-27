@@ -101,6 +101,13 @@ curl https://mariorivzz.vercel.app/api/stats
 
 Después de configurar `UPSTASH_REDIS_REST_URL` y `UPSTASH_REDIS_REST_TOKEN` en Vercel.
 
+**Nota sobre tiers:** Solo existe tier `free` actualmente. Los límites se aplican a todos los clientes:
+- 3 peticiones/minuto global
+- 35 peticiones/día global
+- 6 peticiones/IP/día
+
+Cuando se reabra el plan Developer (con GROQ_PROJECT_ID de pago), se descomentar el tier `developer` en `src/pages/api/chat.js` línea ~126 y se agregará lógica de validación.
+
 ### 1. Rate limiting por IP (6 mensajes/día)
 
 ```bash

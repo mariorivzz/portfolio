@@ -110,12 +110,21 @@ function hashIp(ip) {
 }
 
 // ── Rate limiting setup ──────────────────────────────────────────────────────
+// NOTA: Solo hay tier `free` por ahora. Cuando se reabra el plan Developer
+// (con acceso a un GROQ_PROJECT_ID de pago), descomentar el tier `developer`
+// debajo y validar GROQ_TIER desde la solicitud o variable de entorno.
+// Por ahora, todos los clientes usan los límites `free`.
 const RATE_LIMITS = {
   free: {
     requestsPerMinuteGlobal: 3,
     requestsPerDayGlobal: 35,
     requestsPerIpPerDay: 6,
   },
+  // developer: {
+  //   requestsPerMinuteGlobal: 30,
+  //   requestsPerDayGlobal: 500,
+  //   requestsPerIpPerDay: 50,
+  // },
 };
 
 // Upstash Redis fallback: in-memory rate limiting if Redis is unavailable
