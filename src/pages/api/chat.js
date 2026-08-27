@@ -8,6 +8,8 @@
 // Set GROQ_API_KEY in your .env file (get one free at console.groq.com).
 
 import { createHash } from 'crypto';
+import { Ratelimit } from '@upstash/ratelimit';
+import { Redis } from '@upstash/redis';
 
 export const prerender = false;
 
@@ -107,12 +109,100 @@ function hashIp(ip) {
   return createHash('sha256').update(input).digest('hex');
 }
 
+// ── Rate limiting setup ──────────────────────────────────────────────────────
+const RATE_LIMITS = {
+  free: {
+    requestsPerMinuteGlobal: 3,
+    requestsPerDayGlobal: 35,
+    requestsPerIpPerDay: 6,
+  },
+};
+
+// Upstash Redis fallback: in-memory rate limiting if Redis is unavailable
+class InMemoryRateLimiter {
+  constructor(limit, window) {
+    this.limit = limit;
+    this.window = window; // in seconds
+    this.buckets = new Map();
+  }
+
+  async limit(key) {
+    const now = Date.now();
+    const expiry = now + this.window * 1000;
+
+    if (!this.buckets.has(key)) {
+      this.buckets.set(key, { count: 1, expiry });
+      return { success: true, limit: this.limit, remaining: this.limit - 1, reset: expiry };
+    }
+
+    const bucket = this.buckets.get(key);
+    if (bucket.expiry < now) {
+      bucket.count = 1;
+      bucket.expiry = expiry;
+      return { success: true, limit: this.limit, remaining: this.limit - 1, reset: expiry };
+    }
+
+    bucket.count += 1;
+    if (bucket.count > this.limit) {
+      return {
+        success: false,
+        limit: this.limit,
+        remaining: 0,
+        reset: bucket.expiry,
+      };
+    }
+
+    return { success: true, limit: this.limit, remaining: this.limit - bucket.count, reset: bucket.expiry };
+  }
+}
+
+// Initialize Upstash Redis or fallback to in-memory
+let rateLimitGlobalMin, rateLimitGlobalDay, rateLimitIpDay;
+
+const upstashUrl = import.meta.env.UPSTASH_REDIS_REST_URL;
+const upstashToken = import.meta.env.UPSTASH_REDIS_REST_TOKEN;
+
+if (!upstashUrl || !upstashToken) {
+  console.error(
+    '[/api/chat] 🚨 RATE LIMITING DEGRADADO — Upstash no configurado. Usando fallback en memoria (cada instancia serverless tiene su propio contador, sin persistencia entre solicitudes). Configura UPSTASH_REDIS_REST_URL y UPSTASH_REDIS_REST_TOKEN en Vercel inmediatamente.'
+  );
+  rateLimitGlobalMin = new InMemoryRateLimiter(RATE_LIMITS.free.requestsPerMinuteGlobal, 60);
+  rateLimitGlobalDay = new InMemoryRateLimiter(RATE_LIMITS.free.requestsPerDayGlobal, 86400);
+  rateLimitIpDay = new InMemoryRateLimiter(RATE_LIMITS.free.requestsPerIpPerDay, 86400);
+} else {
+  const redis = new Redis({
+    url: upstashUrl,
+    token: upstashToken,
+  });
+
+  rateLimitGlobalMin = new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(RATE_LIMITS.free.requestsPerMinuteGlobal, '60 s'),
+    prefix: 'rl:portfolio:global:min',
+    analytics: false,
+  });
+
+  rateLimitGlobalDay = new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(RATE_LIMITS.free.requestsPerDayGlobal, '24 h'),
+    prefix: 'rl:portfolio:global:day',
+    analytics: false,
+  });
+
+  rateLimitIpDay = new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(RATE_LIMITS.free.requestsPerIpPerDay, '24 h'),
+    prefix: 'rl:portfolio:ip:day',
+    analytics: false,
+  });
+}
+
 // ── Request handler ──────────────────────────────────────────────────────────
 export async function POST({ request, clientAddress }) {
   // Validate Content-Type
   const contentType = request.headers.get('content-type') ?? '';
   if (!contentType.includes('application/json')) {
-    return errorResponse(415, 'Content-Type must be application/json');
+    return errorResponse(415, 'Content-Type debe ser application/json');
   }
 
   // Parse body
@@ -120,22 +210,22 @@ export async function POST({ request, clientAddress }) {
   try {
     body = await request.json();
   } catch {
-    return errorResponse(400, 'Invalid JSON body');
+    return errorResponse(400, 'JSON inválido');
   }
 
   // Validate Origin header (reject missing or invalid)
   const origin = request.headers.get('origin')?.toLowerCase();
   if (!origin) {
     console.warn('[/api/chat] Missing Origin header — rejecting');
-    return errorResponse(403, 'Forbidden');
+    return errorResponse(403, 'No autorizado');
   }
 
   // Whitelist of allowed origins
   const allowedOrigins = [
-    /^http:\/\/localhost(:\d+)?$/, // localhost:3000, localhost:4321, etc
-    /^http:\/\/127\.0\.0\.1(:\d+)?$/, // 127.0.0.1:PORT
-    /^https:\/\/mariorivashernandez\.com$/, // production domain
-    /^https:\/\/www\.mariorivashernandez\.com$/, // www variant
+    /^http:\/\/localhost(:\d+)?$/,
+    /^http:\/\/127\.0\.0\.1(:\d+)?$/,
+    /^https:\/\/mariorivashernandez\.com$/,
+    /^https:\/\/www\.mariorivashernandez\.com$/,
   ];
 
   // Check preview deployments (Vercel)
@@ -148,17 +238,60 @@ export async function POST({ request, clientAddress }) {
   const isOriginAllowed = allowedOrigins.some((pattern) => pattern.test(origin));
   if (!isOriginAllowed) {
     console.warn(`[/api/chat] Invalid Origin: ${origin} — rejecting`);
-    return errorResponse(403, 'Forbidden');
+    return errorResponse(403, 'No autorizado');
   }
 
   // Hash IP AFTER Origin validation (don't hash traffic we'll reject)
   const hashedIp = hashIp(clientAddress);
 
+  // ── Rate limiting check ──────────────────────────────────────────────────
+  try {
+    // Check per-IP per-day limit FIRST (fail early on abusers)
+    const ipDayResponse = await rateLimitIpDay.limit(hashedIp);
+    if (!ipDayResponse.success) {
+      const secondsLeft = Math.ceil((ipDayResponse.reset - Date.now()) / 1000);
+      return errorResponse(429, 'Has alcanzado tu límite diario. Vuelve mañana.', {
+        'Retry-After': String(Math.max(1, secondsLeft)),
+      });
+    }
+
+    // Check global per-minute limit
+    const globalMinResponse = await rateLimitGlobalMin.limit('global');
+    if (!globalMinResponse.success) {
+      return errorResponse(429, 'Demasiadas peticiones. Intenta de nuevo en 60 segundos.', {
+        'Retry-After': '60',
+      });
+    }
+
+    // Check global per-day limit
+    const globalDayResponse = await rateLimitGlobalDay.limit('global');
+    if (!globalDayResponse.success) {
+      const secondsLeft = Math.ceil((globalDayResponse.reset - Date.now()) / 1000);
+      return errorResponse(429, 'Límite diario alcanzado. Vuelve mañana.', {
+        'Retry-After': String(Math.max(1, secondsLeft)),
+      });
+    }
+  } catch (err) {
+    // Distinguish between quota exhausted (HTTP 429) and network errors
+    const statusCode = err?.status || err?.statusCode;
+    const isQuotaError = statusCode === 429;
+
+    if (isQuotaError) {
+      // Upstash quota exhausted: fail closed (block request)
+      console.error('[/api/chat] Rate limiting quota exhausted:', err?.message);
+      return errorResponse(503, 'El servicio no está disponible. Intenta más tarde.');
+    } else {
+      // Network/connection error: fail open (allow request)
+      console.warn('[/api/chat] Rate limiting unavailable (network error), allowing request:', err?.message);
+      // Continue without rate limiting
+    }
+  }
+
   // Guard: API key must be configured
   const apiKey = import.meta.env.GROQ_API_KEY;
   if (!apiKey) {
     console.warn('[/api/chat] GROQ_API_KEY is not set — returning 503');
-    return errorResponse(503, 'AI assistant is not configured. Please contact Mario directly.');
+    return errorResponse(503, 'Asistente no configurado. Contacta a Mario.');
   }
 
   // Sanitise history — keep last 5 turns, cap content to 600 chars, whitelist roles
@@ -190,42 +323,29 @@ export async function POST({ request, clientAddress }) {
       console.error(`[/api/chat] Groq error (${res.status}):`, errText);
 
       // Map Groq errors to client-safe status codes
-      // Never leak provider status codes; always map to standard semantics
       if (res.status === 429) {
-        // Rate limit from Groq (transient, though we don't use Groq rate limiting yet)
-        // Forward Retry-After header if present
         const retryAfter = res.headers.get('retry-after');
         const headers = retryAfter ? { 'Retry-After': retryAfter } : {};
-        return errorResponse(429, 'Too many requests. Please try again later.', headers);
+        return errorResponse(429, 'Demasiadas peticiones. Intenta de nuevo más tarde.', headers);
       }
       if (res.status >= 500) {
-        // Any 5xx from Groq (transient) — return 502 Bad Gateway
-        return errorResponse(502, 'Failed to get AI response. Please try again.');
+        return errorResponse(502, 'Error al obtener respuesta. Intenta de nuevo.');
       }
       if (res.status === 401 || res.status === 403) {
-        // Invalid/revoked API key or Groq access issue (permanent, not client's fault)
-        return errorResponse(503, 'AI assistant is not configured. Please contact Mario directly.');
+        return errorResponse(503, 'Asistente no configurado. Contacta a Mario.');
       }
       if (res.status === 400) {
-        // Check for spending limit block (blocked_api_access is not officially documented)
-        // Log full body to verify when we hit a real spending limit
         console.log('[/api/chat] 400 error body:', errText);
         if (errText.includes('blocked_api_access')) {
           console.error('[/api/chat] SPENDING LIMIT EXCEEDED or API access blocked');
-          return errorResponse(
-            503,
-            'AI assistant is temporarily unavailable. Please try again later.'
-          );
+          return errorResponse(503, 'El servicio no está disponible. Intenta más tarde.');
         }
-        // Regular 400 Bad Request
-        return errorResponse(400, 'Invalid request. Please try again.');
+        return errorResponse(400, 'Solicitud inválida. Intenta de nuevo.');
       }
       if (res.status >= 400) {
-        // Any other 4xx (404, etc) from Groq → normalize to 400
-        return errorResponse(400, 'Invalid request. Please try again.');
+        return errorResponse(400, 'Solicitud inválida. Intenta de nuevo.');
       }
-      // Fallback (shouldn't reach here if !res.ok is true)
-      return errorResponse(502, 'Failed to get AI response. Please try again.');
+      return errorResponse(502, 'Error al obtener respuesta. Intenta de nuevo.');
     }
 
     const data = await res.json();
@@ -246,7 +366,6 @@ export async function POST({ request, clientAddress }) {
     });
   } catch (err) {
     console.error('[/api/chat] Network error:', err?.message ?? err);
-    // Network error — transient (502)
-    return errorResponse(502, 'Failed to get AI response. Please try again.');
+    return errorResponse(502, 'Error al obtener respuesta. Intenta de nuevo.');
   }
 }

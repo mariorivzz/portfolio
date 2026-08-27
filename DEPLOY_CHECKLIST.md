@@ -27,7 +27,7 @@ curl -X POST https://mariorivzz.vercel.app/api/chat \
 ```
 
 - [ ] Devuelve `HTTP 403`
-- [ ] Mensaje de error: `{ error: "Forbidden" }`
+- [ ] Mensaje de error: `{ error: "No autorizado" }`
 
 ### 4. Origin validation: curl con Origin falso → 403
 
@@ -39,7 +39,7 @@ curl -X POST https://mariorivzz.vercel.app/api/chat \
 ```
 
 - [ ] Devuelve `HTTP 403`
-- [ ] Mensaje de error: `{ error: "Forbidden" }`
+- [ ] Mensaje de error: `{ error: "No autorizado" }`
 
 ### 5. Role injection test: enviar role "system" debe ignorarse
 
@@ -73,7 +73,7 @@ curl https://mariorivzz.vercel.app/api/stats
 
 ### 7. Mensaje muy largo se trunca correctamente
 
-- [ ] Enviar un mensaje con más de 2000 caracteres
+- [ ] Enviar un mensaje con más de 600 caracteres
 - [ ] El asistente debe responder normalmente (mensaje truncado, no error)
 - [ ] Verificar en server logs que no hay crashes
 
@@ -97,9 +97,80 @@ curl https://mariorivzz.vercel.app/api/stats
 
 ---
 
-## Si todo pasa ✅
+## Fase 3: Rate Limiting con Upstash ✅
 
-Proceder a **Fase 3: Rate Limiting** con Redis.
+Después de configurar `UPSTASH_REDIS_REST_URL` y `UPSTASH_REDIS_REST_TOKEN` en Vercel.
+
+### 1. Rate limiting por IP (6 mensajes/día)
+
+```bash
+# Intento 1-6: deben pasar (200)
+for i in {1..6}; do
+  curl -X POST https://mariorivzz.vercel.app/api/chat \
+    -H "Content-Type: application/json" \
+    -H "Origin: https://mariorivashernandez.com" \
+    -d '{"messages":[{"role":"user","content":"Test"}]}'
+  echo ""
+done
+
+# Intento 7: debe devolver 429
+curl -X POST https://mariorivzz.vercel.app/api/chat \
+  -H "Content-Type: application/json" \
+  -H "Origin: https://mariorivashernandez.com" \
+  -d '{"messages":[{"role":"user","content":"Test"}]}'
+```
+
+- [ ] Intentos 1-6 devuelven `HTTP 200`
+- [ ] Intento 7 devuelve `HTTP 429`
+- [ ] Respuesta 429: `{ error: "Has alcanzado tu límite diario. Vuelve mañana." }`
+- [ ] Header `Retry-After` presente con segundos hasta reset
+
+### 2. Rate limiting global por minuto (3 peticiones/minuto)
+
+```bash
+# Desde navegador o curl rápido: 3 peticiones en <60s
+# Petición 4 en el mismo minuto debe ser 429
+
+curl -X POST https://mariorivzz.vercel.app/api/chat \
+  -H "Content-Type: application/json" \
+  -H "Origin: https://mariorivashernandez.com" \
+  -d '{"messages":[{"role":"user","content":"Test"}]}'
+```
+
+- [ ] 4ª petición en <60s devuelve `HTTP 429`
+- [ ] Mensaje: `{ error: "Demasiadas peticiones. Intenta de nuevo en 60 segundos." }`
+
+### 3. Rate limiting global por día (35 peticiones/día)
+
+- [ ] Monitorear que después de ~35-40 peticiones globales, todas devuelven 429
+- [ ] Mensaje: `{ error: "Límite diario alcanzado. Vuelve mañana." }`
+- [ ] El límite se resetea a las 24h
+
+### 4. Retry-After en todas las 429
+
+- [ ] Todas las respuestas 429 incluyen header `Retry-After`
+- [ ] Para límites por minuto: `Retry-After: 60`
+- [ ] Para límites por IP/día: `Retry-After: <segundos-hasta-reset>`
+- [ ] ChatWidget respeta `Retry-After < 10 segundos` para reintento automático
+
+### 5. Fallback en memoria (si Upstash no configurado)
+
+- [ ] Remover `UPSTASH_REDIS_REST_URL` de Vercel → redeploy
+- [ ] Verificar que servidor loguea: `🚨 RATE LIMITING DEGRADADO — Upstash no configurado`
+- [ ] El endpoint sigue funcionando con limitadores en memoria
+- [ ] Restaurar variables Upstash → redeploy
+
+### 6. Prueba de privacidad
+
+- [ ] Acceder a `https://mariorivzz.vercel.app/privacidad`
+- [ ] Leer descripción de cómo se protege la IP (hasheada, 24h)
+- [ ] Verificar que Footer.astro incluye link `/privacidad`
+
+---
+
+## Si todo pasa ✅ en Fase 3
+
+Endpoint está hardened y listo para producción con rate limiting activo.
 
 ## Si algo falla ❌
 

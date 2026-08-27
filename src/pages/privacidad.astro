@@ -1,0 +1,115 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Privacidad — Mario Rivas" robots="index, follow">
+  <main class="privacy-page">
+    <div class="container">
+      <header class="privacy-header">
+        <h1>Privacidad y datos</h1>
+        <p class="lead">Cómo protegemos tu información</p>
+      </header>
+
+      <section class="privacy-content">
+        <h2>¿Qué datos recogemos?</h2>
+        <p>Cuando usas el chat de esta página:</p>
+        <ul>
+          <li><strong>Tu dirección IP</strong> — La recopilamos cifrada (hasheada) solo para protegerte contra abuso. Se borra automáticamente cada 24 horas.</li>
+          <li><strong>Lo que escribes en el chat</strong> — Solo mientras hablas; no lo guardamos en nuestro servidor.</li>
+        </ul>
+
+        <h2>¿Cómo los usamos?</h2>
+        <ul>
+          <li><strong>IP cifrada:</strong> Solo para evitar abuso. Máximo 6 mensajes por IP al día.</li>
+          <li><strong>Tu mensaje:</strong> Se envía a Groq (nuestra IA) para responderte; después se olvida.</li>
+        </ul>
+
+        <h2>¿Cuánto tiempo guardamos?</h2>
+        <ul>
+          <li><strong>IP:</strong> Se borra automáticamente después de 24 horas.</li>
+          <li><strong>Chat:</strong> Solo en tu navegador (localStorage); no guardamos nada en nuestros servidores.</li>
+        </ul>
+
+        <h2>Tus derechos</h2>
+        <p>No recopilamos datos personales persistentes. No usamos cookies de seguimiento. Si tienes dudas sobre tu privacidad, contáctame:</p>
+        <p><strong>mario@mariorivashernandez.com</strong></p>
+
+        <hr />
+        <p class="legal-notice">
+          ⚠️ <strong>Aviso legal:</strong> Este texto es informativo y no constituye asesoramiento legal. Consulta con un abogado especializado en RGPD antes de publicar políticas de privacidad.
+        </p>
+      </section>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .privacy-page {
+    min-height: 100vh;
+    padding: 6rem 0;
+    background: var(--bg);
+  }
+
+  .privacy-header {
+    margin-bottom: 3rem;
+    max-width: 60rem;
+  }
+
+  .privacy-header h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .lead {
+    font-size: 1.1rem;
+    color: var(--text-2);
+  }
+
+  .privacy-content {
+    max-width: 65rem;
+    line-height: 1.8;
+    color: var(--text-2);
+  }
+
+  .privacy-content h2 {
+    font-size: 1.3rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+
+  .privacy-content ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 1.5rem;
+  }
+
+  .privacy-content li {
+    margin-bottom: 0.7rem;
+    padding-left: 1.5em;
+    position: relative;
+  }
+
+  .privacy-content li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--brand);
+  }
+
+  .privacy-content strong {
+    color: var(--text);
+  }
+
+  hr {
+    margin: 2rem 0;
+    border: none;
+    border-top: 1px solid var(--border);
+  }
+
+  .legal-notice {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+</style>
