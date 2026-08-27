@@ -102,6 +102,7 @@ curl https://mariorivzz.vercel.app/api/stats
 Después de configurar `UPSTASH_REDIS_REST_URL` y `UPSTASH_REDIS_REST_TOKEN` en Vercel.
 
 **Nota sobre tiers:** Solo existe tier `free` actualmente. Los límites se aplican a todos los clientes:
+
 - 3 peticiones/minuto global
 - 35 peticiones/día global
 - 10 peticiones/IP/día (temporalmente para fase de pruebas; reducir a 6 después de validación)

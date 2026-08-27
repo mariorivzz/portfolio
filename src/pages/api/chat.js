@@ -161,7 +161,12 @@ class InMemoryRateLimiter {
       };
     }
 
-    return { success: true, limit: this.limit, remaining: this.limit - bucket.count, reset: bucket.expiry };
+    return {
+      success: true,
+      limit: this.limit,
+      remaining: this.limit - bucket.count,
+      reset: bucket.expiry,
+    };
   }
 }
 
@@ -291,7 +296,10 @@ export async function POST({ request, clientAddress }) {
       return errorResponse(503, 'El servicio no está disponible. Intenta más tarde.');
     } else {
       // Network/connection error: fail open (allow request)
-      console.warn('[/api/chat] Rate limiting unavailable (network error), allowing request:', err?.message);
+      console.warn(
+        '[/api/chat] Rate limiting unavailable (network error), allowing request:',
+        err?.message
+      );
       // Continue without rate limiting
     }
   }
