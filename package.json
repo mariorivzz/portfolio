@@ -28,6 +28,8 @@
     "@opentelemetry/sdk-metrics": "^2.7.1",
     "@opentelemetry/sdk-node": "^0.217.0",
     "@opentelemetry/semantic-conventions": "^1.40.0",
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.38.3",
     "astro": "^6.3.0",
     "gsap": "^3.15.0",
     "openai": "^6.36.0",

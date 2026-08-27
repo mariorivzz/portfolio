@@ -8,10 +8,6 @@ export default defineConfig({
   site: 'https://mariorivashernandez.com',
   // 'static' = static by default, API routes opt out via `export const prerender = false`
   output: 'static',
-  integrations: [
-    sitemap({
-      filter: (page) => !page.includes('/stats'),
-    }),
-  ],
+  integrations: [sitemap()],
   adapter: vercel(),
 });
