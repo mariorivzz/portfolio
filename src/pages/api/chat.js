@@ -7,6 +7,8 @@
 // Uses Groq's OpenAI-compatible REST API via native fetch — no SDK, no CJS packages.
 // Set GROQ_API_KEY in your .env file (get one free at console.groq.com).
 
+import { createHash } from 'crypto';
+
 export const prerender = false;
 
 // ── Groq API config ──────────────────────────────────────────────────────────
@@ -81,8 +83,29 @@ function errorResponse(status, message, extraHeaders = {}) {
   });
 }
 
+// ── Helper: Hash IP for rate limiting and logging ──────────────────────────
+function hashIp(ip) {
+  if (!ip) return 'undefined';
+  const salt = import.meta.env.IP_HASH_SALT;
+  if (!salt) {
+    console.error('[/api/chat] IP_HASH_SALT is not configured — IP logging disabled');
+    return 'unconfigured';
+  }
+  const input = `${ip}:${salt}`;
+  return createHash('sha256').update(input).digest('hex');
+}
+
 // ── Request handler ──────────────────────────────────────────────────────────
-export async function POST({ request }) {
+export async function POST({ request, clientAddress }) {
+  // Hash IP to protect privacy; log only presence of forwarding headers
+  const hashedIp = hashIp(clientAddress);
+  const headers = {
+    'x-forwarded-for': request.headers.has('x-forwarded-for'),
+    'x-real-ip': request.headers.has('x-real-ip'),
+  };
+  // TEMP: remove after verifying clientAddress populates in production
+  console.log('[/api/chat] Request from IP (hashed):', hashedIp, '| Headers:', headers);
+
   // Validate Content-Type
   const contentType = request.headers.get('content-type') ?? '';
   if (!contentType.includes('application/json')) {
@@ -158,15 +181,42 @@ export async function POST({ request }) {
 
     if (!res.ok) {
       const errText = await res.text().catch(() => '');
-      console.error(`[/api/chat] Groq error ${res.status}:`, errText);
+      console.error(`[/api/chat] Groq error (${res.status}):`, errText);
 
-      // Distinguish between transient (502) and permanent (503) errors
-      if (res.status >= 500 && res.status !== 503) {
-        // 5xx from Groq (transient) — 502 Bad Gateway
+      // Map Groq errors to client-safe status codes
+      // Never leak provider status codes; always map to standard semantics
+      if (res.status === 429) {
+        // Rate limit from Groq (transient, though we don't use Groq rate limiting yet)
+        // Forward Retry-After header if present
+        const retryAfter = res.headers.get('retry-after');
+        const headers = retryAfter ? { 'Retry-After': retryAfter } : {};
+        return errorResponse(429, 'Too many requests. Please try again later.', headers);
+      }
+      if (res.status >= 500) {
+        // Any 5xx from Groq (transient) — return 502 Bad Gateway
         return errorResponse(502, 'Failed to get AI response. Please try again.');
       }
-      // Other errors (400, 401, 403, 404, etc) — pass through or map
-      return errorResponse(res.status, 'Failed to get AI response. Please try again.');
+      if (res.status === 401 || res.status === 403) {
+        // Invalid/revoked API key or Groq access issue (permanent, not client's fault)
+        return errorResponse(503, 'AI assistant is not configured. Please contact Mario directly.');
+      }
+      if (res.status === 400) {
+        // Check for spending limit block (blocked_api_access is not officially documented)
+        // Log full body to verify when we hit a real spending limit
+        console.log('[/api/chat] 400 error body:', errText);
+        if (errText.includes('blocked_api_access')) {
+          console.error('[/api/chat] SPENDING LIMIT EXCEEDED or API access blocked');
+          return errorResponse(503, 'AI assistant is temporarily unavailable. Please try again later.');
+        }
+        // Regular 400 Bad Request
+        return errorResponse(400, 'Invalid request. Please try again.');
+      }
+      if (res.status >= 400) {
+        // Any other 4xx (404, etc) from Groq → normalize to 400
+        return errorResponse(400, 'Invalid request. Please try again.');
+      }
+      // Fallback (shouldn't reach here if !res.ok is true)
+      return errorResponse(502, 'Failed to get AI response. Please try again.');
     }
 
     const data = await res.json();
