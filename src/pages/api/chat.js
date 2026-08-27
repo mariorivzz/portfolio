@@ -17,9 +17,9 @@ export const prerender = false;
 // ⚠️ NOTA INTERNA — margen: este endpoint es el que genera coste por consumo.
 // Lo incluyen los planes de creación con asistente (690 € y 990 €, pago único)
 // y, sobre todo, el "Mantenimiento con IA" de 195 €/mes, donde el gasto es
-// recurrente pero el ingreso está fijado. Mirar /stats de vez en cuando: si el
-// consumo de tokens + alojamiento se acerca al margen de esa cuota, hay que
-// subir el precio o limitar el número de mensajes por visita.
+// recurrente pero el ingreso está fijado. Monitorear en Groq Console →
+// Projects → Portfolio → Usage: si el consumo de tokens se acerca al margen de
+// esa cuota, hay que subir el precio o limitar el número de mensajes por visita.
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
 // ⚠️ Groq RETIRA modelos cada pocos meses. Cuando eso pasa, su API responde
@@ -118,7 +118,7 @@ const RATE_LIMITS = {
   free: {
     requestsPerMinuteGlobal: 3,
     requestsPerDayGlobal: 35,
-    requestsPerIpPerDay: 6,
+    requestsPerIpPerDay: 10, // Temporary: 10 for testing phase; reduce to 6 after validation
   },
   // developer: {
   //   requestsPerMinuteGlobal: 30,

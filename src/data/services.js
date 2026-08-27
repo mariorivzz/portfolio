@@ -11,8 +11,9 @@
 // ⚠️ NOTA INTERNA (no visible para el público) — revisar márgenes:
 // Los planes con asistente (690 €, 990 € y el mantenimiento de 195 €/mes)
 // generan coste por consumo de la API del modelo. El mensual es el delicado:
-// el gasto es recurrente pero el ingreso está fijado. Mirar /stats de vez en
-// cuando; si el consumo se acerca al margen, subir precio o limitar mensajes.
+// el gasto es recurrente pero el ingreso está fijado. Monitorear en Groq
+// Console → Projects → Portfolio → Usage; si el consumo se acerca al margen,
+// subir precio o limitar mensajes.
 //
 // ⚠️ NOTA INTERNA — alcance: todo está pensado para ejecutarse en solitario
 // apoyándose en herramientas ya existentes (IA, automatización, agenda).
