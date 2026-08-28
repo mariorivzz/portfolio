@@ -63,7 +63,8 @@ Había una página que mostraba exactamente cuántos tokens (palabras) procesaba
 
 **El principio:** Si 1.000 robots atacan, después de X mensajes (por IP, por minuto, por día), cerramos la puerta. Es como un cine: una vez lleno, no dejas entrar a nadie más.
 
-**Cómo lo hacemos:** 
+**Cómo lo hacemos:**
+
 - **Por minuto global:** máximo 3 mensajes por minuto en total. Si llegan 2-3 visitantes simultáneos usando el chat, se acerca al límite. Si alguien intenta forzarlo, la 4ª petición falla y tiene que esperar 60 segundos.
 - **Por IP por día:** máximo 5 mensajes desde la misma IP en 24 horas (una conversación completa). Si llegas al 6, esperas a mañana.
 - **Global por día:** máximo 25 en total. Protección bajo el techo diario de tokens.
@@ -84,7 +85,7 @@ Había una página que mostraba exactamente cuántos tokens (palabras) procesaba
 
 ---
 
-### 5. **Guardamos tu IP (pero convertida en un código irreversible, solo para contar)** 
+### 5. **Guardamos tu IP (pero convertida en un código irreversible, solo para contar)**
 
 **El principio:** Para saber si eres tú quien llama 5 veces (una conversación), necesitamos reconocerte. Pero no queremos saber quién eres en realidad.
 
@@ -111,6 +112,7 @@ Había una página que mostraba exactamente cuántos tokens (palabras) procesaba
 **El principio:** Los visitantes tienen derecho a saber qué pasará con su información.
 
 **Cómo lo hacemos:** Una página nueva `/privacidad` que explica:
+
 - Guardamos tu IP (convertida en un código irreversible, 24h)
 - No guardamos el chat en nuestros servidores (solo en tu navegador)
 - Enviamos tus mensajes a Groq para que conteste
@@ -124,12 +126,15 @@ Había una página que mostraba exactamente cuántos tokens (palabras) procesaba
 ## Qué son las herramientas que usamos
 
 ### **Groq** (la IA)
+
 Es un servicio que procesa lenguaje natural. Cuando escribes "¿Cuánto cuesta la página básica?", Groq entiende la pregunta y genera una respuesta. Groq cobra por cada palabra procesada (llamados "tokens"), pero yo estoy en el plan gratuito y no pago nada ahora. Es por eso que tenemos límites: para proteger el presupuesto en caso de cambio de plan.
 
 ### **Upstash** (el contador en la nube)
+
 Es una base de datos muy rápida que vive en internet. La usamos para contar "cuántos mensajes ha hecho esta IP hoy". Es como un libreto: cada petición que llega, anotamos un "+1". Cuando llega a 5, decimos "no más por hoy". **Upstash es gratis para nosotros** (dentro de límites normales).
 
 ### **Vercel** (donde vive tu web)
+
 Es el servidor donde está alojada toda la web. Gestiona las peticiones, guarda la clave de Groq en secreto, y ejecuta el código que valida, cuenta y protege. **Vercel es gratis** (con el plan gratuito). Nosotros solo pagamos si la web recibe muchísimo tráfico.
 
 ---
@@ -151,6 +156,7 @@ Es el servidor donde está alojada toda la web. Gestiona las peticiones, guarda 
 ### **Límites de Groq** (en el servidor, no los controlas)
 
 Groq tiene DOS techos en tu proyecto:
+
 - **Por minuto:** 3.500 tokens/minuto (aproximadamente 2 mensajes por minuto)
 - **Por día:** 60.000 tokens (aproximadamente 6 conversaciones completas)
 
@@ -179,6 +185,7 @@ Con dos visitantes hablando al chat simultáneamente durante varias horas, se pu
 ### **"El chatbot no contesta" (error 502 o 503)**
 
 **Qué hago:**
+
 - Miro los logs de Vercel (Deployments → Production → Logs)
 - Busco `[/api/chat] Groq error`
 - Leo el código de error real (401, 503, etc.) y el mensaje
@@ -187,6 +194,7 @@ Con dos visitantes hablando al chat simultáneamente durante varias horas, se pu
 ### **"El chatbot contesta pero muy lento" (>10 segundos)**
 
 **Qué hago:**
+
 - Ver en [console.groq.com](https://console.groq.com) → Project Portfolio → Usage si hay picos de latencia.
 - Revisar los logs de Vercel para ver si hay errores del lado mío.
 - Si la latencia viene de Groq, es un problema del lado de ellos; no hay mucho que pueda hacer excepto esperar.
@@ -197,7 +205,8 @@ Alguien (o un robot) alcanzó el límite.
 
 **Si eres tú:** Espera 24 horas. Después se resetea automáticamente.
 
-**Si es un ataque:** 
+**Si es un ataque:**
+
 - Revisar logs en Vercel para ver de dónde vienen las peticiones.
 - Puedo ajustar los límites en el código si es necesario, pero esto afecta a todos (tanto atacantes como visitantes legítimos).
 - Si es un cliente legítimo que necesita más consultas, puedo subir los límites en el código.
@@ -209,6 +218,7 @@ Alguien (o un robot) alcanzó el límite.
 **Duración:** Normalmente <1 minuto. Cuando Upstash vuelve, el contador se normaliza.
 
 **Qué hago:**
+
 - Revisar en [console.upstash.com](https://console.upstash.com) que la conexión sea válida.
 - Ver los logs de Vercel para saber si el fallo viene de conexión o de Upstash mismo.
 - Esperar. Es raro que Upstash falle.
@@ -220,6 +230,7 @@ Alguien (o un robot) alcanzó el límite.
 **Antes:** Cualquiera podía atacar, gastar tu presupuesto, darle órdenes al robot, y acceder a información privada mía.
 
 **Ahora:**
+
 - ✅ Solo tu web puede usar el chatbot (validación de origen).
 - ✅ Máximo 5 peticiones por IP por día (una conversación, nadie gasta tu presupuesto).
 - ✅ El robot solo sigue instrucciones tuyas, nunca de visitantes.

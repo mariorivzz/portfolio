@@ -22,16 +22,16 @@ Estas 7 garantías son **independientes de tu tecnología.** Cambian de proveedo
 
 ## Qué Cambia si Tu Stack es Otro
 
-| Dimensión | Astro + Vercel | Next.js | Node/Express | Detalles |
-|-----------|---|---|---|---|
-| **Endpoint del chat** | `src/pages/api/chat.js` (SSR) | `app/api/chat/route.ts` (route handler) | `app.post('/api/chat', ...)` en server | El path cambia; la lógica de seguridad es idéntica |
-| **Obtener IP del cliente** | `clientAddress` (Vercel adapter) | `request.headers.get('x-forwarded-for')` o Vercel IP geolocation headers | `req.ip` o `req.headers['x-forwarded-for']` | Vercel da `clientAddress` gratis; otros requieren parsing de headers |
-| **Variables de entorno** | `import.meta.env.GROQ_API_KEY` (Astro) | `process.env.GROQ_API_KEY` (Next.js) | `process.env.GROQ_API_KEY` (Node.js) | Syntaxis distinta; mismo principio |
-| **Rate limiting** | Upstash Redis REST API (sin SDK) | Vercel KV, Upstash SDK, o Redis conectado | Redis conectado, o Upstash REST | Upstash REST funciona en cualquier lado; cambiar URL/token según servidor |
-| **Proveedor de IA** | Groq API (mapear 429→429, 5xx→502) | Claude, OpenAI, Gemini (mapear errores distintos) | Groq, Claude, OpenAI (los mismos) | El mapeo de errores cambia por proveedor. La estructura es igual |
-| **Error handling** | Respuesta JSON con `reply` o error en español | Same JSON contract; lang puede cambiar | Same JSON contract | La forma de responder es consistente en cualquier sitio |
-| **Logging** | Vercel logs (Deployments → Logs) | Vercel, Datadog, CloudWatch, stderr | stderr, archivos, o servicio centralizado | Vercel da logs gratis; otros requieren setup |
-| **Secretos** | Vercel env vars → inyectados en runtime | Vercel env vars (si usas Vercel), o archivo .env.local | .env archivo, o gestor de secretos (AWS Secrets, HashiCorp Vault) | Vercel automatiza; otros requieren gestor manual |
+| Dimensión                  | Astro + Vercel                                | Next.js                                                                  | Node/Express                                                      | Detalles                                                                  |
+| -------------------------- | --------------------------------------------- | ------------------------------------------------------------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| **Endpoint del chat**      | `src/pages/api/chat.js` (SSR)                 | `app/api/chat/route.ts` (route handler)                                  | `app.post('/api/chat', ...)` en server                            | El path cambia; la lógica de seguridad es idéntica                        |
+| **Obtener IP del cliente** | `clientAddress` (Vercel adapter)              | `request.headers.get('x-forwarded-for')` o Vercel IP geolocation headers | `req.ip` o `req.headers['x-forwarded-for']`                       | Vercel da `clientAddress` gratis; otros requieren parsing de headers      |
+| **Variables de entorno**   | `import.meta.env.GROQ_API_KEY` (Astro)        | `process.env.GROQ_API_KEY` (Next.js)                                     | `process.env.GROQ_API_KEY` (Node.js)                              | Syntaxis distinta; mismo principio                                        |
+| **Rate limiting**          | Upstash Redis REST API (sin SDK)              | Vercel KV, Upstash SDK, o Redis conectado                                | Redis conectado, o Upstash REST                                   | Upstash REST funciona en cualquier lado; cambiar URL/token según servidor |
+| **Proveedor de IA**        | Groq API (mapear 429→429, 5xx→502)            | Claude, OpenAI, Gemini (mapear errores distintos)                        | Groq, Claude, OpenAI (los mismos)                                 | El mapeo de errores cambia por proveedor. La estructura es igual          |
+| **Error handling**         | Respuesta JSON con `reply` o error en español | Same JSON contract; lang puede cambiar                                   | Same JSON contract                                                | La forma de responder es consistente en cualquier sitio                   |
+| **Logging**                | Vercel logs (Deployments → Logs)              | Vercel, Datadog, CloudWatch, stderr                                      | stderr, archivos, o servicio centralizado                         | Vercel da logs gratis; otros requieren setup                              |
+| **Secretos**               | Vercel env vars → inyectados en runtime       | Vercel env vars (si usas Vercel), o archivo .env.local                   | .env archivo, o gestor de secretos (AWS Secrets, HashiCorp Vault) | Vercel automatiza; otros requieren gestor manual                          |
 
 **Regla de oro:** Si cambias de stack, audita **cómo obtienes la IP** y **dónde almacenas secretos.** Todo lo demás es traducción directa de conceptos.
 
@@ -94,6 +94,7 @@ const allowedOrigins = [
 ```
 
 **Errores comunes:**
+
 - `'https://mariorivashernandez.com'` sin regex → acepta `https://mariorivashernandez.com.attacker.com`
 - `/mariorivashernandez/` sin inicio/fin → acepta `http://mariorivashernandez.com`
 - `'http://localhost'` sin puerto → rechaza `http://localhost:3000`
@@ -168,6 +169,7 @@ fetch('/api/chat', {
 ### Principio
 
 Un atacante puede enviar conversaciones enormes para:
+
 1. Gastar más tokens (y presupuesto)
 2. Confundir el modelo con historial irrelevante
 3. Explotar bugs de parsing de historial grande
@@ -217,7 +219,7 @@ En `src/pages/api/chat.js`:
 if (!res.ok) {
   const errText = await res.text();
   console.error(`[/api/chat] Groq error (${res.status}):`, errText); // ← Log interno
-  
+
   // Mapeo seguro
   if (res.status === 429) {
     return errorResponse(429, 'Demasiadas peticiones. Intenta más tarde.');
@@ -250,6 +252,7 @@ if (!res.ok) {
 ### Principio
 
 Rate limits no son "números mágicos". Se derivan de:
+
 1. La cuota de tu proveedor (tokens/minuto)
 2. El coste promedio de una interacción
 3. Tu tolerancia al riesgo (¿cuánto puedes gastar si falla el límite?)
@@ -263,6 +266,7 @@ Mensajes/minuto = (TPM del proyecto) / (tokens promedio por mensaje)
 ```
 
 **Groq:** Con 3.500 TPM y ~1.650 tokens/mensaje:
+
 ```
 3.500 / 1.650 ≈ 2 mensajes/minuto posibles
 ```
@@ -276,9 +280,9 @@ En `src/pages/api/chat.js`:
 ```javascript
 const RATE_LIMITS = {
   free: {
-    requestsPerMinuteGlobal: 3,    // Todos los IPs combinados
-    requestsPerDayGlobal: 25,      // Calculado desde techo diario de Groq (60.000 tokens)
-    requestsPerIpPerDay: 5,        // Una conversación completa por IP/día
+    requestsPerMinuteGlobal: 3, // Todos los IPs combinados
+    requestsPerDayGlobal: 25, // Calculado desde techo diario de Groq (60.000 tokens)
+    requestsPerIpPerDay: 5, // Una conversación completa por IP/día
   },
 };
 ```
@@ -348,18 +352,19 @@ const apiKey = import.meta.env.GROQ_API_KEY;
 ### Principio
 
 Cada secreto (API key, token, salt) tiene un ciclo de vida:
+
 - **Dónde vive:** Servidor, nunca cliente
 - **Cómo se inyecta:** Variables de entorno, nunca código
 - **Cuándo se rota:** Acceso comprometido, o cada 6 meses
 
 ### Tabla de inventario (Astro + Vercel)
 
-| Secret | Dónde vive | Nunca escribir en | Rotar si |
-|--------|-----------|------------------|----------|
-| `GROQ_API_KEY` | Vercel env vars (Production) | logs, cliente | fue subida a GitHub, cada ~6 meses |
-| `UPSTASH_REDIS_REST_TOKEN` | Vercel env vars (Production) | logs, cliente | cada ~6 meses |
-| `UPSTASH_REDIS_REST_URL` | Vercel env vars (Production) | logs, cliente | nunca (no tiene "expiración") |
-| `IP_HASH_SALT` | Vercel env vars (Production) | logs, código | cada 3-6 meses |
+| Secret                     | Dónde vive                   | Nunca escribir en | Rotar si                           |
+| -------------------------- | ---------------------------- | ----------------- | ---------------------------------- |
+| `GROQ_API_KEY`             | Vercel env vars (Production) | logs, cliente     | fue subida a GitHub, cada ~6 meses |
+| `UPSTASH_REDIS_REST_TOKEN` | Vercel env vars (Production) | logs, cliente     | cada ~6 meses                      |
+| `UPSTASH_REDIS_REST_URL`   | Vercel env vars (Production) | logs, cliente     | nunca (no tiene "expiración")      |
+| `IP_HASH_SALT`             | Vercel env vars (Production) | logs, código      | cada 3-6 meses                     |
 
 ### Cómo verificar (post-deploy)
 
@@ -417,19 +422,23 @@ function hashIp(ip) {
 
 #### Retención coherente
 
-| Dato | Dónde | Retención | Quién accede |
-|------|-------|-----------|--------------|
-| IP (hashed) | Redis (Upstash) | 24h máximo | Solo código de rate limiting |
-| Chat historial | localStorage (navegador) | Indefinido (usuario borra) | Solo el visitante |
-| Logs de tokens | Vercel | 3-7 días (política Vercel) | Tú (owner del proyecto) |
+| Dato           | Dónde                    | Retención                  | Quién accede                 |
+| -------------- | ------------------------ | -------------------------- | ---------------------------- |
+| IP (hashed)    | Redis (Upstash)          | 24h máximo                 | Solo código de rate limiting |
+| Chat historial | localStorage (navegador) | Indefinido (usuario borra) | Solo el visitante            |
+| Logs de tokens | Vercel                   | 3-7 días (política Vercel) | Tú (owner del proyecto)      |
 
 #### Página de privacidad debe decir exactamente
 
 ```html
 <!-- src/pages/privacidad.astro -->
-<li><strong>Tu dirección IP</strong> — La convertimos en un código irreversible (hasheada) 
-    solo para protegerte contra abuso. Se borra automáticamente cada 24 horas.</li>
-<li><strong>Chat:</strong> Almacenado en tu navegador (localStorage). No en nuestros servidores.</li>
+<li>
+  <strong>Tu dirección IP</strong> — La convertimos en un código irreversible (hasheada) solo para
+  protegerte contra abuso. Se borra automáticamente cada 24 horas.
+</li>
+<li>
+  <strong>Chat:</strong> Almacenado en tu navegador (localStorage). No en nuestros servidores.
+</li>
 <li><strong>Groq:</strong> Tus mensajes se envían a Groq API para procesamiento.</li>
 ```
 
@@ -455,20 +464,21 @@ Este es el proceso más importante. Hazlo correctamente la primera vez. **El pro
 
 Tabla de ejemplo real (Portfolio, openai/gpt-oss-120b, con system prompt):
 
-| Turno | Input tokens | Output tokens | Total / turno | Acumulado | Historial |
-|-------|---|---|---|---|---|
-| 1 | 1.800 | 450 | 2.250 | 2.250 | 1 mensaje |
-| 2 | 2.050 + hist | 420 | 2.470 | 4.720 | 2 mensajes |
-| 3 | 2.100 + hist | 430 | 2.530 | 7.250 | 3 mensajes |
-| 4 | 2.150 + hist | 440 | 2.590 | 9.840 | 4 mensajes |
-| 5 | 2.200 + hist | 450 | 2.650 | 12.490 | 5 mensajes (tope) |
-| 6 (reset) | 1.600 | 460 | 2.060 | ~2.060 | 1 mensaje nuevo |
+| Turno     | Input tokens | Output tokens | Total / turno | Acumulado | Historial         |
+| --------- | ------------ | ------------- | ------------- | --------- | ----------------- |
+| 1         | 1.800        | 450           | 2.250         | 2.250     | 1 mensaje         |
+| 2         | 2.050 + hist | 420           | 2.470         | 4.720     | 2 mensajes        |
+| 3         | 2.100 + hist | 430           | 2.530         | 7.250     | 3 mensajes        |
+| 4         | 2.150 + hist | 440           | 2.590         | 9.840     | 4 mensajes        |
+| 5         | 2.200 + hist | 450           | 2.650         | 12.490    | 5 mensajes (tope) |
+| 6 (reset) | 1.600        | 460           | 2.060         | ~2.060    | 1 mensaje nuevo   |
 
 **Conclusión:** Una conversación completa (5 turnos, historial lleno) cuesta ~10.250 tokens. No 5.540.
 
 ### Paso 2: Identificar AMBOS techos del proveedor
 
 **Tu proyecto Groq tiene:**
+
 - **Techo por minuto (TPM):** 3.500 tokens/minuto
 - **Techo por día:** 60.000 tokens/día (típico en plan gratuito; verifica en console.groq.com)
 
@@ -527,6 +537,7 @@ Mensajes = 5 × 5 turnos = 25 mensajes/día máximo
 ```
 
 **Límites realistas:**
+
 - Global/día: **25 mensajes** (no 35)
 - Por IP/día: **5 mensajes** (1 conversación)
 - Global/minuto: **3 mensajes** (margen del techo de 3.500 TPM ÷ 1.650 tokens/msg = 2 msg/min)
@@ -564,12 +575,12 @@ git show <commit-id> -- src/pages/api/chat.js | grep -A 3 "hashIp\|allowedOrigin
 
 ### Tabla de verificación por cambio
 
-| Cambio | Comando | Espera |
-|--------|---------|--------|
-| Rate limiting Upstash | `git show -- src/pages/api/chat.js \| grep "Ratelimit.slidingWindow"` | Mínimo 3 matches |
-| Origin whitelist | `git show -- src/pages/api/chat.js \| grep "allowedOrigins"` | Debe tener `/^https:` |
-| IP hash | `git show -- src/pages/api/chat.js \| grep "createHash"` | 1 match |
-| Roles | `git show -- src/pages/api/chat.js \| grep "validRoles"` | Exactamente `['user', 'assistant']` |
+| Cambio                | Comando                                                               | Espera                              |
+| --------------------- | --------------------------------------------------------------------- | ----------------------------------- |
+| Rate limiting Upstash | `git show -- src/pages/api/chat.js \| grep "Ratelimit.slidingWindow"` | Mínimo 3 matches                    |
+| Origin whitelist      | `git show -- src/pages/api/chat.js \| grep "allowedOrigins"`          | Debe tener `/^https:`               |
+| IP hash               | `git show -- src/pages/api/chat.js \| grep "createHash"`              | 1 match                             |
+| Roles                 | `git show -- src/pages/api/chat.js \| grep "validRoles"`              | Exactamente `['user', 'assistant']` |
 
 ---
 
@@ -677,6 +688,7 @@ Antes de mergear a main:
 **Última actualización:** 2026-08-27
 
 **Cambios desde v1.2:**
+
 - Nuevo: Sección "Dimensiones de Seguridad No Negociables" (7 garantías que se sostienen en cualquier stack)
 - Nuevo: Tabla "Qué Cambia si Tu Stack es Otro" (Astro vs Next.js vs Node, equivalencias concretas)
 - Reorganizado: Cada sección ahora tiene PRINCIPIO + IMPLEMENTACIÓN EN ESTE STACK
