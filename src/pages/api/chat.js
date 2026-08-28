@@ -117,8 +117,8 @@ function hashIp(ip) {
 const RATE_LIMITS = {
   free: {
     requestsPerMinuteGlobal: 3,
-    requestsPerDayGlobal: 35,
-    requestsPerIpPerDay: 10, // Temporary: 10 for testing phase; reduce to 6 after validation
+    requestsPerDayGlobal: 25,
+    requestsPerIpPerDay: 5,
   },
   // developer: {
   //   requestsPerMinuteGlobal: 30,
