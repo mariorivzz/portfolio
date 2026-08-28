@@ -631,8 +631,8 @@ curl -s -i -X POST "$DOMAIN/api/chat" \
   -d '{"messages":[{"role":"user","content":"Hola"}]}' | head -1
 
 echo ""
-echo "=== 4. Rate limit (7 intentos, el 7º falla) ==="
-for i in {1..7}; do
+echo "=== 4. Rate limit (6 intentos, el 6º falla) ==="
+for i in {1..6}; do
   echo -n "Intento $i: "
   curl -s -i -X POST "$DOMAIN/api/chat" \
     -H "Origin: $DOMAIN" \

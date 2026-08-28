@@ -70,7 +70,7 @@ Había una página que mostraba exactamente cuántos tokens (palabras) procesaba
 
 **Dónde están las cuentas:** Usamos **Upstash Redis**, que es como un contador que vive en la nube. Cada petición incrementa el contador. Cuando llega al límite, cierra.
 
-**Resultado:** El consumo de Groq está protegido. Con estos límites, aunque 4 atacantes intenten a la vez, 35 mensajes es el máximo del día. Nada más pasa.
+**Resultado:** El consumo de Groq está protegido. Con estos límites, aunque 4 atacantes intenten a la vez, 25 mensajes es el máximo del día. Nada más pasa.
 
 ---
 
@@ -86,13 +86,13 @@ Había una página que mostraba exactamente cuántos tokens (palabras) procesaba
 
 ### 5. **Guardamos tu IP (pero convertida en un código irreversible, solo para contar)** 
 
-**El principio:** Para saber si eres tú quien llama 10 veces, necesitamos reconocerte. Pero no queremos saber quién eres en realidad.
+**El principio:** Para saber si eres tú quien llama 5 veces (una conversación), necesitamos reconocerte. Pero no queremos saber quién eres en realidad.
 
 **Cómo lo hacemos:** Tomamos tu IP (ej: 192.168.1.1), la mezclamos con una contraseña secreta que solo nosotros sabemos, y la convertimos en un código irreversible que no se puede deshacer. Es diferente a "encriptar": encriptar se puede revertir con la clave correcta; esto no. Es como una huella digital: única, pero anónima.
 
 **Cuánto tiempo guardamos:** 24 horas. Después, se borra.
 
-**Resultado:** Podemos contar "esta IP pidió 10 mensajes", pero no podemos saber quién eres ni rastrearte a través del tiempo.
+**Resultado:** Podemos contar "esta IP pidió 5 mensajes", pero no podemos saber quién eres ni rastrearte a través del tiempo.
 
 ---
 
@@ -127,7 +127,7 @@ Había una página que mostraba exactamente cuántos tokens (palabras) procesaba
 Es un servicio que procesa lenguaje natural. Cuando escribes "¿Cuánto cuesta la página básica?", Groq entiende la pregunta y genera una respuesta. Groq cobra por cada palabra procesada (llamados "tokens"), pero yo estoy en el plan gratuito y no pago nada ahora. Es por eso que tenemos límites: para proteger el presupuesto en caso de cambio de plan.
 
 ### **Upstash** (el contador en la nube)
-Es una base de datos muy rápida que vive en internet. La usamos para contar "cuántos mensajes ha hecho esta IP hoy". Es como un libreto: cada petición que llega, anotamos un "+1". Cuando llega a 10, decimos "no más por hoy". **Upstash es gratis para nosotros** (dentro de límites normales).
+Es una base de datos muy rápida que vive en internet. La usamos para contar "cuántos mensajes ha hecho esta IP hoy". Es como un libreto: cada petición que llega, anotamos un "+1". Cuando llega a 5, decimos "no más por hoy". **Upstash es gratis para nosotros** (dentro de límites normales).
 
 ### **Vercel** (donde vive tu web)
 Es el servidor donde está alojada toda la web. Gestiona las peticiones, guarda la clave de Groq en secreto, y ejecuta el código que valida, cuenta y protege. **Vercel es gratis** (con el plan gratuito). Nosotros solo pagamos si la web recibe muchísimo tráfico.
@@ -136,7 +136,7 @@ Es el servidor donde está alojada toda la web. Gestiona las peticiones, guarda 
 
 ## Cuánto cuesta todo esto
 
-**Groq:** Ahora mismo estoy en el plan **gratuito** de Groq. No pago nada. Si algún día paso a pago, el coste sería mínimo: gpt-oss-120b cuesta $0,15 por millón de tokens de entrada y $0,60 por millón de salida. Con el máximo de 35 mensajes al día, eso serían unos 58.000 tokens, menos de 1 céntimo al día en el peor caso. **Alrededor de 30 céntimos de euro al mes si la web se usa al máximo.**
+**Groq:** Ahora mismo estoy en el plan **gratuito** de Groq. No pago nada. Si algún día paso a pago, el coste sería mínimo: gpt-oss-120b cuesta $0,15 por millón de tokens de entrada y $0,60 por millón de salida. Con el máximo de 25 mensajes al día, eso serían unos 51.250 tokens, menos de 0,05 céntimos al día en el peor caso. **Alrededor de 1,5 céntimos de euro al mes si la web se usa al máximo.**
 
 **Upstash:** Es gratis hasta un millón de comandos por mes. Con nuestros límites, nunca llegaremos a eso. **Gratuito.**
 

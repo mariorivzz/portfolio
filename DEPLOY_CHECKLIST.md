@@ -148,9 +148,9 @@ curl -X POST https://mariorivashernandez.com/api/chat \
 - [ ] 4ª petición en <60s devuelve `HTTP 429`
 - [ ] Mensaje: `{ error: "Demasiadas peticiones. Intenta de nuevo en 60 segundos." }`
 
-### 3. Rate limiting global por día (35 peticiones/día)
+### 3. Rate limiting global por día (25 peticiones/día)
 
-- [ ] Monitorear que después de ~35-40 peticiones globales, todas devuelven 429
+- [ ] Monitorear que después de ~25 peticiones globales, todas devuelven 429
 - [ ] Mensaje: `{ error: "Límite diario alcanzado. Vuelve mañana." }`
 - [ ] El límite se resetea a las 24h
 
