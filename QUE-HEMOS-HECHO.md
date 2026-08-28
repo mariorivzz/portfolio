@@ -65,8 +65,8 @@ Había una página que mostraba exactamente cuántos tokens (palabras) procesaba
 
 **Cómo lo hacemos:** 
 - **Por minuto global:** máximo 3 mensajes por minuto en total. Si llegan 2-3 visitantes simultáneos usando el chat, se acerca al límite. Si alguien intenta forzarlo, la 4ª petición falla y tiene que esperar 60 segundos.
-- **Por IP por día:** máximo 10 mensajes desde la misma IP en 24 horas. Si llegas al 11, esperas a mañana.
-- **Global por día:** máximo 35 en total. Protección extra por si algo falla.
+- **Por IP por día:** máximo 5 mensajes desde la misma IP en 24 horas (una conversación completa). Si llegas al 6, esperas a mañana.
+- **Global por día:** máximo 25 en total. Protección bajo el techo diario de tokens.
 
 **Dónde están las cuentas:** Usamos **Upstash Redis**, que es como un contador que vive en la nube. Cada petición incrementa el contador. Cuando llega al límite, cierra.
 
@@ -150,9 +150,13 @@ Es el servidor donde está alojada toda la web. Gestiona las peticiones, guarda 
 
 ### **Límites de Groq** (en el servidor, no los controlas)
 
-Groq tiene un cupo del proyecto: 3.500 tokens/minuto (eso son aproximadamente 2 mensajes por minuto). Es mi límite más ajustado. Si alguien alcanza eso, Groq devuelve un error 429 ("demasiadas peticiones") y el chatbot dice "Intenta de nuevo en 60 segundos".
+Groq tiene DOS techos en tu proyecto:
+- **Por minuto:** 3.500 tokens/minuto (aproximadamente 2 mensajes por minuto)
+- **Por día:** 60.000 tokens (aproximadamente 6 conversaciones completas)
 
-Con dos visitantes hablando al chat simultáneamente, se toca este límite. Es realista en un día de mucho tráfico.
+El techo **diario es más restrictivo**. Si alguien alcanza cualquiera de los dos, Groq devuelve un error 429 ("demasiadas peticiones") y el chatbot dice "Intenta de nuevo en 60 segundos" o "Vuelve mañana".
+
+Con dos visitantes hablando al chat simultáneamente durante varias horas, se pueden tocar ambos.
 
 ### **Nuestros límites** (los que nosotros pusimos)
 
@@ -160,12 +164,12 @@ Con dos visitantes hablando al chat simultáneamente, se toca este límite. Es r
    - **Cuándo pasa:** Un robot atacando, o un bot en una red social probando.
    - **Qué ves:** "Demasiadas peticiones. Intenta en 60 segundos."
 
-2. **Por IP por día (10):** Si tu IP hace 10 preguntas en 24 horas, la 11ª falla. Vuelve a intentar mañana.
-   - **Cuándo pasa:** Si llegas a 10 mensajes en un día, probablemente haya un robot atacando o alguien probando el límite.
+2. **Por IP por día (5):** Si tu IP hace 5 preguntas en 24 horas (una conversación completa), la 6ª falla. Vuelve a intentar mañana.
+   - **Cuándo pasa:** Si llegas a 5 mensajes en un día, probablemente haya un robot atacando o alguien probando el límite.
    - **Qué ves:** "Has alcanzado tu límite diario. Vuelve mañana."
 
-3. **Global por día (35):** Si toda la web suma 35 peticiones en 24 horas, todo nuevo mensaje falla. Vuelve a intentar mañana.
-   - **Cuándo pasa:** Casi nunca con tráfico real. Es un tope de emergencia.
+3. **Global por día (25):** Si toda la web suma 25 peticiones en 24 horas, todo nuevo mensaje falla. Vuelve a intentar mañana.
+   - **Cuándo pasa:** Casi nunca con tráfico real. Es un tope calculado para respetar el techo diario de Groq.
    - **Qué ves:** "Límite diario alcanzado. Vuelve mañana."
 
 ---
@@ -217,7 +221,7 @@ Alguien (o un robot) alcanzó el límite.
 
 **Ahora:**
 - ✅ Solo tu web puede usar el chatbot (validación de origen).
-- ✅ Máximo 10 peticiones por IP por día (nadie gasta tu presupuesto).
+- ✅ Máximo 5 peticiones por IP por día (una conversación, nadie gasta tu presupuesto).
 - ✅ El robot solo sigue instrucciones tuyas, nunca de visitantes.
 - ✅ La clave de Groq es privada (no está en el código).
 - ✅ Mi consumo es privado (eliminamos `/stats`).

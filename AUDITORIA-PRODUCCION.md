@@ -277,13 +277,11 @@ En `src/pages/api/chat.js`:
 const RATE_LIMITS = {
   free: {
     requestsPerMinuteGlobal: 3,    // Todos los IPs combinados
-    requestsPerDayGlobal: 35,      // Tope de emergencia
-    requestsPerIpPerDay: 10,       // Por IP (previene abuso de una IP)
+    requestsPerDayGlobal: 25,      // Calculado desde techo diario de Groq (60.000 tokens)
+    requestsPerIpPerDay: 5,        // Una conversación completa por IP/día
   },
 };
 ```
-
-**⚠️ Valor temporal:** Ahora está en 10 (fase de pruebas). Cambiará a 6 después de validación.
 
 ### Cómo se verifica en Astro + Vercel
 
@@ -304,7 +302,7 @@ echo "UPSTASH_REDIS_REST_TOKEN configurado"
 ```bash
 DOMAIN="https://tu-dominio.com"
 
-for i in {1..7}; do
+for i in {1..6}; do
   echo -n "Intento $i: "
   curl -s -i -X POST "$DOMAIN/api/chat" \
     -H "Origin: $DOMAIN" \
@@ -313,8 +311,8 @@ for i in {1..7}; do
 done
 
 # Espera:
-# Intentos 1-10: 200 OK
-# Intento 11: 429 Too Many Requests
+# Intentos 1-5: 200 OK
+# Intento 6: 429 Too Many Requests
 ```
 
 ---
@@ -543,14 +541,11 @@ Margen = 8.750 tokens (14% de buffer)
 
 **✓ Aceptable.** Hay margen para picos.
 
-### ⚠️ Nota Crítica
+### ✅ Límites aplicados
 
-**Tus límites actuales:**
-- Global/día: 35 mensajes ← DEMASIADO (excede techo diario)
-- Por IP/día: 10 mensajes ← Puede estar bien (2 conversaciones)
-- Global/minuto: 3 mensajes ← Correcto
-
-**Recomendación:** Baja global/día a 25 máximo. O pide 120.000 TPM diarios al proveedor.
+- Global/día: 25 mensajes (50.000 tokens aprox., con margen bajo 60.000 diarios)
+- Por IP/día: 5 mensajes (1 conversación completa)
+- Global/minuto: 3 mensajes (margen bajo techo de 3.500 TPM)
 
 ---
 
@@ -594,7 +589,7 @@ Tu mensaje de commit debe describir SOLO esos archivos y cambios.
 feat: implement rate limiting with Upstash Redis
 
 - Add Upstash Redis initialization and fallback logic
-- Implement sliding window rate limiting (3/min global, 10/day per IP, 35/day global)
+- Implement sliding window rate limiting (3/min global, 5/day per IP, 25/day global)
 - Map Groq errors to safe HTTP status codes (429→429, 5xx→502, 401→503)
 
 Files: src/pages/api/chat.js, .RGPD.md, DEPLOY_CHECKLIST.md

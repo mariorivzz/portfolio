@@ -12,7 +12,7 @@ Antes de proceder a Fase 3 (Rate Limiting), verificar que los siguientes puntos 
 
 ### 2. Chat funciona desde el navegador (dominio real)
 
-- [ ] Acceder a `https://mariorivzz.vercel.app` (o tu dominio de producción)
+- [ ] Acceder a `https://mariorivashernandez.com` (o tu dominio de producción)
 - [ ] Chat widget se carga correctamente
 - [ ] Escribir un mensaje normal y recibir respuesta del asistente
 - [ ] Verificar en DevTools → Network que la petición POST a `/api/chat` devuelve `200`
@@ -21,7 +21,7 @@ Antes de proceder a Fase 3 (Rate Limiting), verificar que los siguientes puntos 
 ### 3. Origin validation: curl sin header Origin → 403
 
 ```bash
-curl -X POST https://mariorivzz.vercel.app/api/chat \
+curl -X POST https://mariorivashernandez.com/api/chat \
   -H "Content-Type: application/json" \
   -d '{"messages":[{"role":"user","content":"Hola"}]}'
 ```
@@ -32,7 +32,7 @@ curl -X POST https://mariorivzz.vercel.app/api/chat \
 ### 4. Origin validation: curl con Origin falso → 403
 
 ```bash
-curl -X POST https://mariorivzz.vercel.app/api/chat \
+curl -X POST https://mariorivashernandez.com/api/chat \
   -H "Content-Type: application/json" \
   -H "Origin: https://attacker.com" \
   -d '{"messages":[{"role":"user","content":"Hola"}]}'
@@ -65,7 +65,7 @@ curl -X POST https://mariorivzz.vercel.app/api/chat \
 ### 6. /api/stats endpoint → 404
 
 ```bash
-curl https://mariorivzz.vercel.app/api/stats
+curl https://mariorivashernandez.com/api/stats
 ```
 
 - [ ] Devuelve `HTTP 404`
@@ -104,32 +104,32 @@ Después de configurar `UPSTASH_REDIS_REST_URL` y `UPSTASH_REDIS_REST_TOKEN` en 
 **Nota sobre tiers:** Solo existe tier `free` actualmente. Los límites se aplican a todos los clientes:
 
 - 3 peticiones/minuto global
-- 35 peticiones/día global
-- 10 peticiones/IP/día (temporalmente para fase de pruebas; reducir a 6 después de validación)
+- 25 peticiones/día global
+- 5 peticiones/IP/día
 
 Cuando se reabra el plan Developer (con GROQ_PROJECT_ID de pago), se descomentar el tier `developer` en `src/pages/api/chat.js` línea ~126 y se agregará lógica de validación.
 
-### 1. Rate limiting por IP (10 mensajes/día durante pruebas)
+### 1. Rate limiting por IP (5 mensajes/día)
 
 ```bash
-# Intento 1-10: deben pasar (200)
-for i in {1..10}; do
-  curl -X POST https://mariorivzz.vercel.app/api/chat \
+# Intento 1-5: deben pasar (200)
+for i in {1..5}; do
+  curl -X POST https://mariorivashernandez.com/api/chat \
     -H "Content-Type: application/json" \
     -H "Origin: https://mariorivashernandez.com" \
     -d '{"messages":[{"role":"user","content":"Test"}]}'
   echo ""
 done
 
-# Intento 11: debe devolver 429
-curl -X POST https://mariorivzz.vercel.app/api/chat \
+# Intento 6: debe devolver 429
+curl -X POST https://mariorivashernandez.com/api/chat \
   -H "Content-Type: application/json" \
   -H "Origin: https://mariorivashernandez.com" \
   -d '{"messages":[{"role":"user","content":"Test"}]}'
 ```
 
-- [ ] Intentos 1-10 devuelven `HTTP 200`
-- [ ] Intento 11 devuelve `HTTP 429`
+- [ ] Intentos 1-5 devuelven `HTTP 200`
+- [ ] Intento 6 devuelve `HTTP 429`
 - [ ] Respuesta 429: `{ error: "Has alcanzado tu límite diario. Vuelve mañana." }`
 - [ ] Header `Retry-After` presente con segundos hasta reset
 
@@ -139,7 +139,7 @@ curl -X POST https://mariorivzz.vercel.app/api/chat \
 # Desde navegador o curl rápido: 3 peticiones en <60s
 # Petición 4 en el mismo minuto debe ser 429
 
-curl -X POST https://mariorivzz.vercel.app/api/chat \
+curl -X POST https://mariorivashernandez.com/api/chat \
   -H "Content-Type: application/json" \
   -H "Origin: https://mariorivashernandez.com" \
   -d '{"messages":[{"role":"user","content":"Test"}]}'
@@ -170,7 +170,7 @@ curl -X POST https://mariorivzz.vercel.app/api/chat \
 
 ### 6. Prueba de privacidad
 
-- [ ] Acceder a `https://mariorivzz.vercel.app/privacidad`
+- [ ] Acceder a `https://mariorivashernandez.com/privacidad`
 - [ ] Leer descripción de cómo se protege la IP (hasheada, 24h)
 - [ ] Verificar que Footer.astro incluye link `/privacidad`
 
